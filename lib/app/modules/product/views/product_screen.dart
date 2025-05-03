@@ -1,13 +1,9 @@
-
-import 'package:expriy_deals/app/modules/product/views/add_product_screen.dart';
 import 'package:expriy_deals/app/modules/product/widgets/product_card.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
+import 'package:expriy_deals/app/widgets/costom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ProductScreen extends StatefulWidget {
   final bool shouldBackButton;
@@ -49,11 +45,8 @@ class _ProductScreenState extends State<ProductScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             heightBox20,
-            Text(
-              'Products',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            heightBox8,
+            CustomAppBar(name: 'Search products'),
+            heightBox10,
             Row(
               children: [
                 Expanded(
@@ -107,66 +100,6 @@ class _ProductScreenState extends State<ProductScreen> {
               ],
             ),
             heightBox12,
-            SizedBox(
-              height: 56,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Container(
-                      width: 90,
-                      decoration: BoxDecoration(
-                          border:
-                              Border.all(color: AppColors.iconButtonThemeColor),
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Center(
-                          child: Text(
-                            'Smart phone accesories',
-                            style: TextStyle(fontSize: 12),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            heightBox12,
-            Center(
-              child: InkWell(
-                onTap: () {
-                  Get.to(AddProductScreen());
-                },
-                child: Container(
-                  height: 32,
-                  width: 123,
-                  decoration: BoxDecoration(
-                      color: AppColors.iconButtonThemeColor,
-                      borderRadius: BorderRadius.circular(50)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.white,
-                        radius: 13,
-                        child: Icon(Icons.add),
-                      ),
-                      widthBox4,
-                      Text(
-                        'Add product',
-                        style: TextStyle(color: Colors.white),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            heightBox12,
             Expanded(
               child: SizedBox(
                   child: Column(
@@ -178,7 +111,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisSpacing: 12,
                           mainAxisSpacing: 16,
-                          childAspectRatio: 1.02,
+                          childAspectRatio: 1,
                           crossAxisCount: 2),
                       itemBuilder: (context, index) {
                         return Padding(

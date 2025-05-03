@@ -1,10 +1,10 @@
 import 'package:cuberto_bottom_bar/cuberto_bottom_bar.dart';
-import 'package:expriy_deals/app/modules/earnings/views/earning_screen.dart';
 import 'package:expriy_deals/app/modules/home/views/home_screen.dart';
-import 'package:expriy_deals/app/modules/order/views/earning_screen.dart';
+import 'package:expriy_deals/app/modules/order/views/cart_screen.dart';
 import 'package:expriy_deals/app/modules/product/views/product_datails_screen.dart';
 import 'package:expriy_deals/app/modules/product/views/product_screen.dart';
 import 'package:expriy_deals/app/modules/profile/views/profile_screen.dart';
+import 'package:expriy_deals/app/modules/seller/views/seller_profile_screen.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -46,8 +46,8 @@ class _MainButtonNavbarScreenState extends State<MainButtonNavbarScreen> {
 
   final List<Widget> _pages = const [
     HomeScreen(),
-    ProductScreen(shouldBackButton: false),
-    ProductDetailScreen(),
+    CartScreen(),
+    SellerProfileScreen(),
     ProfileScreen()
   ];
 

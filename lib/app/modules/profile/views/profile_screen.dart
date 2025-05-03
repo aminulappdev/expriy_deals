@@ -1,4 +1,7 @@
 
+import 'package:expriy_deals/app/modules/order/views/oder_screen.dart';
+import 'package:expriy_deals/app/modules/order/views/order_details_screen.dart';
+import 'package:expriy_deals/app/modules/order/views/timeLine.dart';
 import 'package:expriy_deals/app/modules/profile/views/change_password_screen.dart';
 import 'package:expriy_deals/app/modules/profile/views/edit_profile_screen.dart';
 import 'package:expriy_deals/app/modules/profile/views/info_screen.dart';
@@ -59,21 +62,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 feature: 'Edit Profile',
                 icon: Icons.person,
                 ontap: () {
-                  Get.to(EditProfile());
+                  Get.to(ShippingInfoScreen());
                 },
               ),
               ProfileDrawerFeature(
                 feature: 'Address',
                 icon: Icons.location_on,
                 ontap: () {
-                  // Navigator.pushNamed(context, MyOrderScreen.routeName);
+                  Get.to(MyOrderScreen());
                 },
               ),
               ProfileDrawerFeature(
                 feature: 'Payment',
                 icon: Icons.payment,
                 ontap: () {
-                  // Navigator.pushNamed(context, HistoryScreen.routeName);
+                  Get.to(OrderDetailsScreen(orderId: '',));
                 },
               ),
               heightBox8,
