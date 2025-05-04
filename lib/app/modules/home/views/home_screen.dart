@@ -41,12 +41,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CircleAvatar(
-                      radius: 21,
+                      radius: 21.r,
                       backgroundImage: AssetImage(AssetsPath.headphone),
                     ),
                     Container(
-                      height: 42,
-                      width: 42,
+                      height: 42.h,
+                      width: 42.w,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: const Color(0xffFB6000).withOpacity(0.10),
@@ -57,57 +57,57 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 heightBox16,
                 Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      height: 48.h,
-                      decoration: BoxDecoration(
-                        color: Color(0xffFAFAFA),
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(
-                          color: Colors.grey[300]!,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        height: 48.h,
+                        decoration: BoxDecoration(
+                          color: Color(0xffFAFAFA),
+                          borderRadius: BorderRadius.circular(24),
+                          border: Border.all(
+                            color: Colors.grey[300]!,
+                          ),
                         ),
-                      ),
-                      child: Row(
-                        children: [
-                          widthBox8,
-                          GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              height: 34.h,
-                              width: 34.h,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.iconButtonThemeColor,
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  Icons.search_rounded,
-                                  size: 24.h,
-                                  color: Colors.white,
+                        child: Row(
+                          children: [
+                            widthBox8,
+                            GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                height: 34.h,
+                                width: 34.h,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors.iconButtonThemeColor,
+                                ),
+                                child: Center(
+                                  child: Icon(
+                                    Icons.search_rounded,
+                                    size: 24.h,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          widthBox8,
-                          Expanded(
-                            child: TextFormField(
-                              onChanged: (_) {},
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                contentPadding: EdgeInsets.zero,
+                            widthBox8,
+                            Expanded(
+                              child: TextFormField(
+                                onChanged: (_) {},
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  contentPadding: EdgeInsets.zero,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              heightBox16,
+                  ],
+                ),
+                heightBox16,
                 SeeAllSection(
                   title: 'Categories',
                   ontap: () {
@@ -117,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 heightBox8,
                 SizedBox(
-                  height: 110.h,
+                  height: 120.h,
                   width: MediaQuery.of(context).size.width,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
@@ -129,8 +129,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                              height: 60,
-                              width: 60,
+                              height: 60.h,
+                              width: 60.w,
                               decoration: BoxDecoration(
                                   color: colorList[index],
                                   borderRadius: BorderRadius.circular(20)),
@@ -141,7 +141,15 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             heightBox4,
-                            SizedBox(width: 70, child: Text('Fasion & Apperial'))
+                            Center(
+                                child: SizedBox(
+                              width: 70.w,
+                              child: Text(
+                                'Fasion & Apperial',
+                                style: TextStyle(fontSize: 12),
+                                textAlign: TextAlign.center,
+                              ),
+                            ))
                           ],
                         ),
                       );
@@ -158,10 +166,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Text(
                               'Special offer',
-                              style: GoogleFonts.poppins(fontSize: 18.sp,color: AppColors.iconButtonThemeColor,fontWeight: FontWeight.w600),
+                              style: GoogleFonts.poppins(
+                                  fontSize: 18.sp,
+                                  color: AppColors.iconButtonThemeColor,
+                                  fontWeight: FontWeight.w600),
                             ),
                             widthBox4,
-                            Icon(Icons.flash_on_outlined,color: AppColors.iconButtonThemeColor,)
+                            Icon(
+                              Icons.flash_on_outlined,
+                              color: AppColors.iconButtonThemeColor,
+                            )
                           ],
                         )),
                     GestureDetector(
@@ -177,7 +191,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     )
                   ],
                 ),
-                
                 SizedBox(
                   height: 180.h,
                   width: MediaQuery.of(context).size.width,
@@ -187,14 +200,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 4.w),
-                        child: ProductCard(isShowDiscount: true,),
+                        child: ProductCard(
+                          isShowDiscount: true,
+                        ),
                       );
                     },
                   ),
                 ),
                 heightBox12,
-            
-                 SeeAllSection(
+                SeeAllSection(
                   title: 'Nearby Stores',
                   ontap: () {
                     Navigator.pushNamed(context, ProductScreen.routeName,
@@ -202,7 +216,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 heightBox10,
-                 SizedBox(
+                SizedBox(
                   height: 180.h,
                   width: MediaQuery.of(context).size.width,
                   child: ListView.builder(
@@ -211,14 +225,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 4.w),
-                        child: ProductCard(isShowDiscount: true,),
+                        child: ProductCard(
+                          isShowDiscount: true,
+                        ),
                       );
                     },
                   ),
                 ),
-                 heightBox12,
-            
-                 SeeAllSection(
+                heightBox12,
+                SeeAllSection(
                   title: 'Recommended for You',
                   ontap: () {
                     Navigator.pushNamed(context, ProductScreen.routeName,
@@ -226,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 heightBox10,
-                 SizedBox(
+                SizedBox(
                   height: 180.h,
                   width: MediaQuery.of(context).size.width,
                   child: ListView.builder(
@@ -235,7 +250,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 4.w),
-                        child: ProductCard(isShowDiscount: true,),
+                        child: ProductCard(
+                          isShowDiscount: true,
+                        ),
                       );
                     },
                   ),

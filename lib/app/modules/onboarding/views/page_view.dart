@@ -21,7 +21,7 @@ class OnboardingPage extends StatelessWidget {
     required this.imageHeight,
     required this.showBackButton,
     required this.pageController, 
-  });
+  }); 
 
   @override
   Widget build(BuildContext context) {

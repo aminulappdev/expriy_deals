@@ -1,7 +1,6 @@
-
 import 'package:expriy_deals/app/modules/order/views/oder_screen.dart';
-import 'package:expriy_deals/app/modules/order/views/order_details_screen.dart';
-import 'package:expriy_deals/app/modules/order/views/timeLine.dart';
+import 'package:expriy_deals/app/modules/payment/views/payment_success_screen.dart';
+import 'package:expriy_deals/app/modules/profile/views/address_screen.dart';
 import 'package:expriy_deals/app/modules/profile/views/change_password_screen.dart';
 import 'package:expriy_deals/app/modules/profile/views/edit_profile_screen.dart';
 import 'package:expriy_deals/app/modules/profile/views/info_screen.dart';
@@ -62,21 +61,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 feature: 'Edit Profile',
                 icon: Icons.person,
                 ontap: () {
-                  Get.to(ShippingInfoScreen());
+                  Get.to(EditProfile());
                 },
               ),
               ProfileDrawerFeature(
-                feature: 'Address',
+                feature: 'My Orders',
                 icon: Icons.location_on,
                 ontap: () {
                   Get.to(MyOrderScreen());
                 },
               ),
               ProfileDrawerFeature(
+                feature: 'Address',
+                icon: Icons.location_on,
+                ontap: () {
+                  Get.to(AdderssScreen());
+                },
+              ),
+              ProfileDrawerFeature(
                 feature: 'Payment',
                 icon: Icons.payment,
                 ontap: () {
-                  Get.to(OrderDetailsScreen(orderId: '',));
+                  Get.to(PaymentSuccessScreen());
                 },
               ),
               heightBox8,
