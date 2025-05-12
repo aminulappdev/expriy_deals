@@ -1,16 +1,15 @@
-
 import 'package:expriy_deals/app/modules/onboarding/views/onboarding_screen.dart';
+import 'package:expriy_deals/app_binding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 void main() async {
-
-  runApp(const AntoinetteApp());
+  runApp(const ExpriyDeals());
 }
- 
-class AntoinetteApp extends StatelessWidget {
-  const AntoinetteApp({super.key});
+
+class ExpriyDeals extends StatelessWidget {
+  const ExpriyDeals({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,20 +19,19 @@ class AntoinetteApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return GetMaterialApp(
-       
+          initialBinding: ControllerBinder(),
           debugShowCheckedModeBanner: false,
           title: 'expriy-deals',
           theme: ThemeData(
             scaffoldBackgroundColor: Colors.white,
             // ignore: deprecated_member_use
-            primaryColor: Color(0xffA57EA5).withOpacity(0.1),      
+            primaryColor: Color(0xffA57EA5).withOpacity(0.1),
             inputDecorationTheme: inputDecoration(),
             useMaterial3: true,
             fontFamily: 'Poppins',
             textTheme: TextTheme(),
-            
           ),
-        home: OnboardingScreen(),
+          home: OnboardingScreen(),
         );
       },
     );
@@ -51,7 +49,7 @@ InputDecorationTheme inputDecoration() {
     errorBorder: inputBorder(),
   );
 }
-
+ 
 OutlineInputBorder inputBorder() {
   return OutlineInputBorder(
     borderSide: BorderSide(color: const Color(0xffCACACA), width: 1),

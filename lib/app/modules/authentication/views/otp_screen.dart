@@ -1,11 +1,16 @@
 import 'dart:async';
 
+import 'package:expriy_deals/app/modules/authentication/controllers/otp_verify_controller.dart';
+import 'package:expriy_deals/app/modules/authentication/views/sign_in_screen.dart';
 import 'package:expriy_deals/app/modules/authentication/widgets/auth_header_text.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:expriy_deals/app/widgets/costom_app_bar.dart';
 import 'package:expriy_deals/app/widgets/gradiant_elevated_button.dart';
+import 'package:expriy_deals/app/widgets/show_snackBar_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,7 +18,6 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OTPVerifyScreen extends StatefulWidget {
   final String token;
-  static const String routeName = '/otp-screen';
   const OTPVerifyScreen({super.key, required this.token});
 
   @override
@@ -23,7 +27,7 @@ class OTPVerifyScreen extends StatefulWidget {
 class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController otpCtrl = TextEditingController();
-
+  final OtpVerifyController otpVerifyController = OtpVerifyController();
 
   RxInt remainingTime = 60.obs;
   late Timer timer;
@@ -103,9 +107,7 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
                     ),
                     heightBox8,
                     CustomElevatedButton(
-                      onPressed: () {
-                        
-                      },
+                      onPressed: onTapToNextButton,
                       text: 'Confirm',
                     ),
                     heightBox12,
@@ -162,27 +164,27 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
     );
   }
 
-  // Future<void> onTapToNextButton() async {
-  //   if (_formKey.currentState!.validate()) {
-  //     final bool isSuccess =
-  //         await verifyOtpController.verifyOtp(otpCtrl.text, widget.token);
-  //     print(
-  //         'My token ---------------------------------------\n-------\n------');
-  //     print(widget.token);
+  Future<void> onTapToNextButton() async {
+    if (_formKey.currentState!.validate()) {
+      final bool isSuccess =
+          await otpVerifyController.otyVerify(otpCtrl.text, widget.token);
+      print(
+          'My token ---------------------------------------\n-------\n------');
+      print(widget.token);
 
-  //     if (isSuccess) {
-  //       if (mounted) {
-  //         showSnackBarMessage(context, 'Otp verification successfully done');
-  //         Navigator.pushNamed(context, SignInScreen.routeName);
-  //       } else {
-  //         if (mounted) {
-  //           showSnackBarMessage(
-  //               context, verifyOtpController.errorMessage!, true);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
+      if (isSuccess) {
+        if (mounted) {
+          showSnackBarMessage(context, 'Otp verification successfully done');
+          Get.to(SignInScreen());
+        } else {
+          if (mounted) {
+            showSnackBarMessage(
+                context, otpVerifyController.errorMessage!, true);
+          }
+        }
+      }
+    }
+  }
 
   void clearTextField() {
     otpCtrl.clear();

@@ -1,4 +1,3 @@
-
 import 'package:expriy_deals/app/modules/authentication/views/otp_forgot_screen.dart';
 import 'package:expriy_deals/app/modules/authentication/widgets/auth_header_text.dart';
 import 'package:expriy_deals/app/utils/assets_path.dart';
@@ -9,16 +8,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-
 class VerifyEmailScreenWithForgot extends StatefulWidget {
-  static const String routeName = '/verify-email-forgot-screen';
-  const VerifyEmailScreenWithForgot({super.key});
+  final String token;
+  const VerifyEmailScreenWithForgot({super.key, required this.token});
 
   @override
   State<VerifyEmailScreenWithForgot> createState() =>
       _VerifyEmailScreenWithForgotState();
 }
-
+ 
 class _VerifyEmailScreenWithForgotState
     extends State<VerifyEmailScreenWithForgot> {
   // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -52,14 +50,16 @@ class _VerifyEmailScreenWithForgotState
                 title: 'A letter has been sent.',
                 subtitle:
                     'Your next step is inside your inbox. Check your email to unlock it.',
-                titleFontSize: 20,
+                titleFontSize: 20, 
                 subtitleFontSize: 12,
                 sizeBoxHeight: 215,
               ),
               heightBox30,
               CustomElevatedButton(
                 onPressed: () {
-                  Get.to(OTPVerifyForgotScreen());
+                  Get.to(OTPVerifyForgotScreen(
+                    token: widget.token,
+                  ));
                   // Navigator.pushNamed(context, OTPVerifyForgotScreen.routeName);
                 },
                 text: 'Read My Letter',

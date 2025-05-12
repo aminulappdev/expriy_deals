@@ -1,16 +1,18 @@
 
 
+import 'package:expriy_deals/app/modules/authentication/views/otp_screen.dart';
 import 'package:expriy_deals/app/utils/assets_path.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:expriy_deals/app/widgets/costom_app_bar.dart';
 import 'package:expriy_deals/app/widgets/gradiant_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
   final String token;
-  static const String routeName = '/verify-email-screen';
   const VerifyEmailScreen({
     super.key,
     required this.token,
@@ -61,7 +63,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
               heightBox30,
               CustomElevatedButton(
                 onPressed: () { 
-                   
+                   Get.to(OTPVerifyScreen(token: widget.token,));
                 },
                 text: 'Confirm Now',
               ),

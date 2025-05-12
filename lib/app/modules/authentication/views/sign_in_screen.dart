@@ -1,6 +1,8 @@
-
 import 'package:email_validator/email_validator.dart';
+import 'package:expriy_deals/app/modules/authentication/controllers/forgot_password_controller.dart';
+import 'package:expriy_deals/app/modules/authentication/controllers/sign_in_controller.dart';
 import 'package:expriy_deals/app/modules/authentication/views/forgot_password_screen.dart';
+import 'package:expriy_deals/app/modules/authentication/views/sign_up_screen.dart';
 import 'package:expriy_deals/app/modules/authentication/widgets/continue_elevated_button.dart';
 import 'package:expriy_deals/app/modules/authentication/widgets/footer_section.dart';
 import 'package:expriy_deals/app/modules/authentication/widgets/forgot_password_row.dart';
@@ -12,14 +14,13 @@ import 'package:expriy_deals/app/utils/assets_path.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:expriy_deals/app/widgets/costom_app_bar.dart';
 import 'package:expriy_deals/app/widgets/gradiant_elevated_button.dart';
+import 'package:expriy_deals/app/widgets/show_snackBar_message.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-
 import 'package:google_fonts/google_fonts.dart';
-
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -32,7 +33,9 @@ class _SignInScreenState extends State<SignInScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController emailCtrl = TextEditingController();
   TextEditingController passwordCtrl = TextEditingController();
-
+  final SignInController signInController = SignInController();
+  final ForgotPasswordController forgotPasswordController =
+      ForgotPasswordController();
 
   bool _obscureText = true;
   bool isChecked = false;
@@ -41,103 +44,116 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     return CustomScaffoldBackground(
       child: Padding(
-          padding: EdgeInsets.all(12.0.h),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                heightBox20,
-                CustomAppBar(name: 'Sign In'),
-                heightBox16,
-                Align(
-                  alignment: Alignment.center,
-                  child: WelcomeText(
-                    title: 'Hi, Welcome back!',
-                    subtitle: 'Sign in to continue exploring the best deals',
-                  ),
+        padding: EdgeInsets.all(12.0.h),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              heightBox20,
+              CustomAppBar(name: 'Sign In'),
+              heightBox16,
+              Align(
+                alignment: Alignment.center,
+                child: WelcomeText(
+                  title: 'Hi, Welcome back!',
+                  subtitle: 'Sign in to continue exploring the best deals',
                 ),
-                heightBox50,
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Email', style: GoogleFonts.poppins(fontSize: 12.sp, fontWeight: FontWeight.w400, color: Color(0xff626262))),
-                      heightBox8,
-                      TextFormField(
-                        controller: emailCtrl,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (String? value) {
-                          if (value!.isEmpty) return 'Enter email';
-                          if (!EmailValidator.validate(value)) return 'Enter a valid email address';
-                          return null;
-                        },
-                        decoration: InputDecoration(hintText: 'example@gmail.com', hintStyle: TextStyle(color: Colors.grey)),
-                      ),
-                      heightBox8,
-                      Text('Password', style: GoogleFonts.poppins(fontSize: 12.sp, fontWeight: FontWeight.w400, color: Color(0xff626262))),
-                      heightBox8,
-                      TextFormField(
-                        controller: passwordCtrl,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (String? value) {
-                          if (value!.isEmpty) return 'Enter password';
-                          return null;
-                        },
-                        obscureText: _obscureText,
-                        decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                            icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility, color: Colors.grey),
-                            onPressed: () => setState(() => _obscureText = !_obscureText),
-                          ),
-                          hintText: '***********',
-                          hintStyle: TextStyle(color: Colors.grey),
+              ),
+              heightBox50,
+              Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Email',
+                        style: GoogleFonts.poppins(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xff626262))),
+                    heightBox8,
+                    TextFormField(
+                      controller: emailCtrl,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (String? value) {
+                        if (value!.isEmpty) return 'Enter email';
+                        if (!EmailValidator.validate(value)) {
+                          return 'Enter a valid email address';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                          hintText: 'example@gmail.com',
+                          hintStyle: TextStyle(color: Colors.grey)),
+                    ),
+                    heightBox8,
+                    Text('Password',
+                        style: GoogleFonts.poppins(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xff626262))),
+                    heightBox8,
+                    TextFormField(
+                      controller: passwordCtrl,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (String? value) {
+                        if (value!.isEmpty) return 'Enter password';
+                        return null;
+                      },
+                      obscureText: _obscureText,
+                      decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                              _obscureText
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.grey),
+                          onPressed: () =>
+                              setState(() => _obscureText = !_obscureText),
                         ),
+                        hintText: '***********',
+                        hintStyle: TextStyle(color: Colors.grey),
                       ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: ForgotPasswordRow(ontap: () {
-                          Get.to(ForgotPasswordScreen());
-                        },),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: ForgotPasswordRow(
+                        ontap: forgotPasswordBTN,
                       ),
-                      heightBox24,
-                      CustomElevatedButton(onPressed: () {
-                        Get.to(MainButtonNavbarScreen());
-                      }, text: 'Sign in'),
-                      Liner(),
-                      ContinueElevatedButton(
-                        name: 'Continue with google',
-                        logoPath: AssetsPath.googleLogoUp,
-                        ontap: () {
-                          
-                        },
-                      ),
-                      heightBox12,
-                      ContinueElevatedButton(
-                        name: 'Continue with apple',
-                        logoPath: AssetsPath.appleLogo,
-                        ontap: () {},
-                      ),
-                      heightBox12,
-                      AuthenticationFooterSection(
-                        fTextName: 'Don’t have an account? ',
-                        fTextColor: Color(0xff33363F),
-                        sTextName: 'Sign up',
-                        sTextColor: Color(0xff33363F),
-                        ontap: () {
-                         
-                        },
-                      )
-                    ],
-                  ),
+                    ),
+                    heightBox24,
+                    CustomElevatedButton(
+                        onPressed: onTapToNextButton, text: 'Sign in'),
+                    Liner(),
+                    ContinueElevatedButton(
+                      name: 'Continue with google',
+                      logoPath: AssetsPath.googleLogoUp,
+                      ontap: () {},
+                    ),
+                    heightBox12,
+                    ContinueElevatedButton(
+                      name: 'Continue with apple',
+                      logoPath: AssetsPath.appleLogo,
+                      ontap: () {},
+                    ),
+                    heightBox12,
+                    AuthenticationFooterSection(
+                      fTextName: 'Don’t have an account? ',
+                      fTextColor: Color(0xff33363F),
+                      sTextName: 'Sign up',
+                      sTextColor: Color(0xff33363F),
+                      ontap: () {
+                        Get.to(SignUpScreen());
+                      },
+                    )
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
+      ),
     );
-    
   }
 
   // Future<void> onTapGoogleSignIn() async {
@@ -170,31 +186,40 @@ class _SignInScreenState extends State<SignInScreen> {
   //   }
   // }
 
-  // Future<void> onTapToNextButton() async {
-  //   if (_formKey.currentState!.validate()) {
-  //     final bool isSuccess = await signInController.signIn(emailCtrl.text, passwordCtrl.text, isChecked);
+  Future<void> onTapToNextButton() async {
+    if (_formKey.currentState!.validate()) {
+      final bool isSuccess = await signInController.signIn(
+        emailCtrl.text,
+        passwordCtrl.text,
+      );
 
-  //     if (isSuccess) {
-  //       if (mounted) {
-  //         showSnackBarMessage(context, 'Login successfully done');
-  //         Navigator.pushNamedAndRemoveUntil(context, MainButtonNavbarScreen.routeName, (route) => false);
-  //       }
-  //     } else {
-  //       if (mounted) {
-  //         showSnackBarMessage(context, signInController.errorMessage ?? 'Login failed', true);
-  //       }
-  //     }
-  //   }
-  // }
+      if (isSuccess) {
+        if (mounted) {
+          showSnackBarMessage(context, 'Login successfully done');
+          Get.offAll(MainButtonNavbarScreen());
+        }
+      } else {
+        if (mounted) {
+          showSnackBarMessage(
+              context, signInController.errorMessage ?? 'Login failed', true);
+        }
+      }
+    }
+  }
 
-  // Future<void> forgotPasswordBTN() async {
-  //   final bool isSuccess = await forgotPasswordController.forgotPassword(emailCtrl.text);
-  //   if (isSuccess && mounted) {
-  //     Navigator.pushNamed(context, ForgotPasswordScreen.routeName);
-  //   } else if (mounted) {
-  //     showSnackBarMessage(context, forgotPasswordController.errorMessage ?? 'Error occurred', true);
-  //   }
-  // }
+  Future<void> forgotPasswordBTN() async {
+    final bool isSuccess =
+        await forgotPasswordController.forgotPassword(emailCtrl.text);
+    if (isSuccess && mounted) {
+      Get.to(ForgotPasswordScreen(
+        email: emailCtrl.text,
+        token: '${forgotPasswordController.accessToken}',
+      ));
+    } else if (mounted) {
+      showSnackBarMessage(context,
+          forgotPasswordController.errorMessage ?? 'Error occurred', true);
+    }
+  }
 
   void clearTextField() {
     emailCtrl.clear();
