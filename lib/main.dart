@@ -1,10 +1,17 @@
+import 'package:expriy_deals/app/modules/common/views/main_bottom_nav_bar.dart';
 import 'package:expriy_deals/app/modules/onboarding/views/onboarding_screen.dart';
 import 'package:expriy_deals/app_binding.dart';
+import 'package:expriy_deals/get_storage.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init();
+  await Firebase.initializeApp(); 
   runApp(const ExpriyDeals());
 }
 
@@ -31,7 +38,7 @@ class ExpriyDeals extends StatelessWidget {
             fontFamily: 'Poppins',
             textTheme: TextTheme(),
           ),
-          home: OnboardingScreen(),
+          home: StorageUtil.getData('user-access-token') != null ? MainButtonNavbarScreen() : OnboardingScreen(),
         );
       },
     );

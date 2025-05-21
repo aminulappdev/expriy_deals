@@ -1,3 +1,4 @@
+import 'package:expriy_deals/app/modules/authentication/views/sign_in_screen.dart';
 import 'package:expriy_deals/app/modules/order/views/oder_screen.dart';
 import 'package:expriy_deals/app/modules/payment/views/payment_success_screen.dart';
 import 'package:expriy_deals/app/modules/profile/views/address_screen.dart';
@@ -7,12 +8,14 @@ import 'package:expriy_deals/app/modules/profile/views/info_screen.dart';
 import 'package:expriy_deals/app/modules/profile/widgets/profile_drawer_feature.dart';
 import 'package:expriy_deals/app/utils/app_text.dart';
 import 'package:expriy_deals/app/utils/assets_path.dart';
+import 'package:expriy_deals/app/utils/get_storage.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:expriy_deals/app/widgets/custom_alert_dialoge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -127,14 +130,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     feature: 'Policies',
                     icon: Icons.security,
                     ontap: () {
-                      Get.to(InfoScreen(appBarTitle: 'Privacy & Policies', data: DemoText.policies));
+                      Get.to(InfoScreen(
+                          appBarTitle: 'Privacy & Policies',
+                          data: DemoText.policies));
                     },
                   ),
                   ProfileDrawerFeature(
                     feature: 'About Us',
                     icon: Icons.groups_2_sharp,
                     ontap: () {
-                      Get.to(InfoScreen(appBarTitle: 'About Us', data: DemoText.aboutUs));
+                      Get.to(InfoScreen(
+                          appBarTitle: 'About Us', data: DemoText.aboutUs));
                     },
                   ),
                   heightBox8,
@@ -162,7 +168,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Text(
                               'Logout',
                               style: TextStyle(
-                                  color: Colors.red, fontWeight: FontWeight.w600),
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.w600),
                             )
                           ],
                         ),
@@ -178,21 +185,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  void onTapLogoutBTN() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => CustomAlertDialog(
-        title: 'Do you want to log out this profile?',
-        noOntap: () {
-          Navigator.pop(context);
-        },
-        yesOntap: () {},
-      ),
-    );
-  }
+  // void onTapLogoutBTN() {
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (context) => CustomAlertDialog(
+  //       title: 'Do you want to log out this profile?',
+  //       noOntap: () {
+  //         Navigator.pop(context);
+  //       },
+  //       yesOntap: () {},
+  //     ),
+  //   );
+  // }
 
-   void onTapChangeAccount() {
+  void onTapChangeAccount() {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -202,6 +209,76 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Navigator.pop(context);
         },
         yesOntap: () {},
+      ),
+    );
+  }
+
+  void onTapLogoutBTN() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Center(
+          child: Text(
+            textAlign: TextAlign.center,
+            'Do you want to log out this profile?',
+            style: GoogleFonts.poppins(fontSize: 20),
+          ),
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () async {
+              // Google Sign-Out
+              try {
+                await GoogleSignIn().signOut();
+                print('Google signed out');
+              } catch (e) {
+                print('Error signing out from Google: $e');
+              }
+
+              // Clear local token
+              box.remove('user-access-token');
+              print('Token after logout: ${box.read('user-access-token')}');
+
+              // Redirect to Sign In
+              Get.to(SignInScreen());
+            },
+            child: Container(
+              height: 32.h,
+              width: 120.w,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Color(0xff305FA1).withOpacity(0.1),
+                border: Border.all(color: Color(0xff305FA1)),
+              ),
+              child: Center(
+                child: Text(
+                  'YES',
+                  style: TextStyle(color: Color(0xff305FA1), fontSize: 14),
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              height: 32.h,
+              width: 120.w,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Color(0xffA13430).withOpacity(0.1),
+                border: Border.all(color: Color(0xffA13430)),
+              ),
+              child: Center(
+                child: Text(
+                  'NO',
+                  style: TextStyle(color: Color(0xffA13430), fontSize: 14.sp),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

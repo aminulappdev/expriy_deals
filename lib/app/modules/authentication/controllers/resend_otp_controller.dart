@@ -1,35 +1,33 @@
-import 'package:expriy_deals/get_storage.dart';
 import 'package:expriy_deals/services/network_caller/network_caller.dart';
 import 'package:expriy_deals/services/network_caller/network_response.dart';
 import 'package:expriy_deals/urls.dart';
 import 'package:get/get.dart';
 
-class OtpVerifyController extends GetxController {
+class ResendOTPController extends GetxController {
   bool _inProgress = false;
   bool get inProgress => _inProgress;
 
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  Future<bool> otyVerify(String otp, String token) async {
+  String? _otpToken;
+  String? get otpToken => _otpToken;
+
+  Future<bool> resendOTP(String email) async {
     bool isSuccess = false;
 
     _inProgress = true;
 
     update();
 
-    Map<String, dynamic> requestBody = {"otp": otp};
+    Map<String, dynamic> requestBody = {"email": email};
 
     final NetworkResponse response = await Get.find<NetworkCaller>()
-        .postRequestWithToken(Urls.otpVerifyrUrl, requestBody,
-            accesToken: token);
+        .postRequest(Urls.resendOTPUrl, requestBody);
 
     if (response.isSuccess) {
-      StorageUtil.saveData(
-          'user-access-token', response.responseData['data']['token']);
-      print(
-          'Save access token from otp verifiy controller .........................');
-      print(StorageUtil.getData('user-access-token'));
+      _otpToken = response.responseData['data']['token'];
+
       _errorMessage = null;
       isSuccess = true;
     } else {

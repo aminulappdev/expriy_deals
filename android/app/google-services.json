@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "891936630156",
+    "project_id": "expriy-deals",
+    "storage_bucket": "expriy-deals.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891936630156:android:500f7277a08e11fc79e2a9",
+        "android_client_info": {
+          "package_name": "com.example.expriy_deals"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1lHfY4Td7dcVA8DG8WtbZkPAP988ypa4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

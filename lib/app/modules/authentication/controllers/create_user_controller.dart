@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:expriy_deals/app/modules/authentication/model/create_user_response_model.dart';

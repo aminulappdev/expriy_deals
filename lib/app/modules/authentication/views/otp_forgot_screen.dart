@@ -10,7 +10,7 @@ import 'package:expriy_deals/app/widgets/show_snackBar_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart'; 
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OTPVerifyForgotScreen extends StatefulWidget {
@@ -24,8 +24,8 @@ class OTPVerifyForgotScreen extends StatefulWidget {
 class _OTPVerifyForgotScreenState extends State<OTPVerifyForgotScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController otpCtrl = TextEditingController();
-  final OtpVerifyController otpVerifyController = OtpVerifyController();
-
+  final OtpVerifyController otpVerifyController =
+      Get.put(OtpVerifyController());
 
   RxInt remainingTime = 60.obs;
   late Timer timer;
@@ -33,8 +33,6 @@ class _OTPVerifyForgotScreenState extends State<OTPVerifyForgotScreen> {
 
   String email = '';
 
- 
- 
   // void resendOTP() async {
   //   enableResendCodeButtom.value = false;
   //   remainingTime.value = 60;
@@ -53,7 +51,7 @@ class _OTPVerifyForgotScreenState extends State<OTPVerifyForgotScreen> {
 
   //   if (isSuccess) {
   //     if (mounted) {
-       
+
   //       showSnackBarMessage(context, 'OTP succsessfully sent');
   //     } else {
   //       if (mounted) {
@@ -119,18 +117,36 @@ class _OTPVerifyForgotScreenState extends State<OTPVerifyForgotScreen> {
                       ),
                     ),
                     heightBox8,
-                    CustomElevatedButton(
-                      onPressed: onTapToNextButton,
-                      text: 'Confirm',
+                    GetBuilder<OtpVerifyController>(
+                      builder: (controller) {
+                        return Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            CustomElevatedButton(
+                              onPressed: controller.inProgress
+                                  ? () {}
+                                  : () => onTapToNextButton(),
+                              text: controller.inProgress ? '' : 'Confirm',
+                            ),
+                            if (controller.inProgress)
+                              SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              ),
+                          ],
+                        );
+                      },
                     ),
                     heightBox12,
                     Obx(
                       () => Visibility(
                         visible: !enableResendCodeButtom.value,
                         replacement: GestureDetector(
-                          onTap: () {
-                          
-                          },
+                          onTap: () {},
                           child: Text('Resend code',
                               style: GoogleFonts.poppins(
                                   color: Colors.black,
@@ -145,7 +161,7 @@ class _OTPVerifyForgotScreenState extends State<OTPVerifyForgotScreen> {
                                   style: GoogleFonts.poppins(
                                       color: Colors.black, fontSize: 16.sp)),
                               TextSpan(
-                                  text: '$remainingTime',
+                                  text: ' $remainingTime',
                                   style: GoogleFonts.poppins(
                                       color: Colors.orange, fontSize: 16.sp)),
                               TextSpan(

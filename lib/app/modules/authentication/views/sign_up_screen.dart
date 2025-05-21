@@ -31,7 +31,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController desCtrl = TextEditingController();
   TextEditingController emailCtrl = TextEditingController();
   TextEditingController passwordCtrl = TextEditingController();
-  final CreateUserController createUserController = CreateUserController();
+  final CreateUserController createUserController =
+      Get.put(CreateUserController());
 
   File? image;
   final ImagePickerHelper _imagePickerHelper = ImagePickerHelper();
@@ -268,9 +269,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           onPressed: () {},
                         ),
                       ),
-                      child: CustomElevatedButton(
-                        onPressed: onTapToNextButton,
-                        text: 'Verify Email',
+                      child: GetBuilder<CreateUserController>(
+                        builder: (controller) {
+                          return Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              CustomElevatedButton(
+                                onPressed: controller.inProgress
+                                    ? () {}
+                                    : () => onTapToNextButton(),
+                                text:
+                                    controller.inProgress ? '' : 'Verify Email',
+                              ),
+                              if (controller.inProgress)
+                                SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                            ],
+                          );
+                        },
                       ),
                     ),
                     heightBox12,

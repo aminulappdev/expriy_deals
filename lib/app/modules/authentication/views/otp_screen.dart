@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:expriy_deals/app/modules/authentication/controllers/otp_verify_controller.dart';
 import 'package:expriy_deals/app/modules/authentication/views/sign_in_screen.dart';
 import 'package:expriy_deals/app/modules/authentication/widgets/auth_header_text.dart';
@@ -10,9 +9,6 @@ import 'package:expriy_deals/app/widgets/show_snackBar_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -27,7 +23,8 @@ class OTPVerifyScreen extends StatefulWidget {
 class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController otpCtrl = TextEditingController();
-  final OtpVerifyController otpVerifyController = OtpVerifyController();
+  final OtpVerifyController otpVerifyController =
+      Get.put(OtpVerifyController());
 
   RxInt remainingTime = 60.obs;
   late Timer timer;
@@ -99,6 +96,7 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
                           fieldHeight: 50.h,
                           fieldWidth: 50.h,
                           activeFillColor: Colors.white,
+                          // ignore: deprecated_member_use
                           inactiveFillColor: Color(0xffD9A48E).withOpacity(0.1),
                           selectedFillColor: Colors.white),
                       backgroundColor: Colors.transparent,
@@ -106,9 +104,29 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
                       appContext: context,
                     ),
                     heightBox8,
-                    CustomElevatedButton(
-                      onPressed: onTapToNextButton,
-                      text: 'Confirm',
+                    GetBuilder<OtpVerifyController>(
+                      builder: (controller) {
+                        return Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            CustomElevatedButton(
+                              onPressed: controller.inProgress
+                                  ? () {}
+                                  : () => onTapToNextButton(),
+                              text: controller.inProgress ? '' : 'Confirm',
+                            ),
+                            if (controller.inProgress)
+                              SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              ),
+                          ],
+                        );
+                      },
                     ),
                     heightBox12,
                     Obx(
@@ -141,7 +159,7 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
                                   style: GoogleFonts.poppins(
                                       color: Colors.black, fontSize: 16.sp)),
                               TextSpan(
-                                  text: '$remainingTime',
+                                  text: ' $remainingTime',
                                   style: GoogleFonts.poppins(
                                       color: Colors.orange, fontSize: 16.sp)),
                               TextSpan(
