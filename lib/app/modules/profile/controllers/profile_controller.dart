@@ -1,35 +1,34 @@
+import 'package:expriy_deals/app/modules/profile/model/profile_model.dart';
 import 'package:expriy_deals/get_storage.dart';
 import 'package:expriy_deals/services/network_caller/network_caller.dart';
 import 'package:expriy_deals/services/network_caller/network_response.dart';
 import 'package:expriy_deals/urls.dart';
 import 'package:get/get.dart';
 
-class OtpVerifyController extends GetxController {
+class ProfileController extends GetxController {
   bool _inProgress = false;
   bool get inProgress => _inProgress;
 
-  String? _errorMessage;
+  String? _errorMessage; 
   String? get errorMessage => _errorMessage;
 
-  Future<bool> otyVerify(String otp, String token) async {
+  ProfileModel? profileModel;
+  ProfileData? get profileData => profileModel?.data;
+
+  Future<bool> getProfileData() async {
     bool isSuccess = false;
 
     _inProgress = true;
 
     update();
-
-    Map<String, dynamic> requestBody = {"otp": otp};
-
-    final NetworkResponse response = await Get.find<NetworkCaller>()
-        .postRequestWithToken(Urls.otpVerifyrUrl, requestBody,
-            accesToken: token);
+    print('Access token in profile controller page : ${StorageUtil.getData(StorageUtil.userAccessToken)}');
+    final NetworkResponse response = await Get.find<NetworkCaller>().getRequest(
+        
+        Urls.getProfileUrl,
+        accesToken: StorageUtil.getData(StorageUtil.userAccessToken));
 
     if (response.isSuccess) {
-      StorageUtil.saveData(
-          StorageUtil.userAccessToken, response.responseData['data']['token']);
-      print(
-          'Save access token from otp verifiy controller .........................');
-      print(StorageUtil.getData(StorageUtil.userAccessToken));
+      profileModel = ProfileModel.fromJson(response.responseData);
       _errorMessage = null;
       isSuccess = true;
     } else {

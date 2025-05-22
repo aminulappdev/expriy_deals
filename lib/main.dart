@@ -38,7 +38,7 @@ class ExpriyDeals extends StatelessWidget {
             fontFamily: 'Poppins',
             textTheme: TextTheme(),
           ),
-          home: StorageUtil.getData('user-access-token') != null ? MainButtonNavbarScreen() : OnboardingScreen(),
+          home: StorageUtil.getData(StorageUtil.userAccessToken) != null ? MainButtonNavbarScreen() : OnboardingScreen(),
         );
       },
     );

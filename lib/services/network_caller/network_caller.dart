@@ -25,7 +25,7 @@ class NetworkCaller {
       };
 
       if (accesToken != null) {
-        headers['Authorization'] = accesToken;
+        headers['Authorization'] = 'Bearer $accesToken';
       }
 
       var response = await get(uri, headers: headers);

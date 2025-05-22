@@ -166,7 +166,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       final bool isSuccess = await resetPasswordController.resetPassword(
           passwordCtrl.text,
           confirmPasswordCtrl.text,
-          StorageUtil.getData('user-access-token'));
+          StorageUtil.getData(StorageUtil.userAccessToken));
 
       if (isSuccess) {
         if (mounted) {

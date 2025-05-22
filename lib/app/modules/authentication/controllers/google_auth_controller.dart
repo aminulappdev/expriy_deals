@@ -61,9 +61,9 @@ class GoogleAuthController extends GetxController {
       if (response.isSuccess) {
         print(response.responseData['data']['accessToken']);
         StorageUtil.saveData(
-            'user-access-token', response.responseData['data']['accessToken']);
+            StorageUtil.userAccessToken, response.responseData['data']['accessToken']);
         print('User access token from Google user:');
-        print(StorageUtil.getData('user-access-token'));
+        print(StorageUtil.getData(StorageUtil.userAccessToken));
         _errorMessage = null;
 
         // Navigate to main page

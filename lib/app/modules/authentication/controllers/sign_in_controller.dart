@@ -28,7 +28,7 @@ class SignInController extends GetxController {
     if (response.isSuccess) {
       // Save access token using await and ensure data is saved before moving forward
       await StorageUtil.saveData(
-          'user-access-token', response.responseData['data']['accessToken']);
+          StorageUtil.userAccessToken, response.responseData['data']['accessToken']);
       print('Access token : ${response.responseData['data']['accessToken']}');
       _errorMessage = null;
       isSuccess = true;
