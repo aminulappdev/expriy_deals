@@ -21,7 +21,7 @@ class SignInController extends GetxController {
       "email": email,
       "password": password
     }; // Replace your body data
-
+    print('Controller e asche');
     final NetworkResponse response = await Get.find<NetworkCaller>()
         .postRequest(Urls.signInUrl, requestBody); // Replace your api url
 

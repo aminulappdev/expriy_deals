@@ -1,18 +1,24 @@
 import 'package:expriy_deals/app/modules/product/views/product_datails_screen.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
-import 'package:expriy_deals/app/utils/assets_path.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProductCard extends StatefulWidget {
+  final String productId;
+  final String? image;
+  final String? title;
+  final String? price;
+
   final bool isShowDiscount;
   const ProductCard({
     super.key,
     this.isShowDiscount = false,
+    this.image,
+    this.title,
+    this.price, required this.productId,
   });
 
   @override
@@ -20,11 +26,17 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
+
+  @override
+  void initState() {
+    print('Product ID card theke: ${widget.productId}');
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(ProductDetailScreen());
+        Get.to(ProductDetailScreen(productId: '',));
       },
       child: Card(
         elevation: 1,
@@ -40,7 +52,8 @@ class _ProductCardState extends State<ProductCard> {
                 child: Container(
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage(AssetsPath.headphone),
+                          image: NetworkImage(widget.image ??
+                              'https://fastly.picsum.photos/id/471/200/300.jpg?hmac=N_ZXTRU2OGQ7b_1b8Pz2X8e6Qyd84Q7xAqJ90bju2WU'),
                           fit: BoxFit.fill),
                       borderRadius: BorderRadius.circular(8)),
                   child: widget.isShowDiscount
@@ -97,7 +110,7 @@ class _ProductCardState extends State<ProductCard> {
                         child: Text(
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          'Hocco headphone',
+                          widget.title ?? 'name',
                           style: GoogleFonts.poppins(
                               fontSize: 12.sp,
                               color: Colors.black,
@@ -106,7 +119,7 @@ class _ProductCardState extends State<ProductCard> {
                       ),
                       heightBox5,
                       Text(
-                        '\$50.0',
+                        widget.price ?? '00',
                         style: GoogleFonts.poppins(
                             fontSize: 12.sp,
                             color: AppColors.iconButtonThemeColor,

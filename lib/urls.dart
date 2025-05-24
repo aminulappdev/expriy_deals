@@ -1,5 +1,5 @@
 class Urls {
-   static const String _baseUrl = 'http://115.127.156.131:7000/api/v1';
+  static const String _baseUrl = 'http://115.127.156.131:7000/api/v1';
   // static const String _baseUrl = 'http://192.168.10.22:7000/api/v1';
   static const String createUserUrl = '$_baseUrl/users';
   static const String otpVerifyrUrl = '$_baseUrl/otp/verify-otp';
@@ -10,11 +10,13 @@ class Urls {
   static const String googleAuthUrl = '$_baseUrl/auth/google-login';
   static const String getProfileUrl = '$_baseUrl/users/my-profile';
   static const String updateProfileUrl = '$_baseUrl/users/update-my-profile';
+  static const String categoryUrl = '$_baseUrl/categories';
+  static const String productUrl = '$_baseUrl/products';
+ 
 
-
-  static String updateUserByUrl(
+  static String productDetailsById(
     String id,
   ) {
-    return '$_baseUrl/users/update/$id';
+    return '$_baseUrl/products/$id';
   }
 }

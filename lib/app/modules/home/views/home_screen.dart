@@ -1,3 +1,5 @@
+import 'package:expriy_deals/app/modules/category/controllers/all_category_controller.dart';
+import 'package:expriy_deals/app/modules/category/views/all_catogory_screen.dart';
 import 'package:expriy_deals/app/modules/home/widgets/see_all_section.dart';
 import 'package:expriy_deals/app/modules/product/views/product_screen.dart';
 import 'package:expriy_deals/app/modules/product/widgets/product_card.dart';
@@ -6,6 +8,7 @@ import 'package:expriy_deals/app/utils/assets_path.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -28,6 +31,14 @@ List<Color> colorList = [
 ];
 
 class _HomeScreenState extends State<HomeScreen> {
+  final categoryController = Get.put(AllCategoryController());
+
+  @override
+  void initState() {
+    super.initState();
+    categoryController.getCategory();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Container(
                         height: 48.h,
                         decoration: BoxDecoration(
-                          color: Color(0xffFAFAFA),
+                          color: const Color(0xffFAFAFA),
                           borderRadius: BorderRadius.circular(24),
                           border: Border.all(
                             color: Colors.grey[300]!,
@@ -93,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Expanded(
                               child: TextFormField(
                                 onChanged: (_) {},
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   border: InputBorder.none,
                                   focusedBorder: InputBorder.none,
                                   enabledBorder: InputBorder.none,
@@ -111,73 +122,75 @@ class _HomeScreenState extends State<HomeScreen> {
                 SeeAllSection(
                   title: 'Categories',
                   ontap: () {
-                    Navigator.pushNamed(context, ProductScreen.routeName,
-                        arguments: true);
+                    Get.to(AllCatogoryScreen());
                   },
                 ),
                 heightBox8,
-                SizedBox(
-                  height: 120.h,
-                  width: MediaQuery.of(context).size.width,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 8,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 6.w),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              height: 60.h,
-                              width: 60.w,
-                              decoration: BoxDecoration(
-                                  color: colorList[index],
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: Icon(
-                                Icons.headphones,
-                                color: Colors.white,
-                                size: 36,
-                              ),
+
+                // Reactive widget for categories
+                Obx(() {
+                  final categories = categoryController.categoryData;
+                  if (categories == null || categories.isEmpty) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (categoryController.inProgress == true) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else {
+                    return SizedBox(
+                      height: 120.h,
+                      width: MediaQuery.of(context).size.width,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: categories.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 6.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                CategoryCard(
+                                  image: '',
+                                  onTap: () {
+                                    Get.to(ProductScreen(
+                                      shouldBackButton: true,
+                                      categoryId:
+                                          categories[index].id ?? 'Empty',
+                                      categoryName:
+                                          categories[index].name ?? '',
+                                    ));
+                                  },
+                                  name: categories[index].name ?? '',
+                                ),
+                              ],
                             ),
-                            heightBox4,
-                            Center(
-                                child: SizedBox(
-                              width: 70.w,
-                              child: Text(
-                                'Fasion & Apperial',
-                                style: TextStyle(fontSize: 12),
-                                textAlign: TextAlign.center,
-                              ),
-                            ))
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                          );
+                        },
+                      ),
+                    );
+                  }
+                }),
+
                 heightBox12,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                        width: 250.w,
-                        child: Row(
-                          children: [
-                            Text(
-                              'Special offer',
-                              style: GoogleFonts.poppins(
-                                  fontSize: 18.sp,
-                                  color: AppColors.iconButtonThemeColor,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            widthBox4,
-                            Icon(
-                              Icons.flash_on_outlined,
-                              color: AppColors.iconButtonThemeColor,
-                            )
-                          ],
-                        )),
+                    Row(
+                      children: [
+                        Text(
+                          'Special offer',
+                          style: GoogleFonts.poppins(
+                            fontSize: 18.sp,
+                            color: AppColors.iconButtonThemeColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        widthBox4,
+                        Icon(
+                          Icons.flash_on_outlined,
+                          color: AppColors.iconButtonThemeColor,
+                        )
+                      ],
+                    ),
                     GestureDetector(
                       onTap: () {
                         Navigator.pushNamed(context, ProductScreen.routeName,
@@ -186,9 +199,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Text(
                         'See all..',
                         style: GoogleFonts.poppins(
-                            fontSize: 12.sp, color: Colors.green),
+                          fontSize: 12.sp,
+                          color: Colors.green,
+                        ),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -200,9 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 4.w),
-                        child: ProductCard(
-                          isShowDiscount: true,
-                        ),
+                        child: const ProductCard(isShowDiscount: true, productId: '',),
                       );
                     },
                   ),
@@ -225,9 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 4.w),
-                        child: ProductCard(
-                          isShowDiscount: true,
-                        ),
+                        child: const ProductCard(isShowDiscount: true, productId: '',),
                       );
                     },
                   ),
@@ -250,9 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 4.w),
-                        child: ProductCard(
-                          isShowDiscount: true,
-                        ),
+                        child: const ProductCard(isShowDiscount: true, productId: '',),
                       );
                     },
                   ),
@@ -262,6 +271,52 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class CategoryCard extends StatelessWidget {
+  final String image;
+  final String name;
+  final VoidCallback? onTap;
+  const CategoryCard({
+    super.key,
+    required this.image,
+    this.onTap,
+    required this.name,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 60.h,
+            width: 60.w,
+            decoration: BoxDecoration(
+              color: AppColors.iconButtonThemeColor,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: const Icon(
+              Icons.headphones,
+              color: Colors.white,
+              size: 36,
+            ),
+          ),
+          heightBox4,
+          SizedBox(
+            width: 70.w,
+            child: Text(
+              name,
+              style: const TextStyle(fontSize: 12),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -1,6 +1,5 @@
-// ignore_for_file: avoid_print, deprecated_member_use
+// ignore_for_file: deprecated_member_use
 
-import 'package:expriy_deals/app/modules/authentication/views/sign_in_screen.dart';
 import 'package:expriy_deals/app/modules/order/views/oder_screen.dart';
 import 'package:expriy_deals/app/modules/payment/views/payment_success_screen.dart';
 import 'package:expriy_deals/app/modules/profile/controllers/profile_controller.dart';
@@ -10,286 +9,158 @@ import 'package:expriy_deals/app/modules/profile/views/info_screen.dart';
 import 'package:expriy_deals/app/modules/profile/widgets/profile_drawer_feature.dart';
 import 'package:expriy_deals/app/utils/app_text.dart';
 import 'package:expriy_deals/app/utils/assets_path.dart';
-import 'package:expriy_deals/app/utils/get_storage.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
-import 'package:expriy_deals/app/widgets/custom_alert_dialoge.dart';
-import 'package:expriy_deals/get_storage.dart';
+import 'package:expriy_deals/app/utils/show_dialog_utils.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
-
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
-  final ProfileController profileController = Get.find<ProfileController>();
 
   static final customCacheManager = CacheManager(
     Config(
-      'customCacheKey', // ক্যাশের জন্য আলাদা নাম
-      stalePeriod: const Duration(days: 15), // ১৫ দিনের জন্য ক্যাশ তাজা থাকবে
-      maxNrOfCacheObjects: 100, // সর্বোচ্চ ১০০টি ছবি ক্যাশ থাকবে
+      'customCacheKey',
+      stalePeriod: const Duration(days: 15),
+      maxNrOfCacheObjects: 100,
     ),
   );
 
   @override
-  void initState() {
-    profileController.getProfileData();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    Get.put(ProfileController());
+    final controller = Get.find<ProfileController>();
+
     return Scaffold(
-      body: GetBuilder<ProfileController>(builder: (controller) {
-        if (controller.inProgress) {
-          return SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: Center(child: CircularProgressIndicator()));
-        }
-        return Padding(
-          padding: EdgeInsets.all(12.0.h),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                heightBox50,
-                Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        radius: 30,
-                        backgroundImage: controller.profileData?.profile != null
-                            ? NetworkImage(controller.profileData!.profile!)
-                            : AssetImage(AssetsPath.appleLogo),
-                      ),
-                      heightBox4,
-                      Text(
-                        controller.profileData?.name ?? 'No name',
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w700),
-                      ),
-                      Text(controller.profileData?.email ?? 'No email',
-                          style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.w500)),
-                    ],
+      body: Padding(
+        padding: EdgeInsets.all(12.0.h),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              heightBox50,
+              Center(
+                child: Obx(() {                
+                 return controller.inProgress
+                      ? const CircularProgressIndicator()
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              radius: 30,
+                              backgroundImage: controller.profileData?.profile != null
+                                  ? NetworkImage(controller.profileData!.profile!)
+                                  : const AssetImage(AssetsPath.appleLogo),
+                            ),
+                            heightBox4,
+                            Text(
+                              controller.profileData?.name ?? 'No name',
+                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                            ),
+                            Text(
+                              controller.profileData?.email ?? 'No email',
+                              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        );
+                }),
+              ),
+              heightBox12,
+              ProfileDrawerFeature(
+                feature: 'Edit Profile',
+                icon: Icons.person,
+                ontap: () {
+                  if (controller.profileData != null) {
+                    Get.to(EditProfile(profileData: controller.profileData!));
+                  } else {
+                    Get.snackbar('Error', 'Profile data not available');
+                  }
+                },
+              ),
+              ProfileDrawerFeature(
+                feature: 'My Orders',
+                icon: Icons.location_on,
+                ontap: () => Get.to(const MyOrderScreen()),
+              ),
+              ProfileDrawerFeature(
+                feature: 'Payment',
+                icon: Icons.payment,
+                ontap: () => Get.to(const PaymentSuccessScreen()),
+              ),
+              heightBox8,
+              Text(
+                'Settings',
+                style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w500),
+              ),
+              heightBox12,
+              ProfileDrawerFeature(
+                feature: 'Notification',
+                icon: Icons.notifications,
+                ontap: () {
+                  // NotificationScreen নেভিগেশন যোগ করুন
+                },
+              ),
+              heightBox8,
+              ProfileDrawerFeature(
+                feature: 'Change password',
+                icon: Icons.lock,
+                ontap: () => Get.to(const ChangePasswordScreen()),
+              ),
+              heightBox8,
+              ProfileDrawerFeature(
+                feature: 'Delete account',
+                icon: Icons.delete,
+                ontap: () {},
+              ),
+              heightBox8,
+              Text(
+                'Support',
+                style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w500),
+              ),
+              heightBox12,
+              ProfileDrawerFeature(
+                feature: 'Policies',
+                icon: Icons.security,
+                ontap: () => Get.to(const InfoScreen(appBarTitle: 'Privacy & Policies', data: DemoText.policies)),
+              ),
+              ProfileDrawerFeature(
+                feature: 'About Us',
+                icon: Icons.groups_2_sharp,
+                ontap: () => Get.to(const InfoScreen(appBarTitle: 'About Us', data: DemoText.aboutUs)),
+              ),
+              heightBox8,
+              heightBox14,
+              Align(
+                alignment: Alignment.center,
+                child: InkWell(
+                  onTap: () => DialogUtils.showLogoutDialog(context, controller.logout),
+                  child: Container(
+                    height: 40,
+                    width: 140,
+                    decoration: BoxDecoration(
+                      color: const Color(0xffFF0000).withOpacity(0.20),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.logout, color: Colors.red),
+                        widthBox4,
+                        const Text(
+                          'Logout',
+                          style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                heightBox12,
-                ProfileDrawerFeature(
-                  feature: 'Edit Profile',
-                  icon: Icons.person,
-                  ontap: () {
-                    if (controller.profileData != null) {
-                      Get.to(EditProfile(
-                        profileData: controller.profileData!,
-                      ));
-                    } else {
-                      print('Empty data');
-                    }
-                  },
-                ),
-                ProfileDrawerFeature(
-                  feature: 'My Orders',
-                  icon: Icons.location_on,
-                  ontap: () {
-                    Get.to(MyOrderScreen());
-                  },
-                ),
-               
-                ProfileDrawerFeature(
-                  feature: 'Payment',
-                  icon: Icons.payment,
-                  ontap: () {
-                    Get.to(PaymentSuccessScreen());
-                  },
-                ),
-                heightBox8,
-                Text(
-                  'Settings',
-                  style: GoogleFonts.poppins(
-                      fontSize: 12, fontWeight: FontWeight.w500),
-                ),
-                heightBox12,
-                ProfileDrawerFeature(
-                  feature: 'Notification',
-                  icon: Icons.notifications,
-                  ontap: () {
-                    // Navigator.pushNamed(context, NotificationScreen.routeName);
-                  },
-                ),
-                heightBox8,
-                ProfileDrawerFeature(
-                  feature: 'Change password',
-                  icon: Icons.lock,
-                  ontap: () {
-                    Get.to(ChangePasswordScreen());
-                  },
-                ),
-                heightBox8,
-                ProfileDrawerFeature(
-                  feature: 'Delete account',
-                  icon: Icons.delete,
-                  ontap: onTapChangeAccount,
-                ),
-                heightBox8,
-                Text(
-                  'Support',
-                  style: GoogleFonts.poppins(
-                      fontSize: 12, fontWeight: FontWeight.w500),
-                ),
-                heightBox12,
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ProfileDrawerFeature(
-                      feature: 'Policies',
-                      icon: Icons.security,
-                      ontap: () {
-                        Get.to(InfoScreen(
-                            appBarTitle: 'Privacy & Policies',
-                            data: DemoText.policies));
-                      },
-                    ),
-                    ProfileDrawerFeature(
-                      feature: 'About Us',
-                      icon: Icons.groups_2_sharp,
-                      ontap: () {
-                        Get.to(InfoScreen(
-                            appBarTitle: 'About Us', data: DemoText.aboutUs));
-                      },
-                    ),
-                    heightBox8,
-                    heightBox14,
-                    Align(
-                      alignment: Alignment.center,
-                      child: InkWell(
-                        onTap: onTapLogoutBTN,
-                        child: Container(
-                          height: 40,
-                          width: 140,
-                          decoration: BoxDecoration(
-                            color: Color(0xffFF0000).withOpacity(0.20),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.logout,
-                                color: Colors.red,
-                              ),
-                              widthBox4,
-                              Text(
-                                'Logout',
-                                style: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.w600),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      }),
-    );
-  }
-
-  void onTapChangeAccount() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => CustomAlertDialog(
-        title: 'Do you want to delete this account?',
-        noOntap: () {
-          Navigator.pop(context);
-        },
-        yesOntap: () {},
-      ),
-    );
-  }
-
-  void onTapLogoutBTN() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Center(
-          child: Text(
-            textAlign: TextAlign.center,
-            'Do you want to log out this profile?',
-            style: GoogleFonts.poppins(fontSize: 20),
+              ),
+            ],
           ),
         ),
-        actions: [
-          GestureDetector(
-            onTap: () async {
-              // Google Sign-Out
-              try {
-                await GoogleSignIn().signOut();
-                print('Google signed out');
-              } catch (e) {
-                print('Error signing out from Google: $e');
-              }
-
-              // Clear local token
-              box.remove(StorageUtil.userAccessToken);
-              print(
-                  'Token after logout: ${box.read(StorageUtil.userAccessToken)}');
-
-              // Redirect to Sign In
-              Get.to(SignInScreen());
-            },
-            child: Container(
-              height: 32.h,
-              width: 120.w,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color(0xff305FA1).withOpacity(0.1),
-                border: Border.all(color: Color(0xff305FA1)),
-              ),
-              child: Center(
-                child: Text(
-                  'YES',
-                  style: TextStyle(color: Color(0xff305FA1), fontSize: 14),
-                ),
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: Container(
-              height: 32.h,
-              width: 120.w,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color(0xffA13430).withOpacity(0.1),
-                border: Border.all(color: Color(0xffA13430)),
-              ),
-              child: Center(
-                child: Text(
-                  'NO',
-                  style: TextStyle(color: Color(0xffA13430), fontSize: 14.sp),
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

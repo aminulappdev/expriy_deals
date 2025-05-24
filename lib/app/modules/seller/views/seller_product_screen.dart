@@ -72,7 +72,7 @@ class _SellerProductScreenState extends State<SellerProductScreen> {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8.w),
-                    child: ProductCard(),
+                    child: ProductCard(productId: '',),
                   );
                 },
               ),

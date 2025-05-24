@@ -1,14 +1,23 @@
+import 'package:expriy_deals/app/modules/product/controllers/all_product_conrtoller.dart';
 import 'package:expriy_deals/app/modules/product/widgets/product_card.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:expriy_deals/app/widgets/costom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+
 
 class ProductScreen extends StatefulWidget {
+  final String categoryId;
+  final String categoryName;
   final bool shouldBackButton;
   static const String routeName = '/product-screen';
-  const ProductScreen({super.key, required this.shouldBackButton});
+  const ProductScreen(
+      {super.key,
+      required this.shouldBackButton,
+      required this.categoryId,
+      required this.categoryName});
 
   @override
   State<ProductScreen> createState() => _ProductScreenState();
@@ -17,12 +26,15 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen> {
   final TextEditingController searchController = TextEditingController();
   final ScrollController scrollController = ScrollController();
+  final AllProductController allProductController =
+      Get.put(AllProductController());
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   scrollController.addListener(_loadMoreData);
-  // }
+  @override
+  void initState() {
+    super.initState();
+    print('Category ID: ${widget.categoryId}');
+    allProductController.getCategory(widget.categoryId);
+  }
 
   // void _loadMoreData() {
   //   if (scrollController.position.extentAfter < 500 &&
@@ -45,7 +57,7 @@ class _ProductScreenState extends State<ProductScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             heightBox20,
-            CustomAppBar(name: 'Search products'),
+            CustomAppBar(name: widget.categoryName),
             heightBox10,
             Row(
               children: [
@@ -101,28 +113,38 @@ class _ProductScreenState extends State<ProductScreen> {
             ),
             heightBox12,
             Expanded(
-              child: SizedBox(
-                  child: Column(
-                children: [
-                  Expanded(
-                    child: GridView.builder(
-                      padding: EdgeInsets.zero,
-                      itemCount: 10,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 16,
-                          childAspectRatio: 1,
-                          crossAxisCount: 2),
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8.w),
-                          child: ProductCard(),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              )),
+              child: SizedBox(child: Obx(() {
+                if (allProductController.inProgress == true) {
+                  return Center(child: CircularProgressIndicator());
+                } else {
+                 
+                  return GridView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: allProductController.productData?.length ?? 0,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisSpacing: 12,
+                        mainAxisSpacing: 16,
+                        childAspectRatio: 1,
+                        crossAxisCount: 2),
+                    itemBuilder: (context, index) {
+                     
+                      return Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.w),
+                        child: ProductCard(
+                          isShowDiscount: true,
+                          image: allProductController.productData?[index].images[0].url ?? '',
+                          title:
+                              allProductController.productData?[index].name ??
+                                  '',
+                          price: allProductController.productData?[index].price
+                                  .toString() ??
+                              '', productId: allProductController.productData?[index].id ?? '',
+                        ),
+                      );
+                    },
+                  );
+                }
+              })),
             ),
           ],
         ),

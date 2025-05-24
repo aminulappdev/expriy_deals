@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:expriy_deals/urls.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as http; 
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 

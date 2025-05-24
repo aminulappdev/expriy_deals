@@ -1,42 +1,79 @@
+
+import 'package:expriy_deals/app/modules/authentication/views/sign_in_screen.dart';
 import 'package:expriy_deals/app/modules/profile/model/profile_model.dart';
+import 'package:expriy_deals/app/modules/profile/services/profile_services.dart';
+
 import 'package:expriy_deals/get_storage.dart';
 import 'package:expriy_deals/services/network_caller/network_caller.dart';
-import 'package:expriy_deals/services/network_caller/network_response.dart';
 import 'package:expriy_deals/urls.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProfileController extends GetxController {
-  bool _inProgress = false;
-  bool get inProgress => _inProgress;
+  final ProfileService _profileService = ProfileService();
 
-  String? _errorMessage; 
-  String? get errorMessage => _errorMessage;
+  final RxBool _inProgress = false.obs;
+  final RxString _errorMessage = ''.obs;
+  final Rx<ProfileModel?> _profileModel = Rx<ProfileModel?>(null);
 
-  ProfileModel? profileModel;
-  ProfileData? get profileData => profileModel?.data;
+  bool get inProgress => _inProgress.value;
+  String? get errorMessage => _errorMessage.value;
+  ProfileData? get profileData => _profileModel.value?.data;
 
+  @override
+  void onInit() {
+    super.onInit();
+    getProfileData();
+  }
+ 
   Future<bool> getProfileData() async {
-    bool isSuccess = false;
-
-    _inProgress = true;
-
-    update();
-    print('Access token in profile controller page : ${StorageUtil.getData(StorageUtil.userAccessToken)}');
-    final NetworkResponse response = await Get.find<NetworkCaller>().getRequest(
-        
-        Urls.getProfileUrl,
-        accesToken: StorageUtil.getData(StorageUtil.userAccessToken));
-
-    if (response.isSuccess) {
-      profileModel = ProfileModel.fromJson(response.responseData);
-      _errorMessage = null;
-      isSuccess = true;
-    } else {
-      _errorMessage = response.errorMessage;
+    final token = StorageUtil.getData(StorageUtil.userAccessToken);
+    if (token == null) {
+      Get.off(SignInScreen());
+      return false;
     }
+    _inProgress.value = true;
+    final response = await Get.find<NetworkCaller>().getRequest(
+      Urls.getProfileUrl,
+      accesToken: token,
+    );
+    if (response.isSuccess) {
+      _errorMessage.value = '';
+      _profileModel.value = ProfileModel.fromJson(response.responseData);
+      _inProgress.value = false;
+      return true;
+    } else {
+      _errorMessage.value = response.errorMessage;
+      _inProgress.value = false;
+      return false;
+    }
+  }
 
-    _inProgress = false;
-    update();
-    return isSuccess;
+  // Future<void> deleteAccount() async {
+  //   _inProgress.value = true;
+  //   final isSuccess = await _profileService.deleteAccount();
+  //   _inProgress.value = false;
+  //   if (isSuccess) {
+  //     Get.snackbar('Success', 'Account deleted successfully', snackPosition: SnackPosition.BOTTOM);
+  //     Get.offAllNamed('/sign-in-screen');
+  //   } else {
+  //     _errorMessage.value = 'Failed to delete account';
+  //     Get.snackbar('Error', 'Failed to delete account',
+  //         snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.redAccent, colorText: Colors.white);
+  //   }
+  // }
+
+  Future<void> logout() async {
+    _inProgress.value = true;
+    final isSuccess = await _profileService.logout();
+    _inProgress.value = false;
+    if (isSuccess) {
+      Get.snackbar('Success', 'Logged out successfully', snackPosition: SnackPosition.BOTTOM);
+      Get.off(SignInScreen());
+    } else {
+      _errorMessage.value = 'Failed to log out';
+      Get.snackbar('Error', 'Failed to log out',
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.redAccent, colorText: Colors.white);
+    }
   }
 }
