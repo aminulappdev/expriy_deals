@@ -13,10 +13,9 @@ class AllProductController extends GetxController {
   RxString? _errorMessage = ''.obs;
   String? get errorMessage => _errorMessage?.value;
 
-  
   final Rx<ProductModel?> _productModel = Rx<ProductModel?>(null);
-  List<ProductItemModel>? get productData => _productModel.value!.data?.data ?? [];
-  
+  List<ProductItemModel>? get productData =>
+      _productModel.value!.data?.data ?? [];
 
   @override
   void onInit() {
@@ -24,7 +23,7 @@ class AllProductController extends GetxController {
     // getCategory(Get.arguments);
   }
 
-  Future<bool> getCategory(String categoryId) async {
+  Future<bool> getProduct({String? categoryId}) async {
     final token = StorageUtil.getData(StorageUtil.userAccessToken);
     if (token == null) {
       Get.to(SignInScreen());
@@ -37,7 +36,7 @@ class AllProductController extends GetxController {
 
     final NetworkResponse response = await Get.find<NetworkCaller>().getRequest(
         Urls.productUrl,
-        queryParams: queryparam,
+        queryParams: categoryId == null ? {} : queryparam,
         accesToken: StorageUtil.getData(StorageUtil.userAccessToken));
 
     if (response.isSuccess) {

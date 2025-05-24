@@ -1,6 +1,8 @@
 import 'package:expriy_deals/app/modules/category/controllers/all_category_controller.dart';
 import 'package:expriy_deals/app/modules/category/views/all_catogory_screen.dart';
+import 'package:expriy_deals/app/modules/category/widget/category_card.dart';
 import 'package:expriy_deals/app/modules/home/widgets/see_all_section.dart';
+import 'package:expriy_deals/app/modules/product/controllers/all_product_conrtoller.dart';
 import 'package:expriy_deals/app/modules/product/views/product_screen.dart';
 import 'package:expriy_deals/app/modules/product/widgets/product_card.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
@@ -32,11 +34,14 @@ List<Color> colorList = [
 
 class _HomeScreenState extends State<HomeScreen> {
   final categoryController = Get.put(AllCategoryController());
+  final AllProductController allProductController =
+      Get.put(AllProductController());
 
   @override
   void initState() {
     super.initState();
     categoryController.getCategory();
+    allProductController.getProduct();
   }
 
   @override
@@ -105,6 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: TextFormField(
                                 onChanged: (_) {},
                                 decoration: const InputDecoration(
+                                  hintText: 'Search product',
                                   border: InputBorder.none,
                                   focusedBorder: InputBorder.none,
                                   enabledBorder: InputBorder.none,
@@ -137,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return const Center(child: CircularProgressIndicator());
                   } else {
                     return SizedBox(
-                      height: 120.h,
+                      height: 100.h,
                       width: MediaQuery.of(context).size.width,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
@@ -170,7 +176,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
                 }),
 
-                heightBox12,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -193,8 +198,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, ProductScreen.routeName,
-                            arguments: true);
+                        Get.to(ProductScreen(
+                            shouldBackButton: true,
+                            categoryId: '',
+                            categoryName: 'Special offer'));
                       },
                       child: Text(
                         'See all..',
@@ -206,26 +213,55 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 180.h,
-                  width: MediaQuery.of(context).size.width,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 4,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 4.w),
-                        child: const ProductCard(isShowDiscount: true, productId: '',),
-                      );
-                    },
-                  ),
-                ),
+                Obx(() {
+                  if (allProductController.inProgress == true) {
+                    return CircularProgressIndicator();
+                  } else {
+                    return SizedBox(
+                      height: 180.h,
+                      width: MediaQuery.of(context).size.width,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 4,
+                          itemBuilder: (context, index) {
+                            if (allProductController
+                                    .productData![index].discount! >
+                                0) {
+                              return Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 4.w),
+                                child: ProductCard(
+                                  image: allProductController
+                                      .productData?[index].images[0].url,
+                                  price: allProductController
+                                          .productData?[index].price
+                                          .toString() ??
+                                      '',
+                                  title: allProductController
+                                      .productData?[index].name,
+                                  isShowDiscount: true,
+                                  productId: allProductController
+                                          .productData?[index].id ??
+                                      '',
+                                ),
+                              );
+                            } else {
+                              Center(
+                                child: Text('No product avaiable'),
+                              );
+                            }
+                            return Container();
+                          }),
+                    );
+                  }
+                }),
                 heightBox12,
                 SeeAllSection(
                   title: 'Nearby Stores',
                   ontap: () {
-                    Navigator.pushNamed(context, ProductScreen.routeName,
-                        arguments: true);
+                    Get.to(ProductScreen(
+                        shouldBackButton: true,
+                        categoryId: '',
+                        categoryName: ''));
                   },
                 ),
                 heightBox10,
@@ -238,7 +274,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 4.w),
-                        child: const ProductCard(isShowDiscount: true, productId: '',),
+                        child: const ProductCard(
+                          isShowDiscount: true,
+                          productId: '',
+                        ),
                       );
                     },
                   ),
@@ -247,8 +286,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 SeeAllSection(
                   title: 'Recommended for You',
                   ontap: () {
-                    Navigator.pushNamed(context, ProductScreen.routeName,
-                        arguments: true);
+                    Get.to(ProductScreen(
+                        shouldBackButton: true,
+                        categoryId: '',
+                        categoryName: ''));
                   },
                 ),
                 heightBox10,
@@ -261,7 +302,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 4.w),
-                        child: const ProductCard(isShowDiscount: true, productId: '',),
+                        child: const ProductCard(
+                          isShowDiscount: true,
+                          productId: '',
+                        ),
                       );
                     },
                   ),
@@ -271,52 +315,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class CategoryCard extends StatelessWidget {
-  final String image;
-  final String name;
-  final VoidCallback? onTap;
-  const CategoryCard({
-    super.key,
-    required this.image,
-    this.onTap,
-    required this.name,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 60.h,
-            width: 60.w,
-            decoration: BoxDecoration(
-              color: AppColors.iconButtonThemeColor,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: const Icon(
-              Icons.headphones,
-              color: Colors.white,
-              size: 36,
-            ),
-          ),
-          heightBox4,
-          SizedBox(
-            width: 70.w,
-            child: Text(
-              name,
-              style: const TextStyle(fontSize: 12),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ],
       ),
     );
   }

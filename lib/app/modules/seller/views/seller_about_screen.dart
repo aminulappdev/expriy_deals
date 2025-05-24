@@ -2,7 +2,7 @@ import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:flutter/material.dart';
 
 class SellerAboutScreen extends StatefulWidget {
-  static const String routeName = '/product-screen';
+  
   const SellerAboutScreen({
     super.key,
   });

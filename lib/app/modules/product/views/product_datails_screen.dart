@@ -30,7 +30,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   void initState() {
-    print('Product ID: ${widget.productId}');
+    print('Product ID details page theke: ${widget.productId}');
   
     productDetailsController.productDetails(widget.productId);
     super.initState();

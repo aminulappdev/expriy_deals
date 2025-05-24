@@ -1,5 +1,6 @@
 import 'package:expriy_deals/app/modules/category/controllers/all_category_controller.dart';
-import 'package:expriy_deals/app/modules/home/views/home_screen.dart';
+import 'package:expriy_deals/app/modules/category/widget/category_card.dart';
+import 'package:expriy_deals/app/modules/product/views/product_screen.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:expriy_deals/app/widgets/costom_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -42,15 +43,22 @@ class _AllCatogoryScreenState extends State<AllCatogoryScreen> {
                   itemCount: categories.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4,
-                    childAspectRatio: 1.0,
+                    childAspectRatio: 0.8,
                   ),
                   itemBuilder: (BuildContext context, int index) {
                     return Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: CategoryCard(
                         image: '',
-                        onTap: () {},
-                        name: '',
+                        onTap: () {
+                          Get.to(ProductScreen(
+                            shouldBackButton: true,
+                            categoryId: categories[index].id ?? 'Empty',
+                            categoryName: categories[index].name ?? '',
+                          ));
+                        },
+                        name: categoryController.categoryData?[index].name ??
+                            'No name',
                       ),
                     );
                   },

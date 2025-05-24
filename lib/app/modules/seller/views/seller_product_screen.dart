@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SellerProductScreen extends StatefulWidget {
 
-  static const String routeName = '/product-screen';
+ 
   const SellerProductScreen({super.key,});
 
   @override

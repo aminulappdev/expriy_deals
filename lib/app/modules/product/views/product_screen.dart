@@ -7,17 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-
 class ProductScreen extends StatefulWidget {
   final String categoryId;
   final String categoryName;
   final bool shouldBackButton;
-  static const String routeName = '/product-screen';
-  const ProductScreen(
-      {super.key,
-      required this.shouldBackButton,
-      required this.categoryId,
-      required this.categoryName});
+
+  const ProductScreen({
+    super.key,
+    required this.shouldBackButton,
+    required this.categoryId,
+    required this.categoryName,
+  });
 
   @override
   State<ProductScreen> createState() => _ProductScreenState();
@@ -26,27 +26,21 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen> {
   final TextEditingController searchController = TextEditingController();
   final ScrollController scrollController = ScrollController();
-  final AllProductController allProductController =
-      Get.put(AllProductController());
+  final AllProductController allProductController = Get.put(AllProductController());
 
   @override
   void initState() {
     super.initState();
     print('Category ID: ${widget.categoryId}');
-    allProductController.getCategory(widget.categoryId);
+    // Defer getProduct call until after the build phase
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.categoryId == '') {
+        allProductController.getProduct();
+      } else {
+        allProductController.getProduct(categoryId: widget.categoryId);
+      }
+    });
   }
-
-  // void _loadMoreData() {
-  //   if (scrollController.position.extentAfter < 500 &&
-  //       !allProcuctController.inProgress) {
-  //     allProcuctController.fetchAllProducts(null); // Trigger fetch more data
-  //   }
-  // }
-
-  // void _onSearch() {
-  //   String query = searchController.text;
-  //   allProcuctController.onSearchQueryChangedProducts(query); // Trigger search
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +69,11 @@ class _ProductScreenState extends State<ProductScreen> {
                       children: [
                         widthBox8,
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            // Implement search functionality here
+                            // String query = searchController.text;
+                            // allProductController.onSearchQueryChangedProducts(query);
+                          },
                           child: Container(
                             height: 34.h,
                             width: 34.h,
@@ -96,8 +94,11 @@ class _ProductScreenState extends State<ProductScreen> {
                         Expanded(
                           child: TextFormField(
                             controller: searchController,
-                            onChanged: (_) {},
-                            decoration: InputDecoration(
+                            onChanged: (value) {
+                              // Trigger search on text change
+                              // allProductController.onSearchQueryChangedProducts(value);
+                            },
+                            decoration: const InputDecoration(
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
@@ -113,42 +114,45 @@ class _ProductScreenState extends State<ProductScreen> {
             ),
             heightBox12,
             Expanded(
-              child: SizedBox(child: Obx(() {
+              child: Obx(() {
                 if (allProductController.inProgress == true) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else {
-                 
                   return GridView.builder(
                     padding: EdgeInsets.zero,
                     itemCount: allProductController.productData?.length ?? 0,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 16,
-                        childAspectRatio: 1,
-                        crossAxisCount: 2),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 1,
+                      crossAxisCount: 2,
+                    ),
                     itemBuilder: (context, index) {
-                     
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8.w),
                         child: ProductCard(
                           isShowDiscount: true,
                           image: allProductController.productData?[index].images[0].url ?? '',
-                          title:
-                              allProductController.productData?[index].name ??
-                                  '',
-                          price: allProductController.productData?[index].price
-                                  .toString() ??
-                              '', productId: allProductController.productData?[index].id ?? '',
+                          title: allProductController.productData?[index].name ?? '',
+                          price: allProductController.productData?[index].price.toString() ?? '',
+                          productId: allProductController.productData?[index].id ?? '',
                         ),
                       );
                     },
                   );
                 }
-              })),
+              }),
             ),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    scrollController.dispose();
+    super.dispose();
   }
 }

@@ -18,7 +18,8 @@ class ProductCard extends StatefulWidget {
     this.isShowDiscount = false,
     this.image,
     this.title,
-    this.price, required this.productId,
+    this.price,
+    required this.productId,
   });
 
   @override
@@ -26,17 +27,20 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
-
   @override
   void initState() {
-    print('Product ID card theke: ${widget.productId}');
+    // print('Product card theke: ${widget.productId}');
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(ProductDetailScreen(productId: '',));
+        print('Product card theke: ${widget.productId}');
+        Get.to(ProductDetailScreen(
+          productId: widget.productId,
+        ));
       },
       child: Card(
         elevation: 1,
