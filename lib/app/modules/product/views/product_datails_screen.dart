@@ -31,7 +31,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   void initState() {
     print('Product ID details page theke: ${widget.productId}');
-  
+
     productDetailsController.productDetails(widget.productId);
     super.initState();
   }
@@ -235,7 +235,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             height: 42.h,
                             child: CustomElevatedButton(
                                 onPressed: () {
-                                  Get.to(CheckOutScreen());
+                                  productDetailsController.productDetailsData !=
+                                          null
+                                      ? Get.to(CheckOutScreen(
+                                          productDetailsData:
+                                              productDetailsController
+                                                  .productDetailsData!,
+                                        ))
+                                      : printError(
+                                          info: 'productDetailsData is null');
                                 },
                                 text: 'Buy now'),
                           ),

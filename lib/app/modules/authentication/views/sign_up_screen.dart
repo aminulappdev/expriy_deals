@@ -8,6 +8,7 @@ import 'package:expriy_deals/app/modules/authentication/widgets/agree_condition_
 import 'package:expriy_deals/app/modules/authentication/widgets/footer_section.dart';
 import 'package:expriy_deals/app/modules/authentication/widgets/welcome_text.dart';
 import 'package:expriy_deals/app/modules/onboarding/widgets/custom_scafold_background.dart';
+import 'package:expriy_deals/app/utils/app_colors.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:expriy_deals/app/widgets/costom_app_bar.dart';
 import 'package:expriy_deals/app/widgets/gradiant_elevated_button.dart';
@@ -17,6 +18,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:location/location.dart' as loc;
+import 'package:permission_handler/permission_handler.dart' as ph;
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -36,6 +39,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   File? image;
   final ImagePickerHelper _imagePickerHelper = ImagePickerHelper();
+  double? latitude;
+  double? longitude;
 
   bool _obscureText = true;
 
@@ -259,6 +264,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         });
                       },
                     ),
+                    heightBox12,
+                    Center(
+                      child: InkWell(
+                        onTap: () async {
+                          await requestLocationPermission();
+                          await getCurrentLocation();
+                        },
+                        child: Container(
+                          height: 36.h,
+                          width: 250.w,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              border: Border.all(
+                                  color: AppColors.iconButtonThemeColor)),
+                          child: Center(child: Text('Share your location')),
+                        ),
+                      ),
+                    ),
                     heightBox24,
                     Visibility(
                       visible: showButton,
@@ -314,6 +337,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> requestLocationPermission() async {
+    final ph.PermissionStatus status = await ph.Permission.location.request();
+    if (status.isGranted) {
+      // Permission granted; you can now retrieve the location.
+    } else if (status.isDenied) {
+      // Permission denied.
+      print('Location_permission_denied');
+    }
+  }
+
+  Future<void> getCurrentLocation() async {
+    final loc.Location location = loc.Location();
+    try {
+      final loc.LocationData locationData = await location.getLocation();
+      setState(() {
+        latitude = locationData.latitude!;
+        longitude = locationData.longitude!;
+        print('Location is $latitude and $longitude');
+      });
+      // Handle the location data as needed.
+    } catch (e) {
+      // Handle errors, such as permissions not granted or location services disabled.
+      print('Error getting location: $e');
+    }
   }
 
   Future<void> onTapToNextButton() async {

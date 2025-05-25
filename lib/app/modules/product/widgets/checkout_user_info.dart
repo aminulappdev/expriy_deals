@@ -1,4 +1,3 @@
-
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,67 +25,32 @@ class CheckoutUserInfo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              name,
-              style: GoogleFonts.poppins(fontSize: 14.sp),
-            ),
-            GestureDetector(
-              onTap: editOntap,
-              child: CircleAvatar(
-                radius: 12.r,
-                backgroundColor: Colors.white,
-                child: Center(
-                  child: Icon(
-                    Icons.edit,
-                    size: 18.h,
-                  ),
-                ),
-              ),
-            )
-          ],
+        Text(
+          name,
+          style: GoogleFonts.poppins(fontSize: 14.sp),
         ),
         Text(
           number,
           style: GoogleFonts.poppins(fontSize: 12.sp, color: Color(0xff626262)),
         ),
         heightBox8,
-        Container(
-          height: 19.h,
-          width: 49.w,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: const Color.fromARGB(255, 218, 211, 211)),
-          child: Center(
-            child: Text(
-              status,
-              style: TextStyle(fontSize: 12.sp),
-            ),
-          ),
-        ),
-        heightBox8,
+         
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [
+                Icon(Icons.location_on_rounded,size: 18,),
+                widthBox4,
                 SizedBox(
                     width: 170,
                     child: Text(
                       address,
                       style: GoogleFonts.poppins(fontSize: 10.sp),
                     )),
-                Icon(Icons.location_on_rounded)
+                
               ],
             ),
-            GestureDetector(
-                onTap: addressArrowOntap,
-                child: Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  size: 18.h,
-                ))
           ],
         ),
       ],
