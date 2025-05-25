@@ -12,6 +12,7 @@ class Urls {
   static const String updateProfileUrl = '$_baseUrl/users/update-my-profile';
   static const String categoryUrl = '$_baseUrl/categories';
   static const String productUrl = '$_baseUrl/products';
+  static const String ordertUrl = '$_baseUrl/orders';
  
 
   static String productDetailsById(

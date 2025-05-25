@@ -22,15 +22,17 @@ class ProfileModel {
 class ProfileData {
     ProfileData({
         required this.verification,
+        required this.shop,
+        required this.zipCode,
         required this.id,
         required this.status,
         required this.name,
         required this.email,
         required this.phoneNumber,
+        required this.password,
         required this.gender,
         required this.dateOfBirth,
-        required this.loginWth,
-        required this.expireAt,
+        required this.isGoogleLogin,
         required this.profile,
         required this.document,
         required this.role,
@@ -40,40 +42,56 @@ class ProfileData {
         required this.createdAt,
         required this.updatedAt,
         required this.v,
+        required this.passwordChangedAt,
+        required this.loginWth,
+        required this.city,
+        required this.country,
+        required this.state,
+        required this.expireAt,
     });
 
     final Verification? verification;
+    final dynamic shop;
+    final dynamic zipCode;
     final String? id;
     final String? status;
     final String? name;
     final String? email;
-    final dynamic phoneNumber;
+    final String? phoneNumber;
+    final String? password;
     final dynamic gender;
     final dynamic dateOfBirth;
-    final String? loginWth;
-    final dynamic expireAt;
+    final bool? isGoogleLogin;
     final String? profile;
     final dynamic document;
     final String? role;
-    final dynamic address;
+    final String? address;
     final bool? isDeleted;
     final int? balance;
     final DateTime? createdAt;
     final DateTime? updatedAt;
     final int? v;
+    final DateTime? passwordChangedAt;
+    final String? loginWth;
+    final String? city;
+    final String? country;
+    final String? state;
+    final DateTime? expireAt;
 
     factory ProfileData.fromJson(Map<String, dynamic> json){ 
         return ProfileData(
             verification: json["verification"] == null ? null : Verification.fromJson(json["verification"]),
+            shop: json["shop"],
+            zipCode: json["zipCode"],
             id: json["_id"],
             status: json["status"],
             name: json["name"],
             email: json["email"],
             phoneNumber: json["phoneNumber"],
+            password: json["password"],
             gender: json["gender"],
             dateOfBirth: json["dateOfBirth"],
-            loginWth: json["loginWth"],
-            expireAt: json["expireAt"],
+            isGoogleLogin: json["isGoogleLogin"],
             profile: json["profile"],
             document: json["document"],
             role: json["role"],
@@ -83,6 +101,12 @@ class ProfileData {
             createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
             updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
             v: json["__v"],
+            passwordChangedAt: DateTime.tryParse(json["passwordChangedAt"] ?? ""),
+            loginWth: json["loginWth"],
+            city: json["city"],
+            country: json["country"],
+            state: json["state"],
+            expireAt: DateTime.tryParse(json["expireAt"] ?? ""),
         );
     }
 

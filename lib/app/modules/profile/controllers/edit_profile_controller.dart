@@ -19,7 +19,7 @@ class EditProfileController extends GetxController {
 
   /// 🔁 Update Profile Function
   Future<bool> updateProfile(File? image, String name, String email,
-      String contact, String address, String token) async {
+      String contact, String address, String city, String state,String zipcode, String country, String token) async {
     bool isSuccess = false;
     _inProgress = true;
     update();
@@ -34,7 +34,11 @@ class EditProfileController extends GetxController {
         "name": name,
         "email": email,
         "phoneNumber": contact,
-        "address": address
+        "address": address,
+        "city": city,
+        "state": state,
+        "zipCode": zipcode,
+        "country": country,
       };
 
       request.fields['data'] = jsonEncode(jsonFields);

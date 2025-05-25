@@ -8,6 +8,9 @@ class CheckoutUserInfo extends StatelessWidget {
   final String number;
   final String status;
   final String address;
+  final String city;
+  final String zipcode;
+  final String country;
   final VoidCallback editOntap;
   final VoidCallback addressArrowOntap;
   const CheckoutUserInfo({
@@ -18,42 +21,76 @@ class CheckoutUserInfo extends StatelessWidget {
     required this.address,
     required this.editOntap,
     required this.addressArrowOntap,
+    required this.city,
+    required this.zipcode,
+    required this.country,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          name,
-          style: GoogleFonts.poppins(fontSize: 14.sp),
-        ),
-        Text(
-          number,
-          style: GoogleFonts.poppins(fontSize: 12.sp, color: Color(0xff626262)),
-        ),
-        heightBox8,
-         
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Card(
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              name,
+              style: GoogleFonts.poppins(
+                  fontSize: 16.sp, fontWeight: FontWeight.w500),
+            ),
+            Text(
+              number,
+              style: GoogleFonts.poppins(
+                  fontSize: 10.sp, color: Color(0xff626262)),
+            ),
+            heightBox8,
             Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.location_on_rounded,size: 18,),
-                widthBox4,
-                SizedBox(
-                    width: 170,
-                    child: Text(
-                      address,
-                      style: GoogleFonts.poppins(fontSize: 10.sp),
-                    )),
-                
+                Row(
+                  children: [
+                    Icon(
+                      Icons.location_on_rounded,
+                      size: 18,
+                    ),
+                    widthBox4,
+                    SizedBox(
+                        width: 170,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              address,
+                              style: GoogleFonts.poppins(fontSize: 10.sp),
+                            ),
+                            Text(
+                              'City : $city',
+                              style: GoogleFonts.poppins(fontSize: 10.sp),
+                            ),
+                            Text(
+                              'Zipcode : $zipcode',
+                              style: GoogleFonts.poppins(
+                                fontSize: 10.sp,
+                              ),
+                            ),
+                            Text(
+                              'Country : $country',
+                              style: GoogleFonts.poppins(
+                                fontSize: 10.sp,
+                              ),
+                            ),
+                          ],
+                        )),
+                  ],
+                ),
               ],
             ),
           ],
         ),
-      ],
+      ),
     );
   }
 }

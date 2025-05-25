@@ -126,14 +126,16 @@
 //   }
 // }
 
+import 'package:expriy_deals/app/modules/order/controllers/order_controller.dart';
 import 'package:expriy_deals/app/modules/order/widgets/price_row.dart';
 import 'package:expriy_deals/app/modules/product/model/product_details_model.dart';
-import 'package:expriy_deals/app/modules/product/model/product_model.dart';
 import 'package:expriy_deals/app/modules/product/widgets/checkout_user_info.dart';
 import 'package:expriy_deals/app/modules/profile/controllers/profile_controller.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:expriy_deals/app/widgets/costom_app_bar.dart';
+import 'package:expriy_deals/app/widgets/gradiant_elevated_button.dart';
+import 'package:expriy_deals/app/widgets/show_snackBar_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -149,13 +151,13 @@ class CheckOutScreen extends StatefulWidget {
 
 class _CheckOutScreenState extends State<CheckOutScreen> {
   // final PaymentController paymentController = PaymentController();
-  // final ProductOrderController productOrderController =
-  //     Get.find<ProductOrderController>();
+  final ProductOrderController productOrderController =
+      Get.find<ProductOrderController>();
   ProfileController profileController = Get.find<ProfileController>();
   // final PaymentService paymentService = PaymentService();
 
   int selectedButtonIndex = 0;
-  String deliveryAddress = '';
+  String deliveryAddress = 'Dhaka';
 
   int quantity = 1;
 
@@ -198,6 +200,9 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                 CustomAppBar(name: 'Checkout'),
                 heightBox12,
                 CheckoutUserInfo(
+                  city: controller.profileData?.city ?? 'city',
+                  zipcode: controller.profileData?.zipCode ?? 'zipcode',
+                  country: controller.profileData?.country ?? 'country',
                   name: controller.profileData?.name ?? 'name',
                   number:
                       controller.profileData?.document ?? '+49 176 12345678',
@@ -240,7 +245,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                   priceSize: 14,
                 ),
                 heightBox8,
-               
+
                 PriceRow(
                   name: 'Discount',
                   price: '$discount%',
@@ -261,79 +266,73 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                   priceSize: 16,
                 ),
                 SizedBox(height: 230),
-                // Container(
-                //   height: 70.h,
-                //   width: MediaQuery.of(context).size.width,
-                //   decoration: BoxDecoration(
-                //     color: Colors.white,
-                //     borderRadius: BorderRadius.circular(10),
-                //   ),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.end,
-                //     children: [
-                //       Padding(
-                //         padding: EdgeInsets.symmetric(horizontal: 12.w),
-                //         child: SizedBox(
-                //             width: 159.w,
-                //             height: 42.h,
-                //             child: GetBuilder<ProductOrderController>(
-                //               builder: (orderController) {
-                //                 bool isLoading = orderController.inProgress;
+                Container(
+                  height: 70.h,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12.w),
+                        child: SizedBox(
+                            width: 159.w,
+                            height: 42.h,
+                            child: GetBuilder<ProductOrderController>(
+                              builder: (orderController) {
+                                bool isLoading = orderController.inProgress;
 
-                //                 return Stack(
-                //                   alignment: Alignment.center,
-                //                   children: [
-                //                     IgnorePointer(
-                //                       ignoring: isLoading,
-                //                       child: GradientElevatedButton(
-                //                         onPressed: () {
-                //                           if (deliveryAddress ==
-                //                               'Please update your address') {
-                //                             showSnackBarMessage(
-                //                               context,
-                //                               'Please fill-up your address',
-                //                               true,
-                //                             );
-                //                           } else {
-                //                             productOrderFunction(
-                //                               profileController
-                //                                       .profileData?.sId ??
-                //                                   '',
-                //                               '5',
-                //                               profileController
-                //                                       .profileData?.name ??
-                //                                   'Name',
-                //                               '10-10-2024',
-                //                               deliveryAddress,
-                //                               profileController.profileData
-                //                                       ?.contactNumber ??
-                //                                   '+49 176 12345678',
-                //                               profileController
-                //                                       .profileData?.email ??
-                //                                   '',
-                //                             );
-                //                           }
-                //                         },
-                //                         text: isLoading ? '' : 'Place order',
-                //                       ),
-                //                     ),
-                //                     if (isLoading)
-                //                       const SizedBox(
-                //                         width: 20,
-                //                         height: 20,
-                //                         child: CircularProgressIndicator(
-                //                           strokeWidth: 2,
-                //                           color: Colors.white,
-                //                         ),
-                //                       ),
-                //                   ],
-                //                 );
-                //               },
-                //             )),
-                //       ),
-                //     ],
-                //   ),
-                // ),
+                                return Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    IgnorePointer(
+                                      ignoring: isLoading,
+                                      child: CustomElevatedButton(
+                                        onPressed: () {
+                                          if (controller.profileData?.address == '') {
+                                            showSnackBarMessage(
+                                              context,
+                                              'Please fill-up your address',
+                                              true,
+                                            );
+                                          } else {
+                                            productOrderFunction(
+                                              controller.profileData?.address ??
+                                                  'address',
+                                              controller.profileData?.city ??
+                                                  'city',
+                                              controller.profileData?.state ??
+                                                  'state',
+                                              controller.profileData?.zipCode ??
+                                                  'zipcode',
+                                              controller.profileData?.country ??
+                                                  'country',
+                                            );
+                                          }
+                                        },
+                                        text: isLoading ? '' : 'Place order',
+                                      ),
+                                    ),
+                                    if (isLoading)
+                                      const SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                  ],
+                                );
+                              },
+                            )),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -413,7 +412,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              if (widget.productDetailsData.quantity! >
+                              if (widget.productDetailsData.discount! >
                                   quantity) {
                                 quantity++;
                                 price =
@@ -425,7 +424,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                     'Plus: Quantity=$quantity, Price=$price, Total=$mainTotalPrice');
                               } else {
                                 print(
-                                    'Cannot increase quantity beyond ${widget.productDetailsData.quantity}');
+                                    'Cannot increase quantity beyond ${widget.productDetailsData.discount}');
                               }
                             });
                           },
@@ -457,48 +456,40 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     );
   }
 
-  // Future<void> productOrderFunction(
-  //   String userId,
-  //   String deliveryCharge,
-  //   String billingName,
-  //   String pickupDate,
-  //   String address,
-  //   String phoneNumber,
-  //   String email,
-  // ) async {
-  //   final bool isSuccess = await productOrderController.orderProduct(
-  //     widget.productModel.sId!,
-  //     quantity,
-  //     price,
-  //     mainTotalPrice,
-  //     discount.toString(),
-  //     userId,
-  //     mainTotalPrice,
-  //     deliveryCharge,
-  //     billingName,
-  //     pickupDate,
-  //     address,
-  //     phoneNumber,
-  //     email,
-  //   );
+  Future<void> productOrderFunction(
+    String address,
+    String city,
+    String state,
+    String zipCode,
+    String country,
+  ) async {
+    final bool isSuccess = await productOrderController.orderProduct(
+      widget.productDetailsData.id!,
+      quantity,
+      address,
+      city,
+      state,
+      zipCode,
+      country,
+    );
 
-  //   if (isSuccess) {
-  //     print('Reference id is...........');
-  //     print(productOrderController.orderResponseData!.id!);
-  //     if (mounted) {
-  //       paymentService.payment(
-  //         context,
-  //         'Order',
-  //         userId,
-  //         productOrderController.orderResponseData!.id!,
-  //       );
-  //     }
-  //   } else {
-  //     if (mounted) {
-  //       print('Error show ----------------------------------');
-  //       showSnackBarMessage(
-  //           context, productOrderController.errorMessage!, true);
-  //     }
-  //   }
-  // }
+    if (isSuccess) {
+      print('Reference id is...........');
+      print(productOrderController.orderResponseData!.id!);
+      if (mounted) {
+        // paymentService.payment(
+        //   context,
+        //   'Order',
+        //   userId,
+        //   productOrderController.orderResponseData!.id!,
+        // );
+      }
+    } else {
+      if (mounted) {
+        print('Error show ----------------------------------');
+        showSnackBarMessage(
+            context, productOrderController.errorMessage!, true);
+      }
+    }
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:expriy_deals/app/modules/product/model/product_details_model.dart';
 import 'package:expriy_deals/app/modules/seller/views/seller_about_screen.dart';
 import 'package:expriy_deals/app/modules/seller/views/seller_product_screen.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
@@ -7,7 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SellerProfileScreen extends StatefulWidget {
-  const SellerProfileScreen({super.key});
+  const SellerProfileScreen({super.key, required this.productDetailsData});
+  
+  final ProductDetailsData productDetailsData;
+  
+
 
   @override
   State<SellerProfileScreen> createState() => _SellerProfileScreenState();
@@ -51,7 +56,7 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
                       ),
                       heightBox10,
                       Text(
-                        'Toy shop',
+                        widget.productDetailsData.author?.shop?.name ?? '',
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,

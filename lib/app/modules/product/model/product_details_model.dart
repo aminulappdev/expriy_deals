@@ -21,6 +21,7 @@ class ProductDetailsModel {
 
 class ProductDetailsData {
     ProductDetailsData({
+        required this.totalSell,
         required this.id,
         required this.images,
         required this.author,
@@ -28,15 +29,16 @@ class ProductDetailsData {
         required this.details,
         required this.category,
         required this.price,
-        required this.quantity,
         required this.expiredAt,
         required this.discount,
         required this.isDeleted,
         required this.createdAt,
         required this.updatedAt,
         required this.v,
+        required this.stock,
     });
 
+    final int? totalSell;
     final String? id;
     final List<Image> images;
     final Author? author;
@@ -44,16 +46,17 @@ class ProductDetailsData {
     final String? details;
     final Category? category;
     final double? price;
-    final int? quantity;
     final DateTime? expiredAt;
     final int? discount;
     final bool? isDeleted;
     final DateTime? createdAt;
     final DateTime? updatedAt;
     final int? v;
+    final int? stock;
 
     factory ProductDetailsData.fromJson(Map<String, dynamic> json){ 
         return ProductDetailsData(
+            totalSell: json["totalSell"],
             id: json["_id"],
             images: json["images"] == null ? [] : List<Image>.from(json["images"]!.map((x) => Image.fromJson(x))),
             author: json["author"] == null ? null : Author.fromJson(json["author"]),
@@ -61,13 +64,13 @@ class ProductDetailsData {
             details: json["details"],
             category: json["category"] == null ? null : Category.fromJson(json["category"]),
             price: json["price"],
-            quantity: json["quantity"],
             expiredAt: DateTime.tryParse(json["expiredAt"] ?? ""),
             discount: json["discount"],
             isDeleted: json["isDeleted"],
             createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
             updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
             v: json["__v"],
+            stock: json["stock"],
         );
     }
 
@@ -80,6 +83,7 @@ class Author {
         required this.email,
         required this.phoneNumber,
         required this.profile,
+        required this.shop,
     });
 
     final String? id;
@@ -87,6 +91,7 @@ class Author {
     final String? email;
     final String? phoneNumber;
     final String? profile;
+    final Shop? shop;
 
     factory Author.fromJson(Map<String, dynamic> json){ 
         return Author(
@@ -95,6 +100,67 @@ class Author {
             email: json["email"],
             phoneNumber: json["phoneNumber"],
             profile: json["profile"],
+            shop: json["shop"] == null ? null : Shop.fromJson(json["shop"]),
+        );
+    }
+
+}
+
+class Shop {
+    Shop({
+        required this.location,
+        required this.description,
+        required this.address,
+        required this.logo,
+        required this.banner,
+        required this.id,
+        required this.name,
+        required this.bannerColor,
+        required this.author,
+        required this.isDeleted,
+    });
+
+    final Location? location;
+    final dynamic description;
+    final dynamic address;
+    final dynamic logo;
+    final dynamic banner;
+    final String? id;
+    final String? name;
+    final String? bannerColor;
+    final String? author;
+    final bool? isDeleted;
+
+    factory Shop.fromJson(Map<String, dynamic> json){ 
+        return Shop(
+            location: json["location"] == null ? null : Location.fromJson(json["location"]),
+            description: json["description"],
+            address: json["address"],
+            logo: json["logo"],
+            banner: json["banner"],
+            id: json["_id"],
+            name: json["name"],
+            bannerColor: json["bannerColor"],
+            author: json["author"],
+            isDeleted: json["isDeleted"],
+        );
+    }
+
+}
+
+class Location {
+    Location({
+        required this.type,
+        required this.coordinates,
+    });
+
+    final String? type;
+    final List<double> coordinates;
+
+    factory Location.fromJson(Map<String, dynamic> json){ 
+        return Location(
+            type: json["type"],
+            coordinates: json["coordinates"] == null ? [] : List<double>.from(json["coordinates"]!.map((x) => x)),
         );
     }
 

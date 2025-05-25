@@ -1,9 +1,12 @@
+// ignore_for_file: avoid_print
+
 import 'package:expriy_deals/app/modules/product/controllers/product_details_controller.dart';
 import 'package:expriy_deals/app/modules/product/views/check_out_screen.dart';
 import 'package:expriy_deals/app/modules/product/widgets/policy_custom_row.dart';
 import 'package:expriy_deals/app/modules/product/widgets/product_card.dart';
 import 'package:expriy_deals/app/modules/product/widgets/product_caresoul_slider.dart';
 import 'package:expriy_deals/app/modules/product/widgets/see_more_button.dart';
+import 'package:expriy_deals/app/modules/seller/views/seller_profile_screen.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:expriy_deals/app/widgets/costom_app_bar.dart';
 import 'package:expriy_deals/app/widgets/gradiant_elevated_button.dart';
@@ -185,6 +188,66 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     duration: Duration(milliseconds: 300),
                   ),
                   SizedBox(height: 8.h),
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              radius: 18.r,
+                              backgroundImage: NetworkImage(
+                                  productDetailsController
+                                          .productDetailsData?.images[0].url ??
+                                      ''),
+                            ),
+                            widthBox4,
+                            Text(
+                              productDetailsController
+                                      .productDetailsData!.author!.shop?.name ??
+                                  '',
+                              style: GoogleFonts.poppins(
+                                  fontSize: 18.sp, fontWeight: FontWeight.w500),
+                            )
+                          ],
+                        ),
+                        heightBox8,
+                        InkWell(
+                          onTap: () {
+                            productDetailsController.productDetailsData != null
+                                ? Get.to(SellerProfileScreen(
+                                    productDetailsData: productDetailsController
+                                        .productDetailsData!,
+                                  ))
+                                : print('Data not found');
+                          },
+                          child: Container(
+                            height: 32.h,
+                            width: 130,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                color: Color(0xff308960)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Icon(
+                                  Icons.shopping_bag_outlined,
+                                  color: Colors.white,
+                                ),
+                                Text(
+                                  'Visit Store',
+                                  style:
+                                      GoogleFonts.poppins(color: Colors.white),
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      ]),
                   Align(
                     alignment: Alignment.centerRight,
                     child: GestureDetector(
