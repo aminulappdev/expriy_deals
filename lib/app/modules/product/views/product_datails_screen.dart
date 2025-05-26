@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'package:expriy_deals/app/modules/product/controllers/add_to_cart_controller.dart';
+import 'package:expriy_deals/app/modules/product/controllers/all_product_conrtoller.dart';
 import 'package:expriy_deals/app/modules/product/controllers/product_details_controller.dart';
 import 'package:expriy_deals/app/modules/product/views/check_out_screen.dart';
 import 'package:expriy_deals/app/modules/product/widgets/policy_custom_row.dart';
@@ -7,9 +9,12 @@ import 'package:expriy_deals/app/modules/product/widgets/product_card.dart';
 import 'package:expriy_deals/app/modules/product/widgets/product_caresoul_slider.dart';
 import 'package:expriy_deals/app/modules/product/widgets/see_more_button.dart';
 import 'package:expriy_deals/app/modules/seller/views/seller_profile_screen.dart';
+import 'package:expriy_deals/app/utils/app_colors.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:expriy_deals/app/widgets/costom_app_bar.dart';
 import 'package:expriy_deals/app/widgets/gradiant_elevated_button.dart';
+import 'package:expriy_deals/app/widgets/show_snackBar_message.dart';
+import 'package:expriy_deals/get_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -27,16 +32,22 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final ProductDetailsController productDetailsController =
       Get.put(ProductDetailsController());
+  final AddToCartController addToCartController =
+      Get.put(AddToCartController());
+
+  final AllProductController allProductController =
+      Get.put(AllProductController());
 
   bool _isExpandedProduct = false;
   bool _isExpandedPolicy = false;
 
   @override
   void initState() {
-    print('Product ID details page theke: ${widget.productId}');
-
-    productDetailsController.productDetails(widget.productId);
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print('Product ID details page theke: ${widget.productId}');
+      productDetailsController.productDetails(widget.productId);
+    });
   }
 
   @override
@@ -194,13 +205,32 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            CircleAvatar(
-                              radius: 18.r,
-                              backgroundImage: NetworkImage(
-                                  productDetailsController
-                                          .productDetailsData?.images[0].url ??
-                                      ''),
-                            ),
+                            productDetailsController.productDetailsData!.author!
+                                        .shop?.logo !=
+                                    null
+                                ? CircleAvatar(
+                                    radius: 18.r,
+                                    backgroundImage: NetworkImage(
+                                        productDetailsController
+                                                .productDetailsData
+                                                ?.images[0]
+                                                .url ??
+                                            ''),
+                                  )
+                                : CircleAvatar(
+                                    backgroundColor: AppColors.themeColor,
+                                    radius: 18.r,
+                                    child: Text(
+                                      productDetailsController
+                                          .productDetailsData!
+                                          .author!
+                                          .shop!
+                                          .name!
+                                          .substring(0, 1),
+                                      style: GoogleFonts.poppins(
+                                          color: Colors.white, fontSize: 18.sp),
+                                    ),
+                                  ),
                             widthBox4,
                             Text(
                               productDetailsController
@@ -266,21 +296,49 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         fontSize: 15.sp, fontWeight: FontWeight.w500),
                   ),
                   heightBox8,
-                  SizedBox(
-                    height: 180.h,
-                    width: MediaQuery.of(context).size.width,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 5,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 4.w),
-                            child: ProductCard(
-                              productId: '',
-                            ));
-                      },
-                    ),
-                  ),
+                  Obx(() {
+                    if (allProductController.inProgress == true) {
+                      return CircularProgressIndicator();
+                    } else {
+                      return SizedBox(
+                        height: 180.h,
+                        width: MediaQuery.of(context).size.width,
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: allProductController.productData!.length,
+                            itemBuilder: (context, index) {
+                              if (allProductController
+                                      .productData![index].category?.name ==
+                                  productDetailsController
+                                      .productDetailsData?.category?.name) {
+                                return Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 4.w),
+                                  child: ProductCard(
+                                    image: allProductController
+                                        .productData?[index].images[0].url,
+                                    price: allProductController
+                                            .productData?[index].price
+                                            .toString() ??
+                                        '',
+                                    title: allProductController
+                                        .productData?[index].name,
+                                    isShowDiscount: true,
+                                    productId: allProductController
+                                            .productData?[index].id ??
+                                        '',
+                                  ),
+                                );
+                              } else {
+                                Center(
+                                  child: Text('No product avaiable'),
+                                );
+                              }
+                              return Container();
+                            }),
+                      );
+                    }
+                  }),
                   heightBox12,
                   Container(
                     height: 70.h,
@@ -289,8 +347,42 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10)),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: SizedBox(
+                            width: 159.w,
+                            height: 40.h,
+                            child: GestureDetector(
+                                onTap: () {
+                                  productDetailsController
+                                              .productDetailsData !=
+                                          null
+                                      ? addToCArtFunction(
+                                          productDetailsController
+                                              .productDetailsData!.id!,
+                                          productDetailsController
+                                              .productDetailsData!.stock
+                                              .toString())
+                                      : printError(
+                                          info: 'productDetailsData is null');
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: AppColors.iconButtonThemeColor),
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                    'Add to cart',
+                                    style: GoogleFonts.poppins(
+                                        color: AppColors.iconButtonThemeColor),
+                                  )),
+                                )),
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
                           child: SizedBox(
@@ -321,5 +413,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> addToCArtFunction(String productId, String quantity) async {
+    final bool isSuccess =
+        await addToCartController.addToCart(productId, quantity);
+
+    if (isSuccess) {
+      if (mounted) {
+        showSnackBarMessage(context, 'Successfully added to cart', true);
+      } else {
+        if (mounted) {
+          showSnackBarMessage(context, addToCartController.errorMessage!, true);
+        }
+      }
+    }
   }
 }

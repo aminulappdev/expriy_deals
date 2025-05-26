@@ -7,9 +7,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 class CustomAppBar extends StatelessWidget {
   final String name;
-  
+  final bool isBack;
   const CustomAppBar({
-    super.key, required this.name,
+    super.key, required this.name,  this.isBack = true,
   });
 
   @override
@@ -20,7 +20,7 @@ class CustomAppBar extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
-            Navigator.pop(context);
+            isBack == true ? Navigator.pop(context) : null;
           },
           child: CircleAvatar(
             backgroundColor: AppColors.iconButtonThemeColor,

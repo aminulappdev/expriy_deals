@@ -9,10 +9,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SellerProfileScreen extends StatefulWidget {
   const SellerProfileScreen({super.key, required this.productDetailsData});
-  
-  final ProductDetailsData productDetailsData;
-  
 
+  final ProductDetailsData productDetailsData;
 
   @override
   State<SellerProfileScreen> createState() => _SellerProfileScreenState();
@@ -38,22 +36,31 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CircleAvatar(
-                    radius: 24,
-                    backgroundColor: AppColors.iconButtonThemeColor,
-                    child: Icon(
-                      Icons.arrow_back_ios_new,
-                      color: Colors.white,
+                  InkWell(
+                    onTap: () => Navigator.pop(context),
+                    child: CircleAvatar(
+                      radius: 24,
+                      backgroundColor: AppColors.iconButtonThemeColor,
+                      child: Icon(
+                        Icons.arrow_back_ios_new,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                   Column(
                     children: [
                       heightBox20,
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundColor: AppColors.iconButtonThemeColor,
-                        backgroundImage: AssetImage(AssetsPath.headphone),
-                      ),
+                      widget.productDetailsData.author?.shop?.logo == null
+                          ? CircleAvatar(
+                              radius: 40,
+                              backgroundColor: AppColors.themeColor,
+                              child: Text(widget.productDetailsData.author?.shop?.name?[0] ?? '', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: Colors.white),),
+                            )
+                          : CircleAvatar(
+                              radius: 40,
+                              backgroundColor: AppColors.iconButtonThemeColor,
+                              backgroundImage: AssetImage(AssetsPath.headphone),
+                            ),
                       heightBox10,
                       Text(
                         widget.productDetailsData.author?.shop?.name ?? '',
@@ -94,7 +101,7 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
                                 setState(() {});
                               },
                               child: Text(
-                                'Articles',
+                                'Products',
                                 style: TextStyle(
                                     decorationColor: Colors.green,
                                     decoration: selectedPage == 0
@@ -112,7 +119,7 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
                               selectedPage = 1;
                               setState(() {});
                             },
-                            child: Text('Podcasts',
+                            child: Text('About',
                                 style: TextStyle(
                                   decorationColor: Colors.green,
                                   decoration: selectedPage == 1
@@ -130,9 +137,9 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
                     ),
                     heightBox8,
                     if (selectedPage == 0) ...{
-                      SellerProductScreen()
+                      SellerProductScreen(authorID: widget.productDetailsData.author?.id ?? '',)
                     } else if (selectedPage == 1) ...{
-                      SellerAboutScreen()
+                      SellerAboutScreen(productDetailsData: widget.productDetailsData,)
                     }
                   ],
                 ),

@@ -1,5 +1,7 @@
-class ProductDetailsModel {
-    ProductDetailsModel({
+import 'package:expriy_deals/app/modules/product/model/product_details_model.dart';
+
+class AllAddToCartModel {
+    AllAddToCartModel({
         required this.success,
         required this.message,
         required this.data,
@@ -7,77 +9,70 @@ class ProductDetailsModel {
 
     final bool? success;
     final String? message;
-    final ProductDetailsData? data;
+    final Data? data;
 
-    factory ProductDetailsModel.fromJson(Map<String, dynamic> json){ 
-        return ProductDetailsModel(
+    factory AllAddToCartModel.fromJson(Map<String, dynamic> json){ 
+        return AllAddToCartModel(
             success: json["success"],
             message: json["message"],
-            data: json["data"] == null ? null : ProductDetailsData.fromJson(json["data"]),
+            data: json["data"] == null ? null : Data.fromJson(json["data"]),
         );
     }
 
 }
 
-class ProductDetailsData {
-    ProductDetailsData({
-        required this.totalSell,
-        required this.id,
-        required this.images,
-        required this.author,
-        required this.name, 
-        required this.details,
-        required this.category,
-        required this.price,
-        required this.expiredAt,
-        required this.discount,
-        required this.isDeleted,
-        required this.createdAt,
-        required this.updatedAt,
-        required this.v,
-        required this.stock,
+class Data {
+    Data({
+        required this.data,
+        required this.meta,
     });
 
-    final int? totalSell;
-    final String? id;
-    final List<Image> images;
-    final Author? author;
-    final String? name;
-    final String? details;
-    final Category? category;
-    final double? price;
-    final DateTime? expiredAt;
-    final int? discount;
-    final bool? isDeleted;
-    final DateTime? createdAt;
-    final DateTime? updatedAt;
-    final int? v;
-    final int? stock;
+    final List<AllAddToCardItemModel> data;
+    final Meta? meta;
 
-    factory ProductDetailsData.fromJson(Map<String, dynamic> json){ 
-        return ProductDetailsData(
-            totalSell: json["totalSell"],
-            id: json["_id"],
-            images: json["images"] == null ? [] : List<Image>.from(json["images"]!.map((x) => Image.fromJson(x))),
-            author: json["author"] == null ? null : Author.fromJson(json["author"]),
-            name: json["name"],
-            details: json["details"],
-            category: json["category"] == null ? null : Category.fromJson(json["category"]),
-            price: json["price"],
-            expiredAt: DateTime.tryParse(json["expiredAt"] ?? ""),
-            discount: json["discount"],
-            isDeleted: json["isDeleted"],
-            createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
-            updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
-            v: json["__v"],
-            stock: json["stock"],
+    factory Data.fromJson(Map<String, dynamic> json){ 
+        return Data(
+            data: json["data"] == null ? [] : List<AllAddToCardItemModel>.from(json["data"]!.map((x) => AllAddToCardItemModel.fromJson(x))),
+            meta: json["meta"] == null ? null : Meta.fromJson(json["meta"]),
         );
     }
 
 }
 
-class Author {
-    Author({
+class AllAddToCardItemModel {
+    AllAddToCardItemModel({
+        required this.id,
+        required this.user,
+        required this.product,
+        required this.quantity,
+        required this.createdAt,
+        required this.updatedAt,
+    });
+
+    final String? id;
+    final User? user;
+    final ProductDetailsData? product;
+    final int? quantity;
+    final DateTime? createdAt;
+    final DateTime? updatedAt;
+
+    factory AllAddToCardItemModel.fromJson(Map<String, dynamic> json){ 
+        return AllAddToCardItemModel(
+            id: json["_id"],
+            user: json["user"] == null ? null : User.fromJson(json["user"]),
+            product: json["product"] == null ? null : ProductDetailsData.fromJson(json["product"]),
+            quantity: json["quantity"],
+            createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
+            updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
+        );
+    }
+
+}
+
+
+
+class User {
+    User({
         required this.id,
         required this.name,
         required this.email,
@@ -93,8 +88,8 @@ class Author {
     final String? profile;
     final Shop? shop;
 
-    factory Author.fromJson(Map<String, dynamic> json){ 
-        return Author(
+    factory User.fromJson(Map<String, dynamic> json){ 
+        return User(
             id: json["_id"],
             name: json["name"],
             email: json["email"],
@@ -209,6 +204,30 @@ class Image {
             key: json["key"],
             url: json["url"],
             id: json["_id"],
+        );
+    }
+
+}
+
+class Meta {
+    Meta({
+        required this.page,
+        required this.limit,
+        required this.total,
+        required this.totalPage,
+    });
+
+    final int? page;
+    final int? limit;
+    final int? total;
+    final int? totalPage;
+
+    factory Meta.fromJson(Map<String, dynamic> json){ 
+        return Meta(
+            page: json["page"],
+            limit: json["limit"],
+            total: json["total"],
+            totalPage: json["totalPage"],
         );
     }
 

@@ -20,18 +20,6 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-List<Color> colorList = [
-  Colors.deepPurple,
-  Colors.redAccent,
-  Colors.cyan,
-  Colors.deepPurple,
-  Colors.redAccent,
-  Colors.cyan,
-  Colors.deepPurple,
-  Colors.redAccent,
-  Colors.cyan,
-];
-
 class _HomeScreenState extends State<HomeScreen> {
   final categoryController = Get.put(AllCategoryController());
   final AllProductController allProductController =
@@ -293,23 +281,49 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 heightBox10,
-                SizedBox(
-                  height: 180.h,
-                  width: MediaQuery.of(context).size.width,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 4,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 4.w),
-                        child: const ProductCard(
-                          isShowDiscount: true,
-                          productId: '',
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                Obx(() {
+                  if (allProductController.inProgress == true) {
+                    return CircularProgressIndicator();
+                  } else {
+                    return SizedBox(
+                      height: 180.h,
+                      width: MediaQuery.of(context).size.width,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 4,
+                          itemBuilder: (context, index) {
+                            if (allProductController
+                                    .productData![index].totalSell! <
+                                10) {
+                              return Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 4.w),
+                                child: ProductCard(
+                                  image: allProductController
+                                      .productData?[index].images[0].url,
+                                  price: allProductController
+                                          .productData?[index].price
+                                          .toString() ??
+                                      '',
+                                  title: allProductController
+                                      .productData?[index].name,
+                                  isShowDiscount: true,
+                                  productId: allProductController
+                                          .productData?[index].id ??
+                                      '',
+                                ),
+                              );
+                            } else {
+                              SizedBox(
+                                child: Center(
+                                  child: Text('No product avaiable'),
+                                ),
+                              );
+                            }
+                            return Container();
+                          }),
+                    );
+                  }
+                }),
                 heightBox20,
               ],
             ),

@@ -4,7 +4,10 @@ import 'package:expriy_deals/app/modules/authentication/controllers/otp_verify_c
 import 'package:expriy_deals/app/modules/authentication/controllers/resend_otp_controller.dart';
 import 'package:expriy_deals/app/modules/authentication/controllers/reset_password_controller.dart';
 import 'package:expriy_deals/app/modules/authentication/controllers/sign_in_controller.dart';
+import 'package:expriy_deals/app/modules/order/controllers/my_orders_controller.dart';
 import 'package:expriy_deals/app/modules/order/controllers/order_controller.dart';
+import 'package:expriy_deals/app/modules/product/controllers/all_card_controller.dart';
+import 'package:expriy_deals/app/modules/product/controllers/delete_card_controller.dart';
 import 'package:expriy_deals/app/modules/profile/controllers/edit_profile_controller.dart';
 import 'package:expriy_deals/app/modules/profile/controllers/profile_controller.dart';
 import 'package:expriy_deals/services/network_caller/network_caller.dart';
@@ -12,6 +15,7 @@ import 'package:get/get.dart';
 
 class ControllerBinder extends Bindings {
   @override
+
   void dependencies() {
     Get.put(NetworkCaller());
     Get.put(CreateUserController());
@@ -23,5 +27,8 @@ class ControllerBinder extends Bindings {
     Get.put(ProfileController());
     Get.put(EditProfileController());
     Get.put(ProductOrderController());
+    Get.put(AllCartController());
+    Get.put(DeleteCartController());
+    Get.put(MyOrdersController());
   }
 }

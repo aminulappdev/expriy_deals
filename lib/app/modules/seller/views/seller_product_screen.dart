@@ -1,13 +1,18 @@
+import 'package:expriy_deals/app/modules/product/controllers/all_product_conrtoller.dart';
 import 'package:expriy_deals/app/modules/product/widgets/product_card.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/instance_manager.dart';
 
 class SellerProductScreen extends StatefulWidget {
-
- 
-  const SellerProductScreen({super.key,});
+  final String authorID;
+  const SellerProductScreen({
+    super.key,
+    required this.authorID,
+  });
 
   @override
   State<SellerProductScreen> createState() => _SellerProductScreenState();
@@ -16,6 +21,8 @@ class SellerProductScreen extends StatefulWidget {
 class _SellerProductScreenState extends State<SellerProductScreen> {
   final TextEditingController searchController = TextEditingController();
   final ScrollController scrollController = ScrollController();
+  final AllProductController allProductController =
+      Get.put(AllProductController());
 
   // @override
   // void initState() {
@@ -36,7 +43,17 @@ class _SellerProductScreenState extends State<SellerProductScreen> {
   // }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      allProductController.getProduct(authorID: widget.authorID);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // print('///////////////////////////////////');
+    // print(allProductController.productData?.length);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -48,37 +65,65 @@ class _SellerProductScreenState extends State<SellerProductScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Item (10)'),
-                IconButton(onPressed: () {
-                  
-                }, icon: Icon(Icons.search,color: AppColors.iconButtonThemeColor,size: 24,))
+                IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.search,
+                      color: AppColors.iconButtonThemeColor,
+                      size: 24,
+                    ))
               ],
             ),
           ),
         ),
         heightBox10,
         SizedBox(
-          height: 610,
+            height: 800,
             child: Column(
-          children: [
-            Expanded(
-              child: GridView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: 10,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 1,
-                    crossAxisCount: 2),
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w),
-                    child: ProductCard(productId: '',),
-                  );
-                },
-              ),
-            ),
-          ],
-        )),
+              children: [
+                Expanded(
+                  child: Obx(() {
+                    if (allProductController.inProgress == true) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else {
+                      return GridView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount:
+                            allProductController.productData?.length ?? 0,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 16,
+                          childAspectRatio: 1,
+                          crossAxisCount: 2,
+                        ),
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.w),
+                            child: ProductCard(
+                              isShowDiscount: true,
+                              image: allProductController
+                                      .productData?[index].images[0].url ??
+                                  '',
+                              title: allProductController
+                                      .productData?[index].name ??
+                                  '',
+                              price: allProductController
+                                      .productData?[index].price
+                                      .toString() ??
+                                  '',
+                              productId:
+                                  allProductController.productData?[index].id ??
+                                      '',
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  }),
+                ),
+              ],
+            )),
       ],
     );
   }

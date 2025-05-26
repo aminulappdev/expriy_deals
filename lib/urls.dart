@@ -13,11 +13,17 @@ class Urls {
   static const String categoryUrl = '$_baseUrl/categories';
   static const String productUrl = '$_baseUrl/products';
   static const String ordertUrl = '$_baseUrl/orders';
- 
+  static const String addToCartUrl = '$_baseUrl/add-to-card';
 
   static String productDetailsById(
     String id,
   ) {
     return '$_baseUrl/products/$id';
+  }
+
+  static String deleteCartById(
+    String id,
+  ) {
+    return '$_baseUrl/add-to-card/$id';
   }
 }
