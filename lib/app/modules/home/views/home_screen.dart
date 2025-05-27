@@ -4,7 +4,11 @@ import 'package:expriy_deals/app/modules/category/widget/category_card.dart';
 import 'package:expriy_deals/app/modules/home/widgets/see_all_section.dart';
 import 'package:expriy_deals/app/modules/product/controllers/all_product_conrtoller.dart';
 import 'package:expriy_deals/app/modules/product/views/product_screen.dart';
+import 'package:expriy_deals/app/modules/product/views/search_product_screen.dart';
 import 'package:expriy_deals/app/modules/product/widgets/product_card.dart';
+import 'package:expriy_deals/app/modules/seller/controllers/all_shop_controller.dart';
+import 'package:expriy_deals/app/modules/seller/views/shop_screen.dart';
+import 'package:expriy_deals/app/modules/seller/widgets/shope_card.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
 import 'package:expriy_deals/app/utils/assets_path.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
@@ -12,6 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:location/location.dart' as loc;
+import 'package:permission_handler/permission_handler.dart' as ph;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,14 +28,44 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final categoryController = Get.put(AllCategoryController());
-  final AllProductController allProductController =
-      Get.put(AllProductController());
+  final AllProductController allProductController = Get.put(AllProductController());
+  final AllShopController allShopController = Get.find<AllShopController>();
+  double? latitude;
+  double? longitude;
 
   @override
   void initState() {
     super.initState();
-    categoryController.getCategory();
-    allProductController.getProduct();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // requestLocationPermission();
+      // getCurrentLocation();
+      categoryController.getCategory();
+      allProductController.getProduct();
+      allShopController.myShops('23.739974828607025', '90.43835338329617');
+    });
+  }
+
+  Future<void> requestLocationPermission() async {
+    final ph.PermissionStatus status = await ph.Permission.location.request();
+    if (status.isGranted) {
+      // Permission granted; you can now retrieve the location.
+    } else if (status.isDenied) {
+      print('Location_permission_denied');
+    }
+  }
+
+  Future<void> getCurrentLocation() async {
+    final loc.Location location = loc.Location();
+    try {
+      final loc.LocationData locationData = await location.getLocation();
+      setState(() {
+        latitude = locationData.latitude!;
+        longitude = locationData.longitude!;
+        print('Location is $latitude and $longitude');
+      });
+    } catch (e) {
+      print('Error getting location: $e');
+    }
   }
 
   @override
@@ -48,70 +84,29 @@ class _HomeScreenState extends State<HomeScreen> {
                       radius: 21.r,
                       backgroundImage: AssetImage(AssetsPath.headphone),
                     ),
-                    Container(
-                      height: 42.h,
-                      width: 42.w,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: const Color(0xffFB6000).withOpacity(0.10),
-                      ),
-                      child: const Icon(Icons.notifications),
-                    )
-                  ],
-                ),
-                heightBox16,
-                Row(
-                  children: [
-                    Expanded(
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(SearchProductScreen());
+                      },
                       child: Container(
-                        height: 48.h,
+                        height: 34.h,
+                        width: 34.h,
                         decoration: BoxDecoration(
-                          color: const Color(0xffFAFAFA),
-                          borderRadius: BorderRadius.circular(24),
-                          border: Border.all(
-                            color: Colors.grey[300]!,
-                          ),
+                          shape: BoxShape.circle,
+                          color: AppColors.iconButtonThemeColor,
                         ),
-                        child: Row(
-                          children: [
-                            widthBox8,
-                            GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                height: 34.h,
-                                width: 34.h,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.iconButtonThemeColor,
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.search_rounded,
-                                    size: 24.h,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            widthBox8,
-                            Expanded(
-                              child: TextFormField(
-                                onChanged: (_) {},
-                                decoration: const InputDecoration(
-                                  hintText: 'Search product',
-                                  border: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  contentPadding: EdgeInsets.zero,
-                                ),
-                              ),
-                            ),
-                          ],
+                        child: Center(
+                          child: Icon(
+                            Icons.search_rounded,
+                            size: 24.h,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
+                heightBox16,
                 heightBox16,
                 SeeAllSection(
                   title: 'Categories',
@@ -120,16 +115,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 heightBox8,
-
                 // Reactive widget for categories
                 Obx(() {
-                  final categories = categoryController.categoryData;
-                  if (categories == null || categories.isEmpty) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
                   if (categoryController.inProgress == true) {
                     return const Center(child: CircularProgressIndicator());
+                  } else if (categoryController.categoryData == null ||
+                      categoryController.categoryData!.isEmpty) {
+                    return const Center(child: Text('No categories available'));
                   } else {
+                    final categories = categoryController.categoryData!;
                     return SizedBox(
                       height: 100.h,
                       width: MediaQuery.of(context).size.width,
@@ -147,10 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   onTap: () {
                                     Get.to(ProductScreen(
                                       shouldBackButton: true,
-                                      categoryId:
-                                          categories[index].id ?? 'Empty',
-                                      categoryName:
-                                          categories[index].name ?? '',
+                                      categoryId: categories[index].id ?? 'Empty',
+                                      categoryName: categories[index].name ?? '',
                                     ));
                                   },
                                   name: categories[index].name ?? '',
@@ -163,7 +155,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   }
                 }),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -181,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Icon(
                           Icons.flash_on_outlined,
                           color: AppColors.iconButtonThemeColor,
-                        )
+                        ),
                       ],
                     ),
                     GestureDetector(
@@ -204,41 +195,38 @@ class _HomeScreenState extends State<HomeScreen> {
                 Obx(() {
                   if (allProductController.inProgress == true) {
                     return CircularProgressIndicator();
+                  } else if (allProductController.productData == null ||
+                      allProductController.productData!.isEmpty) {
+                    return SizedBox(
+                      height: 180.h,
+                      child: Center(child: Text('No products available')),
+                    );
                   } else {
                     return SizedBox(
                       height: 180.h,
                       width: MediaQuery.of(context).size.width,
                       child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 4,
-                          itemBuilder: (context, index) {
-                            if (allProductController
-                                    .productData![index].discount! >
-                                0) {
-                              return Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 4.w),
-                                child: ProductCard(
-                                  image: allProductController
-                                      .productData?[index].images[0].url,
-                                  price: allProductController
-                                          .productData?[index].price
-                                          .toString() ??
-                                      '',
-                                  title: allProductController
-                                      .productData?[index].name,
-                                  isShowDiscount: true,
-                                  productId: allProductController
-                                          .productData?[index].id ??
-                                      '',
-                                ),
-                              );
-                            } else {
-                              Center(
-                                child: Text('No product avaiable'),
-                              );
-                            }
-                            return Container();
-                          }),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: allProductController.productData!.length > 4
+                            ? 4
+                            : allProductController.productData!.length,
+                        itemBuilder: (context, index) {
+                          if (allProductController.productData![index].discount! > 0) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 4.w),
+                              child: ProductCard(
+                                image: allProductController.productData?[index].images[0].url ?? '',
+                                price: allProductController.productData?[index].price.toString() ?? '',
+                                title: allProductController.productData?[index].name ?? '',
+                                isShowDiscount: true,
+                                productId: allProductController.productData?[index].id ?? '',
+                              ),
+                            );
+                          } else {
+                            return SizedBox.shrink(); // Return empty widget if no discount
+                          }
+                        },
+                      ),
                     );
                   }
                 }),
@@ -246,30 +234,45 @@ class _HomeScreenState extends State<HomeScreen> {
                 SeeAllSection(
                   title: 'Nearby Stores',
                   ontap: () {
-                    Get.to(ProductScreen(
-                        shouldBackButton: true,
-                        categoryId: '',
-                        categoryName: ''));
+                    Get.to(ShopScreen(
+                      shouldBackButton: true,
+                      categoryId: '',
+                      categoryName: '',
+                    ));
                   },
                 ),
                 heightBox10,
-                SizedBox(
-                  height: 180.h,
-                  width: MediaQuery.of(context).size.width,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 4,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 4.w),
-                        child: const ProductCard(
-                          isShowDiscount: true,
-                          productId: '',
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                Obx(() {
+                  if (allShopController.inProgress == true) {
+                    return CircularProgressIndicator();
+                  } else if (allShopController.allShopData == null ||
+                      allShopController.allShopData!.isEmpty) {
+                    return SizedBox(
+                      height: 150,
+                      child: Center(child: Text('No shops available')),
+                    );
+                  } else {
+                    return SizedBox(
+                      height: 180.h,
+                      width: MediaQuery.of(context).size.width,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: allShopController.allShopData?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 4.w),
+                            child: ShopCard(
+                              image: allShopController.allShopData?[index].logo ??
+                                  'https://fastly.picsum.photos/id/471/200/300.jpg?hmac=N_ZXTRU2OGQ7b_1b8Pz2X8e6Qyd84Q7xAqJ90bju2WU',
+                              title: allShopController.allShopData?[index].name ?? 'Shop Name',
+                              shopId: allShopController.allShopData?[index].id ?? '',
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  }
+                }),
                 heightBox12,
                 SeeAllSection(
                   title: 'Recommended for You',
@@ -284,43 +287,38 @@ class _HomeScreenState extends State<HomeScreen> {
                 Obx(() {
                   if (allProductController.inProgress == true) {
                     return CircularProgressIndicator();
+                  } else if (allProductController.productData == null ||
+                      allProductController.productData!.isEmpty) {
+                    return SizedBox(
+                      height: 180.h,
+                      child: Center(child: Text('No products available')),
+                    );
                   } else {
                     return SizedBox(
                       height: 180.h,
                       width: MediaQuery.of(context).size.width,
                       child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 4,
-                          itemBuilder: (context, index) {
-                            if (allProductController
-                                    .productData![index].totalSell! <
-                                10) {
-                              return Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 4.w),
-                                child: ProductCard(
-                                  image: allProductController
-                                      .productData?[index].images[0].url,
-                                  price: allProductController
-                                          .productData?[index].price
-                                          .toString() ??
-                                      '',
-                                  title: allProductController
-                                      .productData?[index].name,
-                                  isShowDiscount: true,
-                                  productId: allProductController
-                                          .productData?[index].id ??
-                                      '',
-                                ),
-                              );
-                            } else {
-                              SizedBox(
-                                child: Center(
-                                  child: Text('No product avaiable'),
-                                ),
-                              );
-                            }
-                            return Container();
-                          }),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: allProductController.productData!.length > 4
+                            ? 4
+                            : allProductController.productData!.length,
+                        itemBuilder: (context, index) {
+                          if (allProductController.productData![index].totalSell! < 10) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 4.w),
+                              child: ProductCard(
+                                image: allProductController.productData?[index].images[0].url ?? '',
+                                price: allProductController.productData?[index].price.toString() ?? '',
+                                title: allProductController.productData?[index].name ?? '',
+                                isShowDiscount: true,
+                                productId: allProductController.productData?[index].id ?? '',
+                              ),
+                            );
+                          } else {
+                            return SizedBox.shrink(); // Return empty widget if condition not met
+                          }
+                        },
+                      ),
                     );
                   }
                 }),

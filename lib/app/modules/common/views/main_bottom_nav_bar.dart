@@ -1,6 +1,7 @@
 import 'package:cuberto_bottom_bar/cuberto_bottom_bar.dart';
 import 'package:expriy_deals/app/modules/home/views/home_screen.dart';
 import 'package:expriy_deals/app/modules/order/views/cart_screen.dart';
+import 'package:expriy_deals/app/modules/order/views/oder_screen.dart';
 import 'package:expriy_deals/app/modules/product/views/search_product_screen.dart';
 import 'package:expriy_deals/app/modules/profile/views/profile_screen.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
@@ -45,7 +46,7 @@ class _MainButtonNavbarScreenState extends State<MainButtonNavbarScreen> {
   final List<Widget> _pages = const [
     HomeScreen(),
     CartScreen(),
-    SearchProductScreen(),
+    MyOrderScreen(isBack: false,),
     ProfileScreen()
   ];
 

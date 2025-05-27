@@ -10,6 +10,7 @@ import 'package:expriy_deals/app/modules/product/controllers/all_card_controller
 import 'package:expriy_deals/app/modules/product/controllers/delete_card_controller.dart';
 import 'package:expriy_deals/app/modules/profile/controllers/edit_profile_controller.dart';
 import 'package:expriy_deals/app/modules/profile/controllers/profile_controller.dart';
+import 'package:expriy_deals/app/modules/seller/controllers/all_shop_controller.dart';
 import 'package:expriy_deals/services/network_caller/network_caller.dart';
 import 'package:get/get.dart';
 
@@ -30,5 +31,6 @@ class ControllerBinder extends Bindings {
     Get.put(AllCartController());
     Get.put(DeleteCartController());
     Get.put(MyOrdersController());
+    Get.put(AllShopController());
   }
 }

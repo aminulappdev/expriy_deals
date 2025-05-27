@@ -32,12 +32,26 @@ class AllProductController extends GetxController {
 
     _inProgress.value = true;
 
-    Map<String, dynamic> queryparam = {'category': categoryId, 'author': authorID};
+   Map<String, dynamic> queryparamByCategory = {
+      'category': categoryId,
+      'limit': 99999
+    };
+    Map<String, dynamic> queryparamByAuthor = {
+      'author': authorID,
+      'limit': 99999
+    };
+   
 
-    final NetworkResponse response = await Get.find<NetworkCaller>().getRequest(
-        Urls.productUrl,
-        queryParams: categoryId == null || authorID == null ? {} : queryparam,
-        accesToken: StorageUtil.getData(StorageUtil.userAccessToken));
+    Map<String, dynamic> queryparam = {'limit': 99999};
+
+    final NetworkResponse response =
+        await Get.find<NetworkCaller>().getRequest(Urls.productUrl,
+            queryParams: categoryId != null
+                ? queryparamByCategory
+                : authorID != null
+                    ? queryparamByAuthor
+                    : queryparam,
+            accesToken: StorageUtil.getData(StorageUtil.userAccessToken));
 
     if (response.isSuccess) {
       _errorMessage = null;

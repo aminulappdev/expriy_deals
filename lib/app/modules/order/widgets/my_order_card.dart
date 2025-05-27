@@ -1,4 +1,3 @@
-
 import 'package:expriy_deals/app/utils/app_colors.dart';
 import 'package:expriy_deals/app/utils/assets_path.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
@@ -7,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyOrderCard extends StatelessWidget {
-
   final String productName;
   final String status;
   final String price;
@@ -26,7 +24,8 @@ class MyOrderCard extends StatelessWidget {
     required this.imagePath,
     required this.mainBTNOntap,
     required this.secondBTNOntap,
-    required this.isShowSeconBTN, required this.secondBTNName, 
+    required this.isShowSeconBTN,
+    required this.secondBTNName,
   });
 
   @override
@@ -110,10 +109,14 @@ class MyOrderCard extends StatelessWidget {
                 heightBox8,
                 isShowSeconBTN == false
                     ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                         Text('Total: 500',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
-                        InkWell(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Total: $price',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                          InkWell(
                             onTap: mainBTNOntap,
                             child: SizedBox(
                               width: 200,
@@ -127,19 +130,22 @@ class MyOrderCard extends StatelessWidget {
                                 child: Center(
                                   child: Text(
                                     'View Details',
-                                    style: TextStyle(
-                                        color: Colors.white),
+                                    style: TextStyle(color: Colors.white),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                      ],
-                    )
+                        ],
+                      )
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Total: 500',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
+                          Text(
+                            'Total: $price',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
                           InkWell(
                             onTap: mainBTNOntap,
                             child: SizedBox(

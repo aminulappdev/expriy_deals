@@ -83,7 +83,7 @@ class ProfileScreen extends StatelessWidget {
               ProfileDrawerFeature(
                 feature: 'My Orders',
                 icon: Icons.location_on,
-                ontap: () => Get.to(const MyOrderScreen()),
+                ontap: () => Get.to(const MyOrderScreen(isBack: true,)),
               ),
               ProfileDrawerFeature(
                 feature: 'Payment',

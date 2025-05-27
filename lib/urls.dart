@@ -14,6 +14,9 @@ class Urls {
   static const String productUrl = '$_baseUrl/products';
   static const String ordertUrl = '$_baseUrl/orders';
   static const String addToCartUrl = '$_baseUrl/add-to-card';
+  static const String myOrderUrl = '$_baseUrl/orders/my-orders';
+  static const String allShopsUrl = '$_baseUrl/shop';
+  
 
   static String productDetailsById(
     String id,
