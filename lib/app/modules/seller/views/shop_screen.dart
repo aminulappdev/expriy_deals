@@ -1,5 +1,5 @@
-import 'package:expriy_deals/app/modules/product/controllers/all_product_conrtoller.dart';
 import 'package:expriy_deals/app/modules/seller/controllers/all_shop_controller.dart';
+import 'package:expriy_deals/app/modules/seller/views/seller_profile_screen.dart';
 import 'package:expriy_deals/app/modules/seller/widgets/shope_card.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
@@ -9,15 +9,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class ShopScreen extends StatefulWidget {
-  final String categoryId;
-  final String categoryName;
   final bool shouldBackButton;
 
   const ShopScreen({
     super.key,
     required this.shouldBackButton,
-    required this.categoryId,
-    required this.categoryName,
   });
 
   @override
@@ -32,7 +28,7 @@ class _ShopScreenState extends State<ShopScreen> {
   @override
   void initState() {
     super.initState();
-    print('Category ID: ${widget.categoryId}');
+
     // Defer getProduct call until after the build phase
     WidgetsBinding.instance.addPostFrameCallback((_) {
       allShopController.myShops(
@@ -51,7 +47,9 @@ class _ShopScreenState extends State<ShopScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             heightBox20,
-            CustomAppBar(name: widget.categoryName),
+            CustomAppBar(
+              name: 'Shops',
+            ),
             heightBox10,
             Row(
               children: [
@@ -140,9 +138,41 @@ class _ShopScreenState extends State<ShopScreen> {
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8.w),
                         child: ShopCard(
-                          shopId: '',
-                          image: '',
-                          title: allShopController.allShopData?[index].name ?? 'Hello',
+                          onTapF: () {
+                            Get.to(SellerProfileScreen(
+                              sellerData: {
+                                'sellerId': allShopController
+                                        .allShopData?[index].author?.id ??
+                                    '',
+                                'shopName': allShopController
+                                        .allShopData?[index].name ??
+                                    'Unknown Shop',
+                                'shopLogo': allShopController
+                                        .allShopData?[index].logo ??
+                                    'https://fastly.picsum.photos/id/471/200/300.jpg?hmac=N_ZXTRU2OGQ7b_1b8Pz2X8e6Qyd84Q7xAqJ90bju2WU',
+                                'shopId':
+                                    allShopController.allShopData?[index].id ??
+                                        '',
+                                'sellerName': allShopController
+                                        .allShopData?[index].author?.name ??
+                                    'Unknown Seller',
+                                'location': allShopController
+                                        .allShopData?[index].address ??
+                                    'Unknown Location',
+                                'phone': allShopController.allShopData?[index]
+                                        .author?.phoneNumber ??
+                                    'N/A',
+                                'description': allShopController
+                                        .allShopData?[index].description ??
+                                    'No Description',
+                              },
+                            ));
+                          },
+                          image: allShopController.allShopData?[index].logo ??
+                              'https://fastly.picsum.photos/id/471/200/300.jpg?hmac=N_ZXTRU2OGQ7b_1b8Pz2X8e6Qyd84Q7xAqJ90bju2WU',
+                          title: allShopController.allShopData?[index].name ??
+                              'Shop Name',
+                          shopData: allShopController.allShopData![index],
                         ),
                       );
                     },

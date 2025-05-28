@@ -25,7 +25,6 @@ class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({super.key, required this.productId});
 
   @override
-  // ignore: library_private_types_in_public_api
   _ProductDetailScreenState createState() => _ProductDetailScreenState();
 }
 
@@ -34,7 +33,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       Get.put(ProductDetailsController());
   final AddToCartController addToCartController =
       Get.put(AddToCartController());
-
   final AllProductController allProductController =
       Get.put(AllProductController());
 
@@ -56,317 +54,304 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       child: Scaffold(
         body: Padding(
           padding: EdgeInsets.all(16.0.h),
-          child: SingleChildScrollView(child: Obx(() {
-            if (productDetailsController.inProgress == true) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomAppBar(name: 'Product Details'),
-                  heightBox12,
-                  HomeCarouselSlider(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        productDetailsController.productDetailsData?.name ??
-                            'no name',
-                        style: GoogleFonts.poppins(
-                          fontSize: 24.sp,
+          child: SingleChildScrollView(
+            child: Obx(() {
+              if (productDetailsController.inProgress == true) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                final data = productDetailsController.productDetailsData;
+                final double updatePrice = double.parse(data!.price.toString());
+                final double discountValue = updatePrice *
+                    ((100 - int.parse(data.discount!.toString())) / 100);
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomAppBar(name: 'Product Details'),
+                    heightBox12,
+                    HomeCarouselSlider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          data?.name ?? 'No Name',
+                          style: GoogleFonts.poppins(
+                            fontSize: 24.sp,
+                          ),
+                        ),
+                        Text(
+                          '\$${discountValue.toStringAsFixed(2)}',
+                          style: GoogleFonts.poppins(
+                              fontSize: 16.h, fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                    heightBox8,
+                    Text(
+                      'Product Details',
+                      style: GoogleFonts.poppins(
+                          fontSize: 16.sp, fontWeight: FontWeight.w400),
+                    ),
+                    heightBox4,
+                    AnimatedCrossFade(
+                      firstChild: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              'Product Name: ${data?.name ?? 'UltraShield SPF 50+ Sunscreen'}'),
+                          Text('Brand: '),
+                          Text('Type: Broad-Spectrum Protection'),
+                          Text('SPF: 50+'),
+                          Text('Formulation: Lotion'),
+                          Text('Volume: 150 ml'),
+                          Text('Price: \$${discountValue.toStringAsFixed(2)}'),
+                          Text(
+                              'Key Ingredients: Avobenzone, Octinoxate, Titanium Dioxide'),
+                          Text('Water Resistance: Up to 80 minutes'),
+                          Text(
+                              'Application: Apply generously on all exposed skin areas 15 minutes before sun exposure. Reapply every 2 hours or after swimming or sweating.'),
+                          Text(
+                              'Benefits: Helps prevent sunburn, premature skin aging, and skin cancer. Suitable for all skin types, including sensitive skin.'),
+                        ],
+                      ),
+                      secondChild: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              'Product Name: ${data?.name ?? 'UltraShield SPF 50+ Sunscreen'}'),
+                          Text('Brand:'),
+                          Text('Type: Broad-Spectrum Protection'),
+                          Text('SPF: 50+'),
+                          Text('Formulation: Lotion'),
+                          Text('Volume: 150 ml'),
+                        ],
+                      ),
+                      crossFadeState: _isExpandedProduct
+                          ? CrossFadeState.showFirst
+                          : CrossFadeState.showSecond,
+                      duration: const Duration(milliseconds: 300),
+                    ),
+                    SizedBox(height: 8.h),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _isExpandedProduct = !_isExpandedProduct;
+                        });
+                      },
+                      child: SeeMoreButton(
+                        isExpanded: _isExpandedProduct,
+                      ),
+                    ),
+                    heightBox4,
+                    AnimatedCrossFade(
+                      firstChild: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            PolicyCustomRow(
+                                name: 'Warranty Policy', routeName: ''),
+                            PolicyCustomRow(
+                                name: 'Return & Refund Policy', routeName: ''),
+                            PolicyCustomRow(
+                                name: 'Replacement Policy', routeName: ''),
+                            PolicyCustomRow(
+                                name: 'Return & Refund Policy', routeName: ''),
+                            PolicyCustomRow(
+                                name: 'Replacement Policy', routeName: ''),
+                          ],
                         ),
                       ),
-                      Text(
-                        '\$89.99',
-                        style: GoogleFonts.poppins(
-                            fontSize: 16.h, fontWeight: FontWeight.w500),
+                      secondChild: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            PolicyCustomRow(
+                                name: 'Warranty Policy', routeName: ''),
+                            PolicyCustomRow(
+                                name: 'Return & Refund Policy', routeName: ''),
+                            PolicyCustomRow(
+                                name: 'Replacement Policy', routeName: ''),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
-                  heightBox8,
-                  Text(
-                    'Product Details',
-                    style: GoogleFonts.poppins(
-                        fontSize: 16.sp, fontWeight: FontWeight.w400),
-                  ),
-                  heightBox4,
-                  AnimatedCrossFade(
-                    firstChild: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Product Name: UltraShield SPF 50+ Sunscreen'),
-                        Text('Brand: SunGuard'),
-                        Text('Type: Broad-Spectrum Protection'),
-                        Text('SPF: 50+'),
-                        Text('Formulation: Lotion'),
-                        Text('Volume: 150 ml'),
-                        Text('Price: \$18.99'),
-                        Text(
-                            'Key Ingredients: Avobenzone, Octinoxate, Titanium Dioxide'),
-                        Text('Water Resistance: Up to 80 minutes'),
-                        Text(
-                            'Application: Apply generously on all exposed skin areas 15 minutes before sun exposure. Reapply every 2 hours or after swimming or sweating.'),
-                        Text(
-                            'Benefits: Helps prevent sunburn, premature skin aging, and skin cancer. Suitable for all skin types, including sensitive skin.'),
-                      ],
+                      crossFadeState: _isExpandedPolicy
+                          ? CrossFadeState.showFirst
+                          : CrossFadeState.showSecond,
+                      duration: const Duration(milliseconds: 300),
                     ),
-                    secondChild: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Product Name: UltraShield SPF 50+ Sunscreen'),
-                        Text('Brand: SunGuard'),
-                        Text('Type: Broad-Spectrum Protection'),
-                        Text('SPF: 50+'),
-                        Text('Formulation: Lotion'),
-                        Text('Volume: 150 ml'),
-                      ],
-                    ),
-                    crossFadeState: _isExpandedProduct
-                        ? CrossFadeState.showFirst
-                        : CrossFadeState.showSecond,
-                    duration: Duration(milliseconds: 300),
-                  ),
-                  SizedBox(height: 8.h),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _isExpandedProduct = !_isExpandedProduct;
-                      });
-                    },
-                    child: SeeMoreButton(
-                      isExpanded: _isExpandedProduct,
-                    ),
-                  ),
-                  heightBox4,
-                  AnimatedCrossFade(
-                    firstChild: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          PolicyCustomRow(
-                            name: 'Warranty Policy',
-                            routeName: '',
-                          ),
-                          PolicyCustomRow(
-                            name: 'Return & Refund Policy',
-                            routeName: '',
-                          ),
-                          PolicyCustomRow(
-                            name: 'Replacement Policy',
-                            routeName: '',
-                          ),
-                          PolicyCustomRow(
-                            name: 'Return & Refund Policy',
-                            routeName: '',
-                          ),
-                          PolicyCustomRow(
-                            name: 'Replacement Policy',
-                            routeName: '',
-                          ),
-                        ],
-                      ),
-                    ),
-                    secondChild: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          PolicyCustomRow(
-                            name: 'Warranty Policy',
-                            routeName: '',
-                          ),
-                          PolicyCustomRow(
-                            name: 'Return & Refund Policy',
-                            routeName: '',
-                          ),
-                          PolicyCustomRow(
-                            name: 'Replacement Policy',
-                            routeName: '',
-                          ),
-                        ],
-                      ),
-                    ),
-                    crossFadeState: _isExpandedPolicy
-                        ? CrossFadeState.showFirst
-                        : CrossFadeState.showSecond,
-                    duration: Duration(milliseconds: 300),
-                  ),
-                  SizedBox(height: 8.h),
-                  Column(
+                    SizedBox(height: 8.h),
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            productDetailsController.productDetailsData!.author!
-                                        .shop?.logo !=
-                                    null
+                            data?.author?.shop?.logo != null
                                 ? CircleAvatar(
                                     radius: 18.r,
-                                    backgroundImage: NetworkImage(
-                                        productDetailsController
-                                                .productDetailsData
-                                                ?.images[0]
-                                                .url ??
-                                            ''),
+                                    backgroundImage:
+                                        NetworkImage(data!.author!.shop!.logo!),
                                   )
                                 : CircleAvatar(
                                     backgroundColor: AppColors.themeColor,
                                     radius: 18.r,
                                     child: Text(
-                                      productDetailsController
-                                          .productDetailsData!
-                                          .author!
-                                          .shop!
-                                          .name!
-                                          .substring(0, 1),
+                                      data?.author?.shop?.name?.isNotEmpty ==
+                                              true
+                                          ? data!.author!.shop!.name!
+                                              .substring(0, 1)
+                                          : '',
                                       style: GoogleFonts.poppins(
                                           color: Colors.white, fontSize: 18.sp),
                                     ),
                                   ),
                             widthBox4,
                             Text(
-                              productDetailsController
-                                      .productDetailsData!.author!.shop?.name ??
-                                  '',
+                              data?.author?.shop?.name ?? 'Unknown Shop',
                               style: GoogleFonts.poppins(
                                   fontSize: 18.sp, fontWeight: FontWeight.w500),
-                            )
+                            ),
                           ],
                         ),
                         heightBox8,
                         InkWell(
                           onTap: () {
-                            productDetailsController.productDetailsData != null
-                                ? Get.to(SellerProfileScreen(
-                                    productDetailsData: productDetailsController
-                                        .productDetailsData!,
-                                  ))
-                                : print('Data not found');
+                            if (data != null &&
+                                data.author != null &&
+                                data.author!.shop != null) {
+                              Get.to(SellerProfileScreen(
+                                sellerData: {
+                                  'sellerId': data.author!.id ?? '',
+                                  'shopName':
+                                      data.author!.shop!.name ?? 'Unknown Shop',
+                                  'shopLogo': data.author!.shop!.logo,
+                                  'shopId': data.author!.shop!.id ?? '',
+                                  'sellerName':
+                                      data.author!.name ?? 'Unknown Seller',
+                                  'location': data.author!.shop?.address ??
+                                      'Unknown Location',
+                                  'phone': data.author!.phoneNumber ?? 'N/A',
+                                  'description':
+                                      data.author!.shop!.description ??
+                                          'No Description',
+                                },
+                              ));
+                            } else {
+                              print('Data not found or incomplete');
+                              showSnackBarMessage(
+                                  context, 'Seller data not available', false);
+                            }
                           },
                           child: Container(
                             height: 32.h,
                             width: 130,
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                color: Color(0xff308960)),
+                              borderRadius: BorderRadius.circular(30),
+                              color: const Color(0xff308960),
+                            ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Icon(
-                                  Icons.shopping_bag_outlined,
-                                  color: Colors.white,
-                                ),
+                                const Icon(Icons.shopping_bag_outlined,
+                                    color: Colors.white),
                                 Text(
                                   'Visit Store',
                                   style:
                                       GoogleFonts.poppins(color: Colors.white),
                                 ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.white,
-                                )
+                                const Icon(Icons.arrow_forward_ios,
+                                    color: Colors.white),
                               ],
                             ),
                           ),
-                        )
-                      ]),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: GestureDetector(
+                        ),
+                      ],
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: GestureDetector(
                         onTap: () {
                           setState(() {
                             _isExpandedPolicy = !_isExpandedPolicy;
                           });
                         },
-                        child: SeeMoreButton(
-                          isExpanded: _isExpandedPolicy,
-                        )),
-                  ),
-                  Text(
-                    'You might also like',
-                    style: GoogleFonts.poppins(
-                        fontSize: 15.sp, fontWeight: FontWeight.w500),
-                  ),
-                  heightBox8,
-                  Obx(() {
-                    if (allProductController.inProgress == true) {
-                      return CircularProgressIndicator();
-                    } else {
-                      return SizedBox(
-                        height: 180.h,
-                        width: MediaQuery.of(context).size.width,
-                        child: ListView.builder(
+                        child: SeeMoreButton(isExpanded: _isExpandedPolicy),
+                      ),
+                    ),
+                    Text(
+                      'You might also like',
+                      style: GoogleFonts.poppins(
+                          fontSize: 15.sp, fontWeight: FontWeight.w500),
+                    ),
+                    heightBox8,
+                    Obx(() {
+                      if (allProductController.inProgress == true) {
+                        return const CircularProgressIndicator();
+                      } else {
+                        return SizedBox(
+                          height: 180.h,
+                          width: MediaQuery.of(context).size.width,
+                          child: ListView.builder(
                             scrollDirection: Axis.horizontal,
-                            itemCount: allProductController.productData!.length,
+                            itemCount:
+                                allProductController.productData?.length ?? 0,
                             itemBuilder: (context, index) {
-                              if (allProductController
-                                      .productData![index].category?.name ==
+                              final product =
+                                  allProductController.productData?[index];
+                              if (product?.category?.name ==
                                   productDetailsController
                                       .productDetailsData?.category?.name) {
                                 return Padding(
                                   padding:
                                       EdgeInsets.symmetric(horizontal: 4.w),
                                   child: ProductCard(
-                                    image: allProductController
-                                        .productData?[index].images[0].url,
-                                    price: allProductController
-                                            .productData?[index].price
-                                            .toString() ??
-                                        '',
-                                    title: allProductController
-                                        .productData?[index].name,
+                                    image: product?.images[0].url,
+                                    price: product?.price.toString() ?? '',
+                                    title: product?.name,
                                     isShowDiscount: true,
-                                    productId: allProductController
-                                            .productData?[index].id ??
-                                        '',
+                                    productId: product?.id ?? '',
                                   ),
                                 );
-                              } else {
-                                Center(
-                                  child: Text('No product avaiable'),
-                                );
                               }
-                              return Container();
-                            }),
-                      );
-                    }
-                  }),
-                  heightBox12,
-                  Container(
-                    height: 70.h,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
+                              return const SizedBox.shrink();
+                            },
+                          ),
+                        );
+                      }
+                    }),
+                    heightBox12,
+                    Container(
+                      height: 70.h,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: SizedBox(
-                            width: 159.w,
-                            height: 40.h,
-                            child: GestureDetector(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: SizedBox(
+                              width: 159.w,
+                              height: 40.h,
+                              child: GestureDetector(
                                 onTap: () {
-                                  productDetailsController
-                                              .productDetailsData !=
-                                          null
-                                      ? addToCArtFunction(
-                                          productDetailsController
-                                              .productDetailsData!.id!,
-                                          productDetailsController
-                                              .productDetailsData!.stock
-                                              .toString())
-                                      : printError(
-                                          info: 'productDetailsData is null');
+                                  if (data != null && data.id != null) {
+                                    addToCArtFunction(
+                                        data.id!, data.stock.toString());
+                                  } else {
+                                    print('productDetailsData is null');
+                                    showSnackBarMessage(context,
+                                        'Product data not available', false);
+                                  }
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -375,41 +360,45 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     borderRadius: BorderRadius.circular(30),
                                   ),
                                   child: Center(
-                                      child: Text(
-                                    'Add to cart',
-                                    style: GoogleFonts.poppins(
-                                        color: AppColors.iconButtonThemeColor),
-                                  )),
-                                )),
+                                    child: Text(
+                                      'Add to cart',
+                                      style: GoogleFonts.poppins(
+                                          color:
+                                              AppColors.iconButtonThemeColor),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: SizedBox(
-                            width: 159.w,
-                            height: 42.h,
-                            child: CustomElevatedButton(
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: SizedBox(
+                              width: 159.w,
+                              height: 42.h,
+                              child: CustomElevatedButton(
                                 onPressed: () {
-                                  productDetailsController.productDetailsData !=
-                                          null
-                                      ? Get.to(CheckOutScreen(
-                                          productDetailsData:
-                                              productDetailsController
-                                                  .productDetailsData!,
-                                        ))
-                                      : printError(
-                                          info: 'productDetailsData is null');
+                                  if (data != null) {
+                                    Get.to(CheckOutScreen(
+                                        productDetailsData: data));
+                                  } else {
+                                    print('productDetailsData is null');
+                                    showSnackBarMessage(context,
+                                        'Product data not available', false);
+                                  }
                                 },
-                                text: 'Buy now'),
+                                text: 'Buy now',
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  )
-                ],
-              );
-            }
-          })),
+                  ],
+                );
+              }
+            }),
+          ),
         ),
       ),
     );
@@ -418,14 +407,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Future<void> addToCArtFunction(String productId, String quantity) async {
     final bool isSuccess =
         await addToCartController.addToCart(productId, quantity);
-
     if (isSuccess) {
       if (mounted) {
         showSnackBarMessage(context, 'Successfully added to cart', true);
-      } else {
-        if (mounted) {
-          showSnackBarMessage(context, addToCartController.errorMessage!, true);
-        }
+      }
+    } else {
+      if (mounted) {
+        showSnackBarMessage(context,
+            addToCartController.errorMessage ?? 'Failed to add to cart', false);
       }
     }
   }

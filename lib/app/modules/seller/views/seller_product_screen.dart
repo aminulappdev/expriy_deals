@@ -8,10 +8,10 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/instance_manager.dart';
 
 class SellerProductScreen extends StatefulWidget {
-  final String authorID;
+  final Map<String, dynamic> sellerData;
   const SellerProductScreen({
     super.key,
-    required this.authorID,
+    required this.sellerData,
   });
 
   @override
@@ -46,7 +46,7 @@ class _SellerProductScreenState extends State<SellerProductScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      allProductController.getProduct(authorID: widget.authorID);
+      allProductController.getProduct(authorID: widget.sellerData['sellerId']);
     });
   }
 

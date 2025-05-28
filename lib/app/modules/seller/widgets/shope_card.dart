@@ -1,19 +1,22 @@
 import 'package:expriy_deals/app/modules/product/views/product_datails_screen.dart';
+import 'package:expriy_deals/app/modules/seller/model/all_shop_model.dart';
+import 'package:expriy_deals/app/modules/seller/views/seller_product_screen.dart';
+import 'package:expriy_deals/app/modules/seller/views/seller_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ShopCard extends StatefulWidget {
-  final String shopId;
+  final AllShopItemModel shopData;
   final String? image;
   final String? title;
+  final VoidCallback onTapF;
   const ShopCard({
     super.key,
-    
     this.image,
     this.title,
-    required this.shopId,
+    required this.shopData, required this.onTapF,
   });
 
   @override
@@ -30,12 +33,7 @@ class _ShopCardState extends State<ShopCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // print('Product card theke: ${widget.productId}');
-        Get.to(ProductDetailScreen(
-          productId: widget.shopId,
-        ));
-      },
+      onTap: widget.onTapF,
       child: Card(
         elevation: 1,
         child: Container(

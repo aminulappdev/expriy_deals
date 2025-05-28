@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 class ProductCard extends StatefulWidget {
   final String productId;
   final String? image;
+  final String? discount;
   final String? title;
   final String? price;
 
@@ -20,6 +21,7 @@ class ProductCard extends StatefulWidget {
     this.title,
     this.price,
     required this.productId,
+    this.discount,
   });
 
   @override
@@ -35,6 +37,9 @@ class _ProductCardState extends State<ProductCard> {
 
   @override
   Widget build(BuildContext context) {
+    final double updatePrice = double.parse(widget.price ?? '0');
+    final double discountValue =
+        updatePrice * ((100 - double.parse(widget.discount ?? '0')) / 100);
     return GestureDetector(
       onTap: () {
         print('Product card theke: ${widget.productId}');
@@ -73,7 +78,9 @@ class _ProductCardState extends State<ProductCard> {
                                   color: AppColors.iconButtonThemeColor),
                               child: Center(
                                   child: Text(
-                                '-10%',
+                                widget.discount == null || widget.discount == ''
+                                    ? '0%'
+                                    : '-${widget.discount}%',
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 12),
                               )),
@@ -122,12 +129,25 @@ class _ProductCardState extends State<ProductCard> {
                         ),
                       ),
                       heightBox5,
-                      Text(
-                        widget.price ?? '00',
-                        style: GoogleFonts.poppins(
-                            fontSize: 12.sp,
-                            color: AppColors.iconButtonThemeColor,
-                            fontWeight: FontWeight.w600),
+                      Row(
+                        children: [
+                          Text(
+                            discountValue.toStringAsFixed(2),
+                            style: GoogleFonts.poppins(
+                                fontSize: 12.sp,
+                                color: AppColors.iconButtonThemeColor,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          widthBox10,
+                          Text(
+                            widget.price ?? '00',
+                            style: GoogleFonts.poppins(
+                                decoration: TextDecoration.lineThrough,
+                                fontSize: 12.sp,
+                                color: const Color.fromARGB(255, 0, 0, 0),
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ],
                       ),
                     ],
                   ),

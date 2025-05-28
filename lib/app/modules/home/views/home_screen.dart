@@ -7,6 +7,8 @@ import 'package:expriy_deals/app/modules/product/views/product_screen.dart';
 import 'package:expriy_deals/app/modules/product/views/search_product_screen.dart';
 import 'package:expriy_deals/app/modules/product/widgets/product_card.dart';
 import 'package:expriy_deals/app/modules/seller/controllers/all_shop_controller.dart';
+import 'package:expriy_deals/app/modules/seller/views/seller_product_screen.dart';
+import 'package:expriy_deals/app/modules/seller/views/seller_profile_screen.dart';
 import 'package:expriy_deals/app/modules/seller/views/shop_screen.dart';
 import 'package:expriy_deals/app/modules/seller/widgets/shope_card.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
@@ -28,7 +30,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final categoryController = Get.put(AllCategoryController());
-  final AllProductController allProductController = Get.put(AllProductController());
+  final AllProductController allProductController =
+      Get.put(AllProductController());
   final AllShopController allShopController = Get.find<AllShopController>();
   double? latitude;
   double? longitude;
@@ -141,8 +144,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   onTap: () {
                                     Get.to(ProductScreen(
                                       shouldBackButton: true,
-                                      categoryId: categories[index].id ?? 'Empty',
-                                      categoryName: categories[index].name ?? '',
+                                      categoryId:
+                                          categories[index].id ?? 'Empty',
+                                      categoryName:
+                                          categories[index].name ?? '',
                                     ));
                                   },
                                   name: categories[index].name ?? '',
@@ -211,19 +216,35 @@ class _HomeScreenState extends State<HomeScreen> {
                             ? 4
                             : allProductController.productData!.length,
                         itemBuilder: (context, index) {
-                          if (allProductController.productData![index].discount! > 0) {
+                          if (allProductController
+                                  .productData![index].discount! >
+                              0) {
                             return Padding(
                               padding: EdgeInsets.symmetric(horizontal: 4.w),
                               child: ProductCard(
-                                image: allProductController.productData?[index].images[0].url ?? '',
-                                price: allProductController.productData?[index].price.toString() ?? '',
-                                title: allProductController.productData?[index].name ?? '',
+                                discount: allProductController
+                                        .productData?[index].discount
+                                        .toString() ??
+                                    '',
+                                image: allProductController
+                                        .productData?[index].images[0].url ??
+                                    '',
+                                price: allProductController
+                                        .productData?[index].price
+                                        .toString() ??
+                                    '',
+                                title: allProductController
+                                        .productData?[index].name ??
+                                    '',
                                 isShowDiscount: true,
-                                productId: allProductController.productData?[index].id ?? '',
+                                productId: allProductController
+                                        .productData?[index].id ??
+                                    '',
                               ),
                             );
                           } else {
-                            return SizedBox.shrink(); // Return empty widget if no discount
+                            return SizedBox
+                                .shrink(); // Return empty widget if no discount
                           }
                         },
                       ),
@@ -236,8 +257,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ontap: () {
                     Get.to(ShopScreen(
                       shouldBackButton: true,
-                      categoryId: '',
-                      categoryName: '',
                     ));
                   },
                 ),
@@ -262,10 +281,60 @@ class _HomeScreenState extends State<HomeScreen> {
                           return Padding(
                             padding: EdgeInsets.symmetric(horizontal: 4.w),
                             child: ShopCard(
-                              image: allShopController.allShopData?[index].logo ??
+                              onTapF: () {
+                                Get.to(SellerProfileScreen(
+                                  sellerData: {
+                                    'sellerId': allProductController
+                                            .productData?[index].author?.id ??
+                                        '',
+                                    'shopName': allProductController
+                                            .productData?[index]
+                                            .author!
+                                            .shop
+                                            ?.name ??
+                                        'Unknown Shop',
+                                    'shopLogo': allProductController
+                                            .productData?[index]
+                                            .author
+                                            ?.shop
+                                            ?.logo ??
+                                        'https://fastly.picsum.photos/id/471/200/300.jpg?hmac=N_ZXTRU2OGQ7b_1b8Pz2X8e6Qyd84Q7xAqJ90bju2WU',
+                                    'shopId': allProductController
+                                            .productData?[index]
+                                            .author
+                                            ?.shop
+                                            ?.id ??
+                                        '',
+                                    'sellerName': allProductController
+                                            .productData?[index].author?.name ??
+                                        'Unknown Seller',
+                                    'location': allProductController
+                                            .productData?[index]
+                                            .author
+                                            ?.shop
+                                            ?.address ??
+                                        'Unknown Location',
+                                    'phone': allProductController
+                                            .productData?[index]
+                                            .author
+                                            ?.phoneNumber ??
+                                        'N/A',
+                                    'description': allProductController
+                                            .productData?[index]
+                                            .author
+                                            ?.shop
+                                            ?.description ??
+                                        'No Description',
+                                  },
+                                ));
+                              },
+                              image: allShopController
+                                      .allShopData?[index].logo ??
                                   'https://fastly.picsum.photos/id/471/200/300.jpg?hmac=N_ZXTRU2OGQ7b_1b8Pz2X8e6Qyd84Q7xAqJ90bju2WU',
-                              title: allShopController.allShopData?[index].name ?? 'Shop Name',
-                              shopId: allShopController.allShopData?[index].id ?? '',
+                              title:
+                                  allShopController.allShopData?[index].name ??
+                                      'Shop Name',
+                              shopData: allShopController.allShopData![index],
                             ),
                           );
                         },
@@ -303,19 +372,31 @@ class _HomeScreenState extends State<HomeScreen> {
                             ? 4
                             : allProductController.productData!.length,
                         itemBuilder: (context, index) {
-                          if (allProductController.productData![index].totalSell! < 10) {
+                          if (allProductController
+                                  .productData![index].totalSell! <
+                              10) {
                             return Padding(
                               padding: EdgeInsets.symmetric(horizontal: 4.w),
                               child: ProductCard(
-                                image: allProductController.productData?[index].images[0].url ?? '',
-                                price: allProductController.productData?[index].price.toString() ?? '',
-                                title: allProductController.productData?[index].name ?? '',
+                                image: allProductController
+                                        .productData?[index].images[0].url ??
+                                    '',
+                                price: allProductController
+                                        .productData?[index].price
+                                        .toString() ??
+                                    '',
+                                title: allProductController
+                                        .productData?[index].name ??
+                                    '',
                                 isShowDiscount: true,
-                                productId: allProductController.productData?[index].id ?? '',
+                                productId: allProductController
+                                        .productData?[index].id ??
+                                    '',
                               ),
                             );
                           } else {
-                            return SizedBox.shrink(); // Return empty widget if condition not met
+                            return SizedBox
+                                .shrink(); // Return empty widget if condition not met
                           }
                         },
                       ),

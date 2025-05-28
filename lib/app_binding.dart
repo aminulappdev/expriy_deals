@@ -6,6 +6,7 @@ import 'package:expriy_deals/app/modules/authentication/controllers/reset_passwo
 import 'package:expriy_deals/app/modules/authentication/controllers/sign_in_controller.dart';
 import 'package:expriy_deals/app/modules/order/controllers/my_orders_controller.dart';
 import 'package:expriy_deals/app/modules/order/controllers/order_controller.dart';
+import 'package:expriy_deals/app/modules/payment/controllers/card_info_controller.dart';
 import 'package:expriy_deals/app/modules/product/controllers/all_card_controller.dart';
 import 'package:expriy_deals/app/modules/product/controllers/delete_card_controller.dart';
 import 'package:expriy_deals/app/modules/profile/controllers/edit_profile_controller.dart';
@@ -16,7 +17,6 @@ import 'package:get/get.dart';
 
 class ControllerBinder extends Bindings {
   @override
-
   void dependencies() {
     Get.put(NetworkCaller());
     Get.put(CreateUserController());
@@ -32,5 +32,6 @@ class ControllerBinder extends Bindings {
     Get.put(DeleteCartController());
     Get.put(MyOrdersController());
     Get.put(AllShopController());
+    Get.put(CardInfoController());
   }
 }

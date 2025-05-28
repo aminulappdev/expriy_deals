@@ -16,6 +16,7 @@ class Urls {
   static const String addToCartUrl = '$_baseUrl/add-to-card';
   static const String myOrderUrl = '$_baseUrl/orders/my-orders';
   static const String allShopsUrl = '$_baseUrl/shop';
+  static const String paymentUrl = '$_baseUrl/payments';
   
 
   static String productDetailsById(

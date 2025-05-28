@@ -1,15 +1,15 @@
-import 'package:expriy_deals/app/modules/product/model/product_details_model.dart';
+
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SellerAboutScreen extends StatefulWidget {
-  final ProductDetailsData productDetailsData;
+  final Map<String, dynamic> sellarData;
 
   const SellerAboutScreen({
     super.key,
-    required this.productDetailsData,
+    required this.sellarData,
   });
 
   @override
@@ -33,7 +33,7 @@ class _SellerAboutScreenState extends State<SellerAboutScreen> {
                   text: 'Strore Name : ',
                   children: [
                 TextSpan(
-                    text: widget.productDetailsData.author?.shop?.name ?? '',
+                    text: widget.sellarData['shopName']  ??'',
                     style: TextStyle(
                         fontWeight: FontWeight.w600, color: Colors.black))
               ])),
@@ -44,7 +44,7 @@ class _SellerAboutScreenState extends State<SellerAboutScreen> {
                   text: 'Owner name : ',
                   children: [
                 TextSpan(
-                    text: widget.productDetailsData.author?.name ?? '',
+                    text: widget.sellarData['sellerName'] ?? '',
                     style: TextStyle(
                         fontWeight: FontWeight.w600, color: Colors.black))
               ])),
@@ -55,7 +55,7 @@ class _SellerAboutScreenState extends State<SellerAboutScreen> {
                   text: 'Store Description : ',
                   children: [
                 TextSpan(
-                    text: widget.productDetailsData.author?.shop?.description ??
+                    text: widget.sellarData['description'] ??
                         '',
                     style: TextStyle(
                         fontWeight: FontWeight.w600, color: Colors.black))
@@ -68,7 +68,7 @@ class _SellerAboutScreenState extends State<SellerAboutScreen> {
           ),
           heightBox12,
           Text(
-            widget.productDetailsData.author?.shop?.address ?? '',
+            widget.sellarData['location'] ?? '',
             style: GoogleFonts.poppins(
                 fontSize: 12.sp, fontWeight: FontWeight.w400),
           ),
@@ -80,7 +80,7 @@ class _SellerAboutScreenState extends State<SellerAboutScreen> {
           ),
           heightBox12,
           Text(
-            widget.productDetailsData.author?.phoneNumber ?? '',
+            widget.sellarData['phone'] ?? '',
             style: GoogleFonts.poppins(
                 fontSize: 12.sp, fontWeight: FontWeight.w400),
           ),
