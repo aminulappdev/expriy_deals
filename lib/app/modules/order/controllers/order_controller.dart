@@ -1,6 +1,5 @@
 // ✅ Fixed ProductOrderController
-
-import 'package:expriy_deals/app/modules/order/model/order_model.dart';
+import 'package:expriy_deals/app/modules/order/controllers/order_response_model.dart';
 import 'package:expriy_deals/get_storage.dart';
 import 'package:expriy_deals/services/network_caller/network_caller.dart';
 import 'package:expriy_deals/services/network_caller/network_response.dart';
@@ -14,8 +13,13 @@ class ProductOrderController extends GetxController {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  OrderModel? orderResponseModel;
-  OrderItemModel? get orderResponseData => orderResponseModel?.data;
+  // OrderModel? orderResponseModel;
+  // OrderItemModel? get orderResponseData => orderResponseModel!.data?.data.isNotEmpty == true
+  //     ? orderResponseModel!.data?.data.first
+  //     : null;
+
+  OrderResponseModel? orderResponse;
+  OrderResponseItemModel? get orderResponseData => orderResponse?.data;
 
   Future<bool> orderProduct(
     String productId,
@@ -48,7 +52,7 @@ class ProductOrderController extends GetxController {
             accesToken: StorageUtil.getData(StorageUtil.userAccessToken));
 
     if (response.isSuccess) {
-      orderResponseModel = OrderModel.fromJson(response.responseData);
+      orderResponse = OrderResponseModel.fromJson(response.responseData);
       _errorMessage = null;
       isSuccess = true;
     } else {

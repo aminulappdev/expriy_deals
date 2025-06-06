@@ -1,7 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:expriy_deals/app/modules/order/views/oder_screen.dart';
-import 'package:expriy_deals/app/modules/payment/views/payment_success_screen.dart';
 import 'package:expriy_deals/app/modules/profile/controllers/profile_controller.dart';
 import 'package:expriy_deals/app/modules/profile/views/change_password_screen.dart';
 import 'package:expriy_deals/app/modules/profile/views/edit_profile_screen.dart';
@@ -85,11 +84,11 @@ class ProfileScreen extends StatelessWidget {
                 icon: Icons.location_on,
                 ontap: () => Get.to(const MyOrderScreen(isBack: true,)),
               ),
-              ProfileDrawerFeature(
-                feature: 'Payment',
-                icon: Icons.payment,
-                ontap: () => Get.to(const PaymentSuccessScreen()),
-              ),
+              // ProfileDrawerFeature(
+              //   feature: 'Payment',
+              //   icon: Icons.payment,
+              //   ontap: () => Get.to(const PaymentSuccessScreen()),
+              // ),
               heightBox8,
               Text(
                 'Settings',

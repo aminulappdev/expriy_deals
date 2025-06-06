@@ -45,7 +45,7 @@ class ProductDetailsData {
     final String? name;
     final String? details;
     final Category? category;
-    final double? price;
+    final dynamic price;
     final DateTime? expiredAt;
     final int? discount;
     final bool? isDeleted;

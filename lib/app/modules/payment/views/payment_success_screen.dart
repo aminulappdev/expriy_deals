@@ -1,13 +1,12 @@
-
 import 'package:expriy_deals/app/modules/payment/views/payment_details_screen.dart';
-import 'package:expriy_deals/app/utils/app_colors.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
+import 'package:get/get_core/src/get_main.dart';
 
 class PaymentSuccessScreen extends StatefulWidget {
+  static const String routeName = '/payment-success-screen';
   const PaymentSuccessScreen({super.key});
 
   @override
@@ -29,7 +28,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold( 
+    return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -40,9 +39,8 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
               width: 90.h,
               decoration: BoxDecoration(
                   border: Border.all(
-                      // ignore: deprecated_member_use
-                      color: AppColors.iconButtonThemeColor.withOpacity(0.7), width: 3),
-                  color: AppColors.iconButtonThemeColor,
+                      color: Color(0xffD9A48E).withOpacity(0.7), width: 3),
+                  color: Color(0xffD9A48E),
                   shape: BoxShape.circle),
               child: Center(
                 child: Icon(

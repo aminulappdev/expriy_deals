@@ -1,13 +1,16 @@
-
+import 'package:expriy_deals/app/modules/common/views/main_bottom_nav_bar.dart';
 import 'package:expriy_deals/app/modules/order/widgets/price_row.dart';
+import 'package:expriy_deals/app/modules/payment/controllers/confirmed_payment_controller.dart';
+import 'package:expriy_deals/app/modules/payment/controllers/pdf_generator_controller.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
+import 'package:expriy_deals/app/utils/get_storage.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class PaymentDetailsScreen extends StatefulWidget {
-
   const PaymentDetailsScreen({super.key});
 
   @override
@@ -15,17 +18,41 @@ class PaymentDetailsScreen extends StatefulWidget {
 }
 
 class _PaymentDetailsScreen extends State<PaymentDetailsScreen> {
- 
+  final PdfController pdfController = Get.put(PdfController());
+  final ConfirmedPaymentController confirmedPaymentController =
+      Get.find<ConfirmedPaymentController>();
+
   @override
   void initState() {
     super.initState();
-   
+    // Confirm payment on the page load
+    // confirmedPaymentController.confirmPaymentfunction(
+    //     box.read('payment-reference-id')); // Change with your actual ID
+    // print('Details page data ....................');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: GetBuilder<ConfirmedPaymentController>(builder: (controller) {
+        // Checking if the request is still in progress
+        if (controller.inProgress) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        // If an error occurred, display the error message
+        if (controller.errorMessage != null) {
+          return Center(child: Text('Error: ${controller.errorMessage}'));
+        }
+
+        DateTime? isoDate =
+            controller.confirmedPaymentResponseModel?.data?.createdAt;
+        String readableDate = isoDate != null
+            ? DateFormat('MMMM dd, yyyy').format(isoDate)
+            : 'Date not available';
+
+        // Displaying the payment details once data is loaded
+        return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             heightBox100,
@@ -49,7 +76,7 @@ class _PaymentDetailsScreen extends State<PaymentDetailsScreen> {
                             heightBox100,
                             PriceRow(
                               name: 'Date',
-                              price: '10',
+                              price: readableDate,
                               nameSize: 14,
                               priceSize: 14,
                             ),
@@ -57,7 +84,7 @@ class _PaymentDetailsScreen extends State<PaymentDetailsScreen> {
                             PriceRow(
                               name: 'Transaction ID',
                               price:
-                                  '10',
+                                  '${controller.confirmedPaymentResponseModel?.data?.id}',
                               nameSize: 14,
                               priceSize: 14,
                             ),
@@ -65,7 +92,7 @@ class _PaymentDetailsScreen extends State<PaymentDetailsScreen> {
                             PriceRow(
                               name: 'Amount',
                               price:
-                                  '20',
+                                  '${controller.confirmedPaymentResponseModel?.data?.price}',
                               nameSize: 14,
                               priceSize: 14,
                             ),
@@ -79,7 +106,7 @@ class _PaymentDetailsScreen extends State<PaymentDetailsScreen> {
                             PriceRow(
                               name: 'Total',
                               price:
-                                  '200',
+                                  '${controller.confirmedPaymentResponseModel?.data?.price}',
                               nameSize: 14,
                               priceSize: 14,
                             ),
@@ -97,10 +124,9 @@ class _PaymentDetailsScreen extends State<PaymentDetailsScreen> {
                       width: 70.h,
                       decoration: BoxDecoration(
                           border: Border.all(
-                              // ignore: deprecated_member_use
-                              color: AppColors.iconButtonThemeColor.withOpacity(0.7),
+                              color: Color(0xffD9A48E).withOpacity(0.7),
                               width: 3),
-                          color: AppColors.iconButtonThemeColor,
+                          color: Color(0xffD9A48E),
                           shape: BoxShape.circle),
                       child: Center(
                         child: Icon(
@@ -117,7 +143,11 @@ class _PaymentDetailsScreen extends State<PaymentDetailsScreen> {
             heightBox50,
             InkWell(
               onTap: () {
-            
+                pdfController.generateAndSavePDF(
+                    readableDate,
+                    '${controller.confirmedPaymentResponseModel?.data?.trnId}',
+                    '${controller.confirmedPaymentResponseModel?.data?.price}',
+                    '${controller.confirmedPaymentResponseModel?.data!.user?.name}');
               },
               child: Container(
                 height: 48,
@@ -144,7 +174,7 @@ class _PaymentDetailsScreen extends State<PaymentDetailsScreen> {
             heightBox12,
             GestureDetector(
               onTap: () {
-              
+                Navigator.pushNamed(context, MainButtonNavbarScreen.routeName);
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -162,14 +192,14 @@ class _PaymentDetailsScreen extends State<PaymentDetailsScreen> {
               ),
             ),
           ],
-        
-      ),
+        );
+      }),
     );
   }
 
   @override
   void dispose() {
-   
+    box.remove('payment-reference-id');
     super.dispose();
   }
 }

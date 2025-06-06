@@ -16,13 +16,20 @@ class Urls {
   static const String addToCartUrl = '$_baseUrl/add-to-card';
   static const String myOrderUrl = '$_baseUrl/orders/my-orders';
   static const String allShopsUrl = '$_baseUrl/shop';
-  static const String paymentUrl = '$_baseUrl/payments';
+  static const String paymentUrl = '$_baseUrl/payments/checkout';
+ 
   
 
   static String productDetailsById(
     String id,
   ) {
     return '$_baseUrl/products/$id';
+  }
+  
+   static String confirmedPaymentUrlsById(
+    String id,
+  ) {
+    return '$_baseUrl/payments/reference/$id';
   }
 
   static String deleteCartById(

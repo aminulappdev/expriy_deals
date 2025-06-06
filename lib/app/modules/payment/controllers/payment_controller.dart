@@ -1,45 +1,41 @@
+import 'package:expriy_deals/app/modules/payment/model/payment_model.dart';
 import 'package:expriy_deals/get_storage.dart';
 import 'package:expriy_deals/services/network_caller/network_caller.dart';
 import 'package:expriy_deals/services/network_caller/network_response.dart';
 import 'package:expriy_deals/urls.dart';
 import 'package:get/get.dart';
 
-class CardInfoController extends GetxController {
+class PaymentController extends GetxController {
   bool _inProgress = false;
   bool get inProgress => _inProgress;
 
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  Future<bool> cardInfo(
-      String orderId,
-      double price,
-      String cardNumber,
-      String expiryDate,
-      String cardCode,
-      String firstName,
-      String lastName) async {
+  String? _accessToken;
+  String? get accessToken => _accessToken;
+
+  PaymentModel? paymentModel;
+  PaymentModel? get paymentData => paymentModel;
+
+  Future<bool> getPayment(
+    String orderId,
+    dynamic price,
+  ) async {
     bool isSuccess = false;
 
     _inProgress = true;
+
     update();
 
-    Map<String, dynamic> requestBody = {
-      "order": orderId,
-      "price": 35.982,
-      "cardInfo": {
-        "cardNumber":cardNumber,
-        "expiryDate": expiryDate,
-        "cardCode": cardCode,
-        "firstName": firstName,
-        "lastName": lastName
-      }
-    };
-    print('Controller e asche');
+    Map<String, dynamic> requestBody = {"order": orderId, "price": price};
+
     final NetworkResponse response = await Get.find<NetworkCaller>()
-        .postRequest(Urls.paymentUrl, requestBody,accesToken: StorageUtil.getData(StorageUtil.userAccessToken)); // Replace your api url
+        .postRequest(Urls.paymentUrl, requestBody,
+            accesToken: StorageUtil.getData(StorageUtil.userAccessToken));
 
     if (response.isSuccess) {
+      paymentModel = PaymentModel.fromJson(response.responseData);
       _errorMessage = null;
       isSuccess = true;
     } else {

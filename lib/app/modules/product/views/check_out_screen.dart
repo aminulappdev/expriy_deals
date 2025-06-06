@@ -1,7 +1,7 @@
-
 import 'package:expriy_deals/app/modules/order/controllers/order_controller.dart';
 import 'package:expriy_deals/app/modules/order/widgets/price_row.dart';
-import 'package:expriy_deals/app/modules/payment/views/payment_field_screen.dart';
+import 'package:expriy_deals/app/modules/payment/controllers/payment_services.dart';
+
 import 'package:expriy_deals/app/modules/product/model/product_details_model.dart';
 import 'package:expriy_deals/app/modules/product/widgets/checkout_user_info.dart';
 import 'package:expriy_deals/app/modules/profile/controllers/profile_controller.dart';
@@ -28,6 +28,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       Get.find<ProductOrderController>();
   ProfileController profileController = Get.find<ProfileController>();
   // final PaymentService paymentService = PaymentService();
+  final PaymentService paymentService = PaymentService();
 
   int selectedButtonIndex = 0;
   String deliveryAddress = 'Dhaka';
@@ -36,8 +37,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
   late String myUserId;
 
-  double price = 0.0;
-  double totalPrice = 0.0;
+  dynamic price = 0.0;
+  dynamic totalPrice = 0.0;
   double mainTotalPrice = 0.0;
   int discount = 0;
   int item = 1;
@@ -47,7 +48,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     super.initState();
     profileController.getProfileData();
     myUserId = profileController.profileData?.id ?? '';
-  
+
     price = (widget.productDetailsData.price ?? 0.0) * quantity;
     discount = widget.productDetailsData.discount ?? 0;
     _calculateTotalPrice();
@@ -350,12 +351,16 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
     if (isSuccess) {
       print('Reference id is...........');
-      print(productOrderController.orderResponseData!.id!);
+      print(productOrderController.orderResponseData?.id);
       if (mounted) {
-        Get.to(PaymentFieldScreen(
-          orderId: '${productOrderController.orderResponseData!.id}',
-          price: price,
-        ));
+        paymentService.payment(
+            context,
+            productOrderController.orderResponseData?.id ?? 'Id null',
+            mainTotalPrice);
+        // Get.to(PaymentFieldScreen(
+        //   orderId: productOrderController.orderResponseData?.id ?? 'Id null',
+        //   price: price,
+        // ));
       }
     } else {
       if (mounted) {

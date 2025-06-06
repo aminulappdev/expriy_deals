@@ -75,7 +75,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          data?.name ?? 'No Name',
+                          data.name ?? 'No Name',
                           style: GoogleFonts.poppins(
                             fontSize: 24.sp,
                           ),
@@ -99,7 +99,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                              'Product Name: ${data?.name ?? 'UltraShield SPF 50+ Sunscreen'}'),
+                              'Product Name: ${data.name ?? 'UltraShield SPF 50+ Sunscreen'}'),
                           Text('Brand: '),
                           Text('Type: Broad-Spectrum Protection'),
                           Text('SPF: 50+'),
@@ -119,7 +119,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                              'Product Name: ${data?.name ?? 'UltraShield SPF 50+ Sunscreen'}'),
+                              'Product Name: ${data.name ?? 'UltraShield SPF 50+ Sunscreen'}'),
                           Text('Brand:'),
                           Text('Type: Broad-Spectrum Protection'),
                           Text('SPF: 50+'),
@@ -193,7 +193,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            data?.author?.shop?.logo != null
+                            data.author?.shop?.logo != null
                                 ? CircleAvatar(
                                     radius: 18.r,
                                     backgroundImage:
@@ -203,7 +203,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     backgroundColor: AppColors.themeColor,
                                     radius: 18.r,
                                     child: Text(
-                                      data?.author?.shop?.name?.isNotEmpty ==
+                                      data.author?.shop?.name?.isNotEmpty ==
                                               true
                                           ? data!.author!.shop!.name!
                                               .substring(0, 1)
@@ -214,7 +214,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   ),
                             widthBox4,
                             Text(
-                              data?.author?.shop?.name ?? 'Unknown Shop',
+                              data.author?.shop?.name ?? 'Unknown Shop',
                               style: GoogleFonts.poppins(
                                   fontSize: 18.sp, fontWeight: FontWeight.w500),
                             ),
@@ -378,14 +378,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               height: 42.h,
                               child: CustomElevatedButton(
                                 onPressed: () {
-                                  if (data != null) {
-                                    Get.to(CheckOutScreen(
-                                        productDetailsData: data));
-                                  } else {
-                                    print('productDetailsData is null');
-                                    showSnackBarMessage(context,
-                                        'Product data not available', false);
-                                  }
+                                  Get.to(
+                                      CheckOutScreen(productDetailsData: data));
                                 },
                                 text: 'Buy now',
                               ),
