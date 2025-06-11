@@ -114,13 +114,13 @@ class MyOrderCard extends StatelessWidget {
                           Text(
                             'Total: $price',
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
+                                fontSize: 14, fontWeight: FontWeight.w600),
                           ),
                           InkWell(
                             onTap: mainBTNOntap,
                             child: SizedBox(
-                              width: 200,
-                              height: 40,
+                               width: 120,
+                              height: 36,
                               child: Container(
                                 height: 40,
                                 width: MediaQuery.of(context).size.width,
@@ -144,13 +144,13 @@ class MyOrderCard extends StatelessWidget {
                           Text(
                             'Total: $price',
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
+                                fontSize: 14, fontWeight: FontWeight.w600),
                           ),
                           InkWell(
                             onTap: mainBTNOntap,
                             child: SizedBox(
-                              width: 120,
-                              height: 40,
+                                width: 90,
+                              height: 36,
                               child: Container(
                                 height: 40,
                                 width: MediaQuery.of(context).size.width,
@@ -160,7 +160,7 @@ class MyOrderCard extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(50)),
                                 child: Center(
                                   child: Text(
-                                    'View Details',
+                                    'Buy Again',
                                     style: TextStyle(
                                         color: AppColors.iconButtonThemeColor),
                                   ),
@@ -171,8 +171,8 @@ class MyOrderCard extends StatelessWidget {
                           InkWell(
                             onTap: secondBTNOntap,
                             child: SizedBox(
-                              width: 120,
-                              height: 40,
+                              width: 90,
+                              height: 36,
                               child: Container(
                                 height: 40,
                                 width: MediaQuery.of(context).size.width,

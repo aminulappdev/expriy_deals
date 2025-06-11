@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ShippingInfoScreen extends StatelessWidget {
-  const ShippingInfoScreen({super.key});
+  const ShippingInfoScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +13,8 @@ class ShippingInfoScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "Shipping Information",
-          style: GoogleFonts.poppins(fontSize: 18.sp, fontWeight: FontWeight.w600),
+          style:
+              GoogleFonts.poppins(fontSize: 18.sp, fontWeight: FontWeight.w600),
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -93,25 +96,6 @@ class TimelineStep extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Column(
-          children: [
-            Text(
-              date,
-              style: GoogleFonts.poppins(
-                fontSize: 12.sp,
-                color: Colors.black54,
-              ),
-            ),
-            Text(
-              time,
-              style: GoogleFonts.poppins(
-                fontSize: 12.sp,
-                color: Colors.black54,
-              ),
-            ),
-          ],
-        ),
-        SizedBox(width: 16.w),
         Column(
           children: [
             Container(

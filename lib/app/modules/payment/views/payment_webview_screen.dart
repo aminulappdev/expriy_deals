@@ -4,6 +4,8 @@ import 'package:expriy_deals/app/modules/payment/controllers/payment_url_control
 import 'package:expriy_deals/app/modules/payment/views/payment_success_screen.dart';
 import 'package:expriy_deals/app/widgets/show_snackBar_message.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 
@@ -59,7 +61,8 @@ class _PaymentWebviewScreenState extends State<PaymentWebviewScreen> {
             final bool isSuccess = await paymentURLController.paymentUrl(url);
             if (isSuccess) {
               await confirmPayment('${widget.paymentData['reference']}');
-              Navigator.pushNamed(context, PaymentSuccessScreen.routeName);
+              Get.to(PaymentSuccessScreen());
+              
             }
     
             // Call your payment result handler or anything you want here

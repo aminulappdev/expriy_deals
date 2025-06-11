@@ -42,7 +42,7 @@ class OrderResponseItemModel {
     final String? user;
     final String? author;
     final String? product;
-    final double? totalPrice;
+    final dynamic totalPrice;
     final int? discount;
     final int? quantity;
     final String? status;

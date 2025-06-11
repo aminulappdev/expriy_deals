@@ -1,4 +1,4 @@
-import 'package:expriy_deals/app/modules/product/model/product_details_model.dart';
+
 import 'package:expriy_deals/app/modules/seller/views/seller_about_screen.dart';
 import 'package:expriy_deals/app/modules/seller/views/seller_product_screen.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
@@ -18,6 +18,12 @@ class SellerProfileScreen extends StatefulWidget {
 class _SellerProfileScreenState extends State<SellerProfileScreen> {
   int selectedPage = 0;
 
+
+  @override
+  void initState() {
+    print('seller data: ${widget.sellerData}');
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 
 class ShopScreen extends StatefulWidget {
   final bool shouldBackButton;
-
+ 
   const ShopScreen({
     super.key,
     required this.shouldBackButton,

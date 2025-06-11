@@ -1,11 +1,12 @@
 import 'package:expriy_deals/app/modules/order/controllers/my_orders_controller.dart';
+import 'package:expriy_deals/app/modules/order/views/order_details_screen.dart';
+import 'package:expriy_deals/app/modules/order/views/timeLine.dart';
 import 'package:expriy_deals/app/modules/order/widgets/my_order_card.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:expriy_deals/app/widgets/costom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
 
 class MyOrderScreen extends StatefulWidget {
   const MyOrderScreen({super.key, required this.isBack});
@@ -33,9 +34,11 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             heightBox20,
-            CustomAppBar(name: "My Orders",isBack: widget.isBack,),
+            CustomAppBar(
+              name: "My Orders",
+              isBack: widget.isBack,
+            ),
             heightBox20,
-           
             Obx(() {
               if (myOrdersController.inProgress == true) {
                 return const Center(
@@ -54,11 +57,16 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                           price: order.totalPrice.toString(),
                           productName: order.product?.name ?? '',
                           quantity: order.quantity.toString(),
-                          isShowSeconBTN: order.status != 'pending',
+                          isShowSeconBTN:
+                              order.status != 'cancelled' ? false : true,
                           status: order.status ?? '',
-                          mainBTNOntap: () {},
+                          mainBTNOntap: () {
+                            Get.to(OrderDetailsScreen(
+                              myOrdersItemModel: order,
+                            ));
+                          },
                           secondBTNOntap: () {},
-                          secondBTNName: 'Buy Again',
+                          secondBTNName: 'View Details',
                         );
                       },
                     );

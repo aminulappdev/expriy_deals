@@ -17,19 +17,17 @@ class Urls {
   static const String myOrderUrl = '$_baseUrl/orders/my-orders';
   static const String allShopsUrl = '$_baseUrl/shop';
   static const String paymentUrl = '$_baseUrl/payments/checkout';
- 
-  
 
   static String productDetailsById(
     String id,
   ) {
     return '$_baseUrl/products/$id';
   }
-  
-   static String confirmedPaymentUrlsById(
+
+  static String confirmedPaymentUrlsById(
     String id,
   ) {
-    return '$_baseUrl/payments/reference/$id';
+    return '$_baseUrl/payments/order/$id';
   }
 
   static String deleteCartById(

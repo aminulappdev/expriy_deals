@@ -1,13 +1,16 @@
+// ignore_for_file: avoid_print
+
 import 'package:expriy_deals/app/modules/category/controllers/all_category_controller.dart';
 import 'package:expriy_deals/app/modules/category/views/all_catogory_screen.dart';
 import 'package:expriy_deals/app/modules/category/widget/category_card.dart';
+import 'package:expriy_deals/app/modules/home/widgets/product_item_shimmer.dart';
 import 'package:expriy_deals/app/modules/home/widgets/see_all_section.dart';
+import 'package:expriy_deals/app/modules/home/widgets/category_item_shimmer.dart';
 import 'package:expriy_deals/app/modules/product/controllers/all_product_conrtoller.dart';
 import 'package:expriy_deals/app/modules/product/views/product_screen.dart';
 import 'package:expriy_deals/app/modules/product/views/search_product_screen.dart';
 import 'package:expriy_deals/app/modules/product/widgets/product_card.dart';
 import 'package:expriy_deals/app/modules/seller/controllers/all_shop_controller.dart';
-import 'package:expriy_deals/app/modules/seller/views/seller_product_screen.dart';
 import 'package:expriy_deals/app/modules/seller/views/seller_profile_screen.dart';
 import 'package:expriy_deals/app/modules/seller/views/shop_screen.dart';
 import 'package:expriy_deals/app/modules/seller/widgets/shope_card.dart';
@@ -44,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // getCurrentLocation();
       categoryController.getCategory();
       allProductController.getProduct();
-      allShopController.myShops('23.739974828607025', '90.43835338329617');
+      allShopController.myShops('-73.935242', '40.73061');
     });
   }
 
@@ -121,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 // Reactive widget for categories
                 Obx(() {
                   if (categoryController.inProgress == true) {
-                    return const Center(child: CircularProgressIndicator());
+                    return CategoryShimmerEffectWidget();
                   } else if (categoryController.categoryData == null ||
                       categoryController.categoryData!.isEmpty) {
                     return const Center(child: Text('No categories available'));
@@ -199,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Obx(() {
                   if (allProductController.inProgress == true) {
-                    return CircularProgressIndicator();
+                    return ProductItemShimmerEffectWidget();
                   } else if (allProductController.productData == null ||
                       allProductController.productData!.isEmpty) {
                     return SizedBox(
@@ -263,7 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 heightBox10,
                 Obx(() {
                   if (allShopController.inProgress == true) {
-                    return CircularProgressIndicator();
+                    return ProductItemShimmerEffectWidget();
                   } else if (allShopController.allShopData == null ||
                       allShopController.allShopData!.isEmpty) {
                     return SizedBox(
@@ -355,7 +358,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 heightBox10,
                 Obx(() {
                   if (allProductController.inProgress == true) {
-                    return CircularProgressIndicator();
+                    return ProductItemShimmerEffectWidget();
                   } else if (allProductController.productData == null ||
                       allProductController.productData!.isEmpty) {
                     return SizedBox(
@@ -373,8 +376,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             : allProductController.productData!.length,
                         itemBuilder: (context, index) {
                           if (allProductController
-                                  .productData![index].totalSell! <
-                              10) {
+                                  .productData![index].totalSell! == 0) {
                             return Padding(
                               padding: EdgeInsets.symmetric(horizontal: 4.w),
                               child: ProductCard(

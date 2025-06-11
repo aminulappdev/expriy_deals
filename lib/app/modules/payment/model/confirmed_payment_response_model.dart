@@ -29,69 +29,60 @@ class ConfirmedPaymentResponseItemModel {
         required this.deliveryStatus,
         required this.trnId,
         required this.price,
-        required this.paymentIntentId,
         required this.isDeleted,
         required this.createdAt,
         required this.updatedAt,
         required this.v,
+        required this.paymentIntentId,
     });
 
     final String? id;
-    final Author? user;
-    final Author? author;
+    final User? user;
+    final String? author;
     final String? order;
     final String? status;
     final String? deliveryStatus;
     final String? trnId;
-    final double? price;
-    final String? paymentIntentId;
+    final dynamic price;
     final bool? isDeleted;
     final DateTime? createdAt;
     final DateTime? updatedAt;
     final int? v;
+    final String? paymentIntentId;
 
     factory ConfirmedPaymentResponseItemModel.fromJson(Map<String, dynamic> json){ 
         return ConfirmedPaymentResponseItemModel(
             id: json["_id"],
-            user: json["user"] == null ? null : Author.fromJson(json["user"]),
-            author: json["author"] == null ? null : Author.fromJson(json["author"]),
+            user: json["user"] == null ? null : User.fromJson(json["user"]),
+            author: json["author"],
             order: json["order"],
             status: json["status"],
             deliveryStatus: json["deliveryStatus"],
             trnId: json["trnId"],
             price: json["price"],
-            paymentIntentId: json["paymentIntentId"],
             isDeleted: json["isDeleted"],
             createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
             updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
             v: json["__v"],
+            paymentIntentId: json["paymentIntentId"],
         );
     }
 
 }
 
-class Author {
-    Author({
+class User {
+    User({
         required this.id,
         required this.name,
-        required this.email,
-        required this.phoneNumber,
-        required this.profile,
     });
 
     final String? id;
     final String? name;
-    final String? email;
-    final String? phoneNumber;
-    final String? profile;
 
-    factory Author.fromJson(Map<String, dynamic> json){ 
-        return Author(
+    factory User.fromJson(Map<String, dynamic> json){ 
+        return User(
             id: json["_id"],
             name: json["name"],
-            email: json["email"],
-            phoneNumber: json["phoneNumber"],
-            profile: json["profile"],
         );
     }
 

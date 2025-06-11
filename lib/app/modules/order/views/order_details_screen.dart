@@ -1,4 +1,8 @@
+import 'package:expriy_deals/app/modules/authentication/widgets/liner_widget.dart';
+import 'package:expriy_deals/app/modules/order/model/my_orders_model.dart';
 import 'package:expriy_deals/app/modules/order/views/timeLine.dart';
+import 'package:expriy_deals/app/modules/order/widgets/delivery_banner.dart';
+import 'package:expriy_deals/app/modules/order/widgets/delivery_card_info.dart';
 import 'package:expriy_deals/app/modules/order/widgets/price_row.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
 import 'package:expriy_deals/app/utils/assets_path.dart';
@@ -6,19 +10,41 @@ import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:expriy_deals/app/widgets/costom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
-  final String orderId;
+  final MyOrdersItemModel myOrdersItemModel;
+
   static const String routeName = '/order-details-screen';
-  const OrderDetailsScreen({super.key, required this.orderId});
+  const OrderDetailsScreen({super.key, required this.myOrdersItemModel});
 
   @override
   State<OrderDetailsScreen> createState() => _OrderDetailsScreenState();
 }
 
 class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
+  var isPending = false;
+  var isDelivered = false;
+  var isCancelled = false;
+  var isOngoing = false;
+
+  @override
+  void initState() {
+    if (widget.myOrdersItemModel.status == 'pending') {
+      isPending = true;
+    } else if (widget.myOrdersItemModel.status == 'delivered') {
+      isOngoing = true;
+      isPending = true;
+      isDelivered = true;
+    } else if (widget.myOrdersItemModel.status == 'cancelled') {
+      isCancelled = true;
+    } else if (widget.myOrdersItemModel.status == 'ongoing') {
+      isPending = true;
+      isOngoing = true;
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,114 +57,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               heightBox20,
               CustomAppBar(name: 'Order Details'),
               heightBox14,
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 70.h,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.r),
-                  color: Color(0xff308960),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(12.0.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Shipped',
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            'Your order is on the way!',
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontSize: 12.sp,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Icon(
-                        FontAwesomeIcons.truckFast,
-                        size: 30.sp,
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
+              DeliveryBanner(),
               heightBox12,
-              Card(
-                color: Colors.white,
-                elevation: 1,
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: 20,
-                              backgroundColor: AppColors.iconButtonThemeColor,
-                              child: Icon(
-                                Icons.location_on,
-                                color: Colors.white,
-                              ),
-                            ),
-                            widthBox10,
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: 300,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Shipping Information',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      Text(
-                                        'View',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            color:
-                                                AppColors.iconButtonThemeColor),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Text(
-                                  'Standerd local',
-                                  style: TextStyle(fontWeight: FontWeight.w400),
-                                ),
-                                Text(
-                                  'Id : 42561',
-                                  style: TextStyle(fontWeight: FontWeight.w400),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+
               heightBox12,
               // Consolidated Shipping Information Card with Timeline
               Card(
@@ -166,7 +87,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                 size: 20.sp,
                               ),
                             ),
-                            widthBox10,                           
+                            widthBox10,
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,38 +135,31 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                       fontWeight: FontWeight.w400,
                                       color: Colors.black54,
                                     ),
-                                  ), 
+                                  ),
                                   SizedBox(
-                                    height: 300.h,
+                                    height: 240.h,
                                     child: ListView(
                                       physics:
                                           NeverScrollableScrollPhysics(), // Disable scrolling inside ListView
                                       children: [
                                         TimelineStep(
-                                          date: "April 28, 2023",
-                                          time: "11:30 AM",
+                                          date: "",
+                                          time: "",
                                           description:
                                               "Arrived at Logistic Hub",
-                                          isCompleted: true,
+                                          isCompleted: isPending,
                                         ),
                                         TimelineStep(
-                                          date: "April 27, 2023",
-                                          time: "4:30 PM",
+                                          date: "",
+                                          time: "",
                                           description: "Package Picked Up",
-                                          isCompleted: false,
+                                          isCompleted: isOngoing,
                                         ),
                                         TimelineStep(
-                                          date: "April 26, 2023",
-                                          time: "9:30 AM",
-                                          description:
-                                              "Packed and Ready to Ship",
-                                          isCompleted: false,
-                                        ),
-                                        TimelineStep(
-                                          date: "April 25, 2023",
-                                          time: "9:30 AM",
+                                          date: "",
+                                          time: "",
                                           description: "Order Confirmed",
-                                          isCompleted: false,
+                                          isCompleted: isDelivered,
                                           isLast: true,
                                         ),
                                       ],
@@ -262,198 +176,207 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 ),
               ),
               heightBox12,
-              // Product Details Card
-              Card(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12.r),
-                    color: Colors.white,
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(12.0.h),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundImage: AssetImage(AssetsPath.headphone),
-                              radius: 20.r,
-                            ),
-                            widthBox10,
-                            Text(
-                              'Text therapy',
-                              style: GoogleFonts.poppins(
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                        heightBox10,
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 60.h,
-                              width: 60.w,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.r),
-                                image: DecorationImage(
-                                  image: AssetImage(AssetsPath.headphone),
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            ),
-                            widthBox8,
-                            SizedBox(
-                              width: 230.w,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    color: Colors.transparent,
-                                    width: 130.w,
-                                    child: Text(
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      'Headphone',
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 15.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                  heightBox12,
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        '\$50',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      Text(
-                                        'Qty: 1',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              heightBox10,
-                              Text(
-                                'Price Details',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              PriceRow(
-                                name: 'Price',
-                                price: '10',
-                                nameSize: 14,
-                                priceSize: 14,
-                              ),
-                              PriceRow(
-                                name: 'Price',
-                                price: '10',
-                                nameSize: 14,
-                                priceSize: 14,
-                              ),
-                              PriceRow(
-                                name: 'Price',
-                                price: '10',
-                                nameSize: 14,
-                                priceSize: 14,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+              DeliveryInformationCard(
+                title: 'Deliery Address',
+                icon: Icons.car_repair_rounded,
+                widget: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.myOrdersItemModel.user?.name ?? 'name',
+                      style: TextStyle(fontWeight: FontWeight.w400),
                     ),
-                  ),
+                    Text(
+                      widget.myOrdersItemModel.user?.phoneNumber ?? 'number',
+                      style: TextStyle(fontWeight: FontWeight.w400),
+                    ),
+                    Text(
+                      widget.myOrdersItemModel.billingDetails?.address ??
+                          'Address',
+                      style: TextStyle(fontWeight: FontWeight.w400),
+                    ),
+                  ],
                 ),
               ),
               heightBox12,
+              // Product Details Card
+              ShopInfoCard(
+                shopLogo: AssetsPath.headphone,
+                shopName: 'Text therapy',
+                productImage: AssetsPath.headphone,
+                productName: 'Headphone',
+                productPrice: '\$50',
+                productQuantity: 'Qty: 1',
+              ),
               heightBox12,
-              Card(
-                color: Colors.white,
-                elevation: 1,
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
+              DeliveryInformationCard(
+                title: 'Order Details',
+                icon: Icons.location_on,
+                widget: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Order ID: ${widget.myOrdersItemModel.id}',
+                      style: TextStyle(fontWeight: FontWeight.w400),
+                    ),
+                    Text(
+                      'Id : 42561',
+                      style: TextStyle(fontWeight: FontWeight.w400),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ShopInfoCard extends StatelessWidget {
+  final String shopLogo;
+  final String shopName;
+  final String productImage;
+  final String productName;
+  final String productPrice;
+  final String productQuantity;
+
+  const ShopInfoCard({
+    super.key,
+    required this.shopLogo,
+    required this.shopName,
+    required this.productImage,
+    required this.productName,
+    required this.productPrice,
+    required this.productQuantity,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.r),
+          color: Colors.white,
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(12.0.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  CircleAvatar(
+                    backgroundImage: AssetImage(AssetsPath.headphone),
+                    radius: 20.r,
+                  ),
+                  widthBox10,
+                  Text(
+                    'Text therapy',
+                    style: GoogleFonts.poppins(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+              heightBox10,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 60.h,
+                    width: 60.w,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.r),
+                      image: DecorationImage(
+                        image: AssetImage(AssetsPath.headphone),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                  widthBox8,
+                  SizedBox(
+                    width: 230.w,
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Container(
+                          color: Colors.transparent,
+                          width: 130.w,
+                          child: Text(
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            'Headphone',
+                            style: GoogleFonts.poppins(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        heightBox12,
                         Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CircleAvatar(
-                              radius: 20,
-                              backgroundColor: AppColors.iconButtonThemeColor,
-                              child: Icon(
-                                Icons.location_on,
-                                color: Colors.white,
+                            Text(
+                              '\$50',
+                              style: GoogleFonts.poppins(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
-                            widthBox10,
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: 300,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Shipping Information',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      Text(
-                                        'View',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            color:
-                                                AppColors.iconButtonThemeColor),
-                                      ),
-                                    ], 
-                                  ),
-                                ),
-                                Text(
-                                  'Standerd local',
-                                  style: TextStyle(fontWeight: FontWeight.w400),
-                                ),
-                                Text(
-                                  'Id : 42561',
-                                  style: TextStyle(fontWeight: FontWeight.w400),
-                                ),
-                              ],
-                            )
+                            Text(
+                              'Qty: 1',
+                              style: GoogleFonts.poppins(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
                           ],
                         ),
                       ],
                     ),
                   ),
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    heightBox10,
+                    Text(
+                      'Price Details',
+                      style: GoogleFonts.poppins(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    PriceRow(
+                      name: 'Price',
+                      price: '10',
+                      nameSize: 14,
+                      priceSize: 14,
+                    ),
+                    PriceRow(
+                      name: 'Shipping fee', 
+                      price: '10',
+                      nameSize: 14,
+                      priceSize: 14,
+                    ),
+                    Container(
+                      height: 1.h,
+                      color: Colors.grey.shade300,
+                      margin: EdgeInsets.symmetric(vertical: 10.h),
+                    ),
+                    PriceRow(
+                      name: 'Total Price',
+                      price: '10',
+                      nameSize: 14,
+                      priceSize: 14,
+                    ),
+                  ],
                 ),
               ),
             ],
