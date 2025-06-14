@@ -94,26 +94,26 @@ class ProfileScreen extends StatelessWidget {
                 'Settings',
                 style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w500),
               ),
-              heightBox12,
-              ProfileDrawerFeature(
-                feature: 'Notification',
-                icon: Icons.notifications,
-                ontap: () {
-                  // NotificationScreen নেভিগেশন যোগ করুন
-                },
-              ),
+              // heightBox12,
+              // ProfileDrawerFeature(
+              //   feature: 'Notification',
+              //   icon: Icons.notifications,
+              //   ontap: () {
+              //     // NotificationScreen নেভিগেশন যোগ করুন
+              //   },
+              // ),
               heightBox8,
               ProfileDrawerFeature(
                 feature: 'Change password',
                 icon: Icons.lock,
                 ontap: () => Get.to(const ChangePasswordScreen()),
               ),
-              heightBox8,
-              ProfileDrawerFeature(
-                feature: 'Delete account',
-                icon: Icons.delete,
-                ontap: () {},
-              ),
+              // heightBox8,
+              // ProfileDrawerFeature(
+              //   feature: 'Delete account',
+              //   icon: Icons.delete,
+              //   ontap: () {},
+              // ),
               heightBox8,
               Text(
                 'Support',

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:expriy_deals/app/modules/order/controllers/order_controller.dart';
 import 'package:expriy_deals/app/modules/order/widgets/price_row.dart';
 import 'package:expriy_deals/app/modules/payment/controllers/payment_services.dart';
@@ -89,22 +91,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                 heightBox8,
                 // Address
                 heightBox8,
-                SizedBox(
-                  width: 170,
-                  child: Text(
-                    deliveryAddress,
-                    style: GoogleFonts.poppins(fontSize: 10.sp),
-                  ),
-                ),
-                heightBox8,
-                SizedBox(
-                  width: 170,
-                  child: Text(
-                    'Delivery',
-                    style: GoogleFonts.poppins(fontSize: 10.sp),
-                  ),
-                ),
-                heightBox12,
+                
+              
                 priceCalculator(context),
                 heightBox12,
                 Text(
@@ -217,116 +205,119 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     );
   }
 
-  Container priceCalculator(BuildContext context) {
-    return Container(
-      height: 91.h,
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Container(
-                  height: 77.h,
-                  width: 75.w,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    image: DecorationImage(
-                      image: widget.productDetailsData.images.isNotEmpty == true
-                          ? NetworkImage(
-                              '${widget.productDetailsData.images[0].url}')
-                          : NetworkImage(
-                              'https://defaultimageurl.com/default.png'),
-                      fit: BoxFit.fill,
+  Widget priceCalculator(BuildContext context) {
+    return Card(
+      elevation: 1,
+      child: Container(
+        height: 95.h,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    height: 77.h,
+                    width: 75.w,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      image: DecorationImage(
+                        image: widget.productDetailsData.images.isNotEmpty == true
+                            ? NetworkImage(
+                                '${widget.productDetailsData.images[0].url}')
+                            : NetworkImage(
+                                'https://defaultimageurl.com/default.png'),
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
-                ),
-                widthBox8,
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Standard delivery',
-                      style: GoogleFonts.poppins(fontSize: 14.sp),
-                    ),
-                    heightBox14,
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              if (quantity > 1) {
-                                quantity--;
-                                price =
-                                    (widget.productDetailsData.price ?? 0.0) *
-                                        quantity;
-                                item--;
-                                _calculateTotalPrice();
-                                print(
-                                    'Minus: Quantity=$quantity, Price=$price, Total=$mainTotalPrice');
-                              }
-                            });
-                          },
-                          child: CircleAvatar(
-                            radius: 13.r,
-                            backgroundColor: Colors.grey,
-                            child: Icon(Icons.remove),
-                          ),
-                        ),
-                        widthBox8,
-                        Text(
-                          quantity.toString(),
-                          style: GoogleFonts.poppins(fontSize: 21.sp),
-                        ),
-                        widthBox8,
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              if (widget.productDetailsData.discount! >
-                                  quantity) {
-                                quantity++;
-                                price =
-                                    (widget.productDetailsData.price ?? 0.0) *
-                                        quantity;
-                                item++;
-                                _calculateTotalPrice();
-                                print(
-                                    'Plus: Quantity=$quantity, Price=$price, Total=$mainTotalPrice');
-                              } else {
-                                print(
-                                    'Cannot increase quantity beyond ${widget.productDetailsData.discount}');
-                              }
-                            });
-                          },
-                          child: CircleAvatar(
-                            radius: 13.r,
-                            backgroundColor: AppColors.iconButtonThemeColor,
-                            child: Icon(
-                              Icons.add,
-                              color: Colors.white,
+                  widthBox8,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Standard delivery',
+                        style: GoogleFonts.poppins(fontSize: 14.sp),
+                      ),
+                      heightBox14,
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                if (quantity > 1) {
+                                  quantity--;
+                                  price =
+                                      (widget.productDetailsData.price ?? 0.0) *
+                                          quantity;
+                                  item--;
+                                  _calculateTotalPrice();
+                                  print(
+                                      'Minus: Quantity=$quantity, Price=$price, Total=$mainTotalPrice');
+                                }
+                              });
+                            },
+                            child: CircleAvatar(
+                              radius: 13.r,
+                              backgroundColor: Colors.grey,
+                              child: Icon(Icons.remove),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Text(
-                price.toStringAsFixed(2),
-                style: GoogleFonts.poppins(fontSize: 20.sp),
+                          widthBox8,
+                          Text(
+                            quantity.toString(),
+                            style: GoogleFonts.poppins(fontSize: 21.sp),
+                          ),
+                          widthBox8,
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                if (widget.productDetailsData.discount! >
+                                    quantity) {
+                                  quantity++;
+                                  price =
+                                      (widget.productDetailsData.price ?? 0.0) *
+                                          quantity;
+                                  item++;
+                                  _calculateTotalPrice();
+                                  print(
+                                      'Plus: Quantity=$quantity, Price=$price, Total=$mainTotalPrice');
+                                } else {
+                                  print(
+                                      'Cannot increase quantity beyond ${widget.productDetailsData.discount}');
+                                }
+                              });
+                            },
+                            child: CircleAvatar(
+                              radius: 13.r,
+                              backgroundColor: AppColors.iconButtonThemeColor,
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ),
-          ],
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Text(
+                  price.toStringAsFixed(2),
+                  style: GoogleFonts.poppins(fontSize: 20.sp),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

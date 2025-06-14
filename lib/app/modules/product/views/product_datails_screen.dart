@@ -16,6 +16,7 @@ import 'package:expriy_deals/app/widgets/gradiant_elevated_button.dart';
 import 'package:expriy_deals/app/widgets/show_snackBar_message.dart';
 import 'package:expriy_deals/get_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -77,7 +78,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         Text(
                           data.name ?? 'No Name',
                           style: GoogleFonts.poppins(
-                            fontSize: 24.sp,
+                            fontSize: 20.sp,
                           ),
                         ),
                         Text(
@@ -91,101 +92,56 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     Text(
                       'Product Details',
                       style: GoogleFonts.poppins(
-                          fontSize: 16.sp, fontWeight: FontWeight.w400),
+                          fontSize: 14.sp, fontWeight: FontWeight.w400),
                     ),
                     heightBox4,
-                    AnimatedCrossFade(
-                      firstChild: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                              'Product Name: ${data.name ?? 'UltraShield SPF 50+ Sunscreen'}'),
-                          Text('Brand: '),
-                          Text('Type: Broad-Spectrum Protection'),
-                          Text('SPF: 50+'),
-                          Text('Formulation: Lotion'),
-                          Text('Volume: 150 ml'),
-                          Text('Price: \$${discountValue.toStringAsFixed(2)}'),
-                          Text(
-                              'Key Ingredients: Avobenzone, Octinoxate, Titanium Dioxide'),
-                          Text('Water Resistance: Up to 80 minutes'),
-                          Text(
-                              'Application: Apply generously on all exposed skin areas 15 minutes before sun exposure. Reapply every 2 hours or after swimming or sweating.'),
-                          Text(
-                              'Benefits: Helps prevent sunburn, premature skin aging, and skin cancer. Suitable for all skin types, including sensitive skin.'),
-                        ],
-                      ),
-                      secondChild: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                              'Product Name: ${data.name ?? 'UltraShield SPF 50+ Sunscreen'}'),
-                          Text('Brand:'),
-                          Text('Type: Broad-Spectrum Protection'),
-                          Text('SPF: 50+'),
-                          Text('Formulation: Lotion'),
-                          Text('Volume: 150 ml'),
-                        ],
-                      ),
-                      crossFadeState: _isExpandedProduct
-                          ? CrossFadeState.showFirst
-                          : CrossFadeState.showSecond,
-                      duration: const Duration(milliseconds: 300),
-                    ),
+                    Html(data: data.details ?? ''),
+
                     SizedBox(height: 8.h),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _isExpandedProduct = !_isExpandedProduct;
-                        });
-                      },
-                      child: SeeMoreButton(
-                        isExpanded: _isExpandedProduct,
-                      ),
-                    ),
+
                     heightBox4,
-                    AnimatedCrossFade(
-                      firstChild: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            PolicyCustomRow(
-                                name: 'Warranty Policy', routeName: ''),
-                            PolicyCustomRow(
-                                name: 'Return & Refund Policy', routeName: ''),
-                            PolicyCustomRow(
-                                name: 'Replacement Policy', routeName: ''),
-                            PolicyCustomRow(
-                                name: 'Return & Refund Policy', routeName: ''),
-                            PolicyCustomRow(
-                                name: 'Replacement Policy', routeName: ''),
-                          ],
-                        ),
-                      ),
-                      secondChild: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            PolicyCustomRow(
-                                name: 'Warranty Policy', routeName: ''),
-                            PolicyCustomRow(
-                                name: 'Return & Refund Policy', routeName: ''),
-                            PolicyCustomRow(
-                                name: 'Replacement Policy', routeName: ''),
-                          ],
-                        ),
-                      ),
-                      crossFadeState: _isExpandedPolicy
-                          ? CrossFadeState.showFirst
-                          : CrossFadeState.showSecond,
-                      duration: const Duration(milliseconds: 300),
-                    ),
+                    // AnimatedCrossFade(
+                    //   firstChild: Container(
+                    //     decoration: BoxDecoration(
+                    //         color: Colors.white,
+                    //         borderRadius: BorderRadius.circular(12)),
+                    //     child: Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         PolicyCustomRow(
+                    //             name: 'Warranty Policy', routeName: ''),
+                    //         PolicyCustomRow(
+                    //             name: 'Return & Refund Policy', routeName: ''),
+                    //         PolicyCustomRow(
+                    //             name: 'Replacement Policy', routeName: ''),
+                    //         PolicyCustomRow(
+                    //             name: 'Return & Refund Policy', routeName: ''),
+                    //         PolicyCustomRow(
+                    //             name: 'Replacement Policy', routeName: ''),
+                    //       ],
+                    //     ),
+                    //   ),
+                    //   secondChild: Container(
+                    //     decoration: BoxDecoration(
+                    //         color: Colors.white,
+                    //         borderRadius: BorderRadius.circular(12)),
+                    //     child: Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         PolicyCustomRow(
+                    //             name: 'Warranty Policy', routeName: ''),
+                    //         PolicyCustomRow(
+                    //             name: 'Return & Refund Policy', routeName: ''),
+                    //         PolicyCustomRow(
+                    //             name: 'Replacement Policy', routeName: ''),
+                    //       ],
+                    //     ),
+                    //   ),
+                    //   crossFadeState: _isExpandedPolicy
+                    //       ? CrossFadeState.showFirst
+                    //       : CrossFadeState.showSecond,
+                    //   duration: const Duration(milliseconds: 300),
+                    // ),
                     SizedBox(height: 8.h),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -205,7 +161,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     child: Text(
                                       data.author?.shop?.name?.isNotEmpty ==
                                               true
-                                          ? data!.author!.shop!.name!
+                                          ? data.author!.shop!.name!
                                               .substring(0, 1)
                                           : '',
                                       style: GoogleFonts.poppins(
@@ -223,8 +179,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         heightBox8,
                         InkWell(
                           onTap: () {
-                            if (data != null &&
-                                data.author != null &&
+                            if (data.author != null &&
                                 data.author!.shop != null) {
                               Get.to(SellerProfileScreen(
                                 sellerData: {
@@ -238,7 +193,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   'location': data.author!.shop?.address ??
                                       'Unknown Location',
                                   'phone': data.author!.phoneNumber ?? 'N/A',
-                                  'description':
+                                  'description': 
                                       data.author!.shop!.description ??
                                           'No Description',
                                 },
@@ -340,11 +295,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 12),
                             child: SizedBox(
-                              width: 159.w,
+                              width: 150.w,
                               height: 40.h,
                               child: GestureDetector(
                                 onTap: () {
-                                  if (data != null && data.id != null) {
+                                  if (data.id != null) {
                                     addToCArtFunction(
                                         data.id!, data.stock.toString());
                                   } else {
@@ -374,7 +329,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 12),
                             child: SizedBox(
-                              width: 159.w,
+                              width: 150.w,
                               height: 42.h,
                               child: CustomElevatedButton(
                                 onPressed: () {
@@ -403,7 +358,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         await addToCartController.addToCart(productId, quantity);
     if (isSuccess) {
       if (mounted) {
-        showSnackBarMessage(context, 'Successfully added to cart', true);
+        showSnackBarMessage(context, 'Successfully added to cart',);
       }
     } else {
       if (mounted) {

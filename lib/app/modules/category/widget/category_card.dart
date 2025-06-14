@@ -1,8 +1,6 @@
-
 import 'package:expriy_deals/app/utils/app_colors.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CategoryCard extends StatelessWidget {
@@ -30,11 +28,22 @@ class CategoryCard extends StatelessWidget {
               color: AppColors.iconButtonThemeColor,
               borderRadius: BorderRadius.circular(20),
             ),
-            child: const Icon(
-              Icons.headphones,
-              color: Colors.white,
-              size: 36,
-            ),
+            child: image == '' || image == null
+                ? const Icon(
+                    Icons.category,
+                    color: Colors.white,
+                    size: 30,
+                  )
+                : Container(
+                    height: 20.h,
+                    width: 20.w,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: NetworkImage(image),
+                        fit: BoxFit.fill,
+                      ),
+                    )),
           ),
           heightBox4,
           SizedBox(

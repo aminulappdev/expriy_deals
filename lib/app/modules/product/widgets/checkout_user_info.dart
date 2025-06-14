@@ -43,7 +43,7 @@ class CheckoutUserInfo extends StatelessWidget {
             Text(
               number,
               style: GoogleFonts.poppins(
-                  fontSize: 10.sp, color: Color(0xff626262)),
+                  fontSize: 12.sp, color: Color(0xff626262)),
             ),
             heightBox8,
             Row(
@@ -54,7 +54,7 @@ class CheckoutUserInfo extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.location_on_rounded,
-                      size: 18,
+                      size: 24,
                     ),
                     widthBox4,
                     SizedBox(
@@ -64,22 +64,22 @@ class CheckoutUserInfo extends StatelessWidget {
                           children: [
                             Text(
                               address,
-                              style: GoogleFonts.poppins(fontSize: 10.sp),
+                              style: GoogleFonts.poppins(fontSize: 12.sp),
                             ),
                             Text(
                               'City : $city',
-                              style: GoogleFonts.poppins(fontSize: 10.sp),
+                              style: GoogleFonts.poppins(fontSize: 12.sp),
                             ),
-                            Text(
-                              'Zipcode : $zipcode',
-                              style: GoogleFonts.poppins(
-                                fontSize: 10.sp,
-                              ),
-                            ),
+                            // Text(
+                            //   'Zipcode : $zipcode',
+                            //   style: GoogleFonts.poppins(
+                            //     fontSize: 12.sp,
+                            //   ),
+                            // ),
                             Text(
                               'Country : $country',
                               style: GoogleFonts.poppins(
-                                fontSize: 10.sp,
+                                fontSize: 12.sp,
                               ),
                             ),
                           ],

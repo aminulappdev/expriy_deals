@@ -26,7 +26,7 @@ class CartProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 110.h,
+      height: 130.h,
       width: 317.w,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
@@ -62,7 +62,7 @@ class CartProductCard extends StatelessWidget {
                     children: [
                       SizedBox(
                         
-                        width: 100.w,
+                        width: 150.w,
                         child: Text(
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,

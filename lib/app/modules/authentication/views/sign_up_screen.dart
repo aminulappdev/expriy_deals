@@ -29,7 +29,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController nameCtrl = TextEditingController();
-  TextEditingController desCtrl = TextEditingController();
+  TextEditingController numberCtrl = TextEditingController();
   TextEditingController emailCtrl = TextEditingController();
   TextEditingController passwordCtrl = TextEditingController();
   final CreateUserController createUserController =
@@ -96,25 +96,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           hintStyle: TextStyle(color: Colors.grey)),
                     ),
                     heightBox8,
-                    Text('Description',
+                    Text('Number',
                         style: GoogleFonts.poppins(
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w400,
                             color: Color(0xff626262))),
                     heightBox8,
                     TextFormField(
-                      controller: desCtrl,
+                      maxLength: 15,
+                      controller: numberCtrl,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      keyboardType: TextInputType.emailAddress,
+                      keyboardType: TextInputType.number,
                       validator: (String? value) {
                         if (value!.isEmpty) {
-                          return 'Enter description';
+                          return 'Enter number';
                         }
 
                         return null;
                       },
                       decoration: InputDecoration(
-                          hintText: 'Enter your description',
+                          hintText: 'Enter your number',
                           hintStyle: TextStyle(color: Colors.grey)),
                     ),
                     heightBox8,
@@ -142,83 +143,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           hintStyle: TextStyle(color: Colors.grey)),
                     ),
                     heightBox8,
-                    Text('Uplpoad your tax documents',
-                        style: GoogleFonts.poppins(
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xff626262))),
-                    heightBox8,
-                    image != null
-                        ? Column(
-                            children: [
-                              Container(
-                                height: 40,
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Color(0xff626262)),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: InkWell(
-                                  onTap: () {
-                                    _imagePickerHelper.showAlertDialog(context,
-                                        (File pickedImage) {
-                                      setState(() {
-                                        image = pickedImage;
-                                      });
-                                    });
-                                  },
-                                  child: Center(
-                                    child: Text(
-                                      'Upload again',
-                                      style: TextStyle(fontSize: 14),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              heightBox4,
-                              Center(
-                                child: Image.file(
-                                  image!,
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 250.h,
-                                  fit: BoxFit.fill,
-                                ),
-                              )
-                            ],
-                          )
-                        : Container(
-                            height: 140,
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Color(0xff626262)),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                _imagePickerHelper.showAlertDialog(context,
-                                    (File pickedImage) {
-                                  setState(() {
-                                    image = pickedImage;
-                                  });
-                                });
-                              },
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.add,
-                                    size: 40,
-                                  ),
-                                  Text(
-                                    'Upload',
-                                    style: TextStyle(fontSize: 24),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                    heightBox8,
+                  
                     Text('Password',
                         style: GoogleFonts.poppins(
                             fontSize: 12.sp,
@@ -325,9 +250,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (_formKey.currentState!.validate()) {
       final bool isSuccess = await createUserController.createUser(
           nameCtrl.text,
-          desCtrl.text,
+          numberCtrl.text,
           emailCtrl.text,
-          image,
+        
           passwordCtrl.text);
 
       if (isSuccess) {

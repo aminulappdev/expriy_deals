@@ -94,7 +94,14 @@ class _PaymentDetailsScreen extends State<PaymentDetailsScreen> {
                               nameSize: 14,
                               priceSize: 14,
                             ),
-                           
+                            heightBox8,
+                            PriceRow(
+                              name: 'Name',
+                              price:
+                                  '${controller.confirmedPaymentResponseModel!.data?.user?.name}',
+                              nameSize: 14,
+                              priceSize: 14,
+                            ),
                             heightBox8,
                             PriceRow(
                               name: 'Amount',
@@ -130,7 +137,6 @@ class _PaymentDetailsScreen extends State<PaymentDetailsScreen> {
                       height: 70.h,
                       width: 70.h,
                       decoration: BoxDecoration(
-                         
                           color: AppColors.iconButtonThemeColor,
                           shape: BoxShape.circle),
                       child: Center(

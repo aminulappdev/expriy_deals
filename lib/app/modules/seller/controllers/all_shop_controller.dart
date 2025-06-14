@@ -33,10 +33,10 @@ class AllShopController extends GetxController {
     _inProgress.value = true;
 
 
-    Map<String, dynamic> queryparam = {'longitude': latitude, 'latitude': longitude, };
+    Map<String, dynamic> queryparam = {'longitude': latitude, 'latitude': longitude};
     final NetworkResponse response = await Get.find<NetworkCaller>().getRequest(
         Urls.allShopsUrl,
-        queryParams: queryparam,
+       
         accesToken: StorageUtil.getData(StorageUtil.userAccessToken));
 
     if (response.isSuccess) {

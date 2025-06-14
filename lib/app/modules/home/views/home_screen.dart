@@ -10,6 +10,7 @@ import 'package:expriy_deals/app/modules/product/controllers/all_product_conrtol
 import 'package:expriy_deals/app/modules/product/views/product_screen.dart';
 import 'package:expriy_deals/app/modules/product/views/search_product_screen.dart';
 import 'package:expriy_deals/app/modules/product/widgets/product_card.dart';
+import 'package:expriy_deals/app/modules/profile/controllers/profile_controller.dart';
 import 'package:expriy_deals/app/modules/seller/controllers/all_shop_controller.dart';
 import 'package:expriy_deals/app/modules/seller/views/seller_profile_screen.dart';
 import 'package:expriy_deals/app/modules/seller/views/shop_screen.dart';
@@ -36,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final AllProductController allProductController =
       Get.put(AllProductController());
   final AllShopController allShopController = Get.find<AllShopController>();
+
   double? latitude;
   double? longitude;
 
@@ -45,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // requestLocationPermission();
       // getCurrentLocation();
+
       categoryController.getCategory();
       allProductController.getProduct();
       allShopController.myShops('-73.935242', '40.73061');
@@ -76,6 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(ProfileController());
+    final controller = Get.find<ProfileController>();
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -86,10 +91,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CircleAvatar(
-                      radius: 21.r,
-                      backgroundImage: AssetImage(AssetsPath.headphone),
-                    ),
+                    Obx(() {
+                      return controller.inProgress
+                          ? const CircularProgressIndicator()
+                          : CircleAvatar(
+                              radius: 21.r,
+                              backgroundImage:
+                                  controller.profileData?.profile != null
+                                      ? NetworkImage(
+                                          controller.profileData!.profile!)
+                                      : const AssetImage(AssetsPath.appleLogo),
+                            );
+                    }),
                     GestureDetector(
                       onTap: () {
                         Get.to(SearchProductScreen());
@@ -143,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 CategoryCard(
-                                  image: '',
+                                  image: categories[index].banner ?? '',
                                   onTap: () {
                                     Get.to(ProductScreen(
                                       shouldBackButton: true,
@@ -376,7 +389,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             : allProductController.productData!.length,
                         itemBuilder: (context, index) {
                           if (allProductController
-                                  .productData![index].totalSell! == 0) {
+                                  .productData![index].totalSell! ==
+                              0) {
                             return Padding(
                               padding: EdgeInsets.symmetric(horizontal: 4.w),
                               child: ProductCard(
