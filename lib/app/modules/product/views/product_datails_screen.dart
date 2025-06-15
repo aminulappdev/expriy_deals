@@ -14,7 +14,6 @@ import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:expriy_deals/app/widgets/costom_app_bar.dart';
 import 'package:expriy_deals/app/widgets/gradiant_elevated_button.dart';
 import 'package:expriy_deals/app/widgets/show_snackBar_message.dart';
-import 'package:expriy_deals/get_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -37,8 +36,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final AllProductController allProductController =
       Get.put(AllProductController());
 
-  bool _isExpandedProduct = false;
-  bool _isExpandedPolicy = false;
+ 
 
   @override
   void initState() {
@@ -71,7 +69,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   children: [
                     CustomAppBar(name: 'Product Details'),
                     heightBox12,
-                    HomeCarouselSlider(),
+                    HomeCarouselSlider(
+                      images:
+                          productDetailsController.productDetailsData?.images ??
+                              [],
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -193,7 +195,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   'location': data.author!.shop?.address ??
                                       'Unknown Location',
                                   'phone': data.author!.phoneNumber ?? 'N/A',
-                                  'description': 
+                                  'description':
                                       data.author!.shop!.description ??
                                           'No Description',
                                 },
@@ -229,58 +231,49 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                       ],
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _isExpandedPolicy = !_isExpandedPolicy;
-                          });
-                        },
-                        child: SeeMoreButton(isExpanded: _isExpandedPolicy),
-                      ),
-                    ),
-                    Text(
-                      'You might also like',
-                      style: GoogleFonts.poppins(
-                          fontSize: 15.sp, fontWeight: FontWeight.w500),
-                    ),
-                    heightBox8,
-                    Obx(() {
-                      if (allProductController.inProgress == true) {
-                        return const CircularProgressIndicator();
-                      } else {
-                        return SizedBox(
-                          height: 180.h,
-                          width: MediaQuery.of(context).size.width,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount:
-                                allProductController.productData?.length ?? 0,
-                            itemBuilder: (context, index) {
-                              final product =
-                                  allProductController.productData?[index];
-                              if (product?.category?.name ==
-                                  productDetailsController
-                                      .productDetailsData?.category?.name) {
-                                return Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 4.w),
-                                  child: ProductCard(
-                                    image: product?.images[0].url,
-                                    price: product?.price.toString() ?? '',
-                                    title: product?.name,
-                                    isShowDiscount: true,
-                                    productId: product?.id ?? '',
-                                  ),
-                                );
-                              }
-                              return const SizedBox.shrink();
-                            },
-                          ),
-                        );
-                      }
-                    }),
+                    heightBox12,
+                    // Text(
+                    //   'You might also like',
+                    //   style: GoogleFonts.poppins(
+                    //       fontSize: 15.sp, fontWeight: FontWeight.w500),
+                    // ),
+                    // heightBox8,
+                    // Obx(() {
+                    //   if (allProductController.inProgress == true) {
+                    //     return const CircularProgressIndicator();
+                    //   } else {
+                    //     return SizedBox(
+                    //       height: 180.h,
+                    //       width: MediaQuery.of(context).size.width,
+                    //       child: ListView.builder(
+                    //         scrollDirection: Axis.horizontal,
+                    //         itemCount:
+                    //             allProductController.productData?.length ?? 0,
+                    //         itemBuilder: (context, index) {
+                    //           final product =
+                    //               allProductController.productData?[index];
+                    //           if (product?.category?.name ==
+                    //               productDetailsController
+                    //                   .productDetailsData?.category?.name) {
+                    //             return Padding(
+                    //               padding:
+                    //                   EdgeInsets.symmetric(horizontal: 4.w),
+                    //               child: ProductCard(
+                    //                 image: product?.images[0].url,
+                    //                 price: product?.price.toString() ?? '',
+                    //                 title: product?.name,
+                    //                 isShowDiscount: true,
+                    //                 productId: product?.id ?? '',
+                    //                 discount: product?.discount.toString(),
+                    //               ),
+                    //             );
+                    //           }
+                    //           return const SizedBox.shrink();
+                    //         },
+                    //       ),
+                    //     );
+                    //   }
+                    // }),
                     heightBox12,
                     Container(
                       height: 70.h,
@@ -358,7 +351,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         await addToCartController.addToCart(productId, quantity);
     if (isSuccess) {
       if (mounted) {
-        showSnackBarMessage(context, 'Successfully added to cart',);
+        showSnackBarMessage(
+          context,
+          'Successfully added to cart',
+        );
       }
     } else {
       if (mounted) {

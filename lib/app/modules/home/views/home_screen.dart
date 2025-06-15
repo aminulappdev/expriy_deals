@@ -6,7 +6,10 @@ import 'package:expriy_deals/app/modules/category/widget/category_card.dart';
 import 'package:expriy_deals/app/modules/home/widgets/product_item_shimmer.dart';
 import 'package:expriy_deals/app/modules/home/widgets/see_all_section.dart';
 import 'package:expriy_deals/app/modules/home/widgets/category_item_shimmer.dart';
+import 'package:expriy_deals/app/modules/product/controllers/Special_product_controller.dart';
 import 'package:expriy_deals/app/modules/product/controllers/all_product_conrtoller.dart';
+import 'package:expriy_deals/app/modules/product/controllers/category_product_controller.dart';
+import 'package:expriy_deals/app/modules/product/controllers/recommend_product_controller.dart';
 import 'package:expriy_deals/app/modules/product/views/product_screen.dart';
 import 'package:expriy_deals/app/modules/product/views/search_product_screen.dart';
 import 'package:expriy_deals/app/modules/product/widgets/product_card.dart';
@@ -36,8 +39,13 @@ class _HomeScreenState extends State<HomeScreen> {
   final categoryController = Get.put(AllCategoryController());
   final AllProductController allProductController =
       Get.put(AllProductController());
-  final AllShopController allShopController = Get.find<AllShopController>();
-
+  final AllShopController allShopController = Get.put(AllShopController());
+  final SpecialProductController specialProductController =
+      Get.put(SpecialProductController());
+  final CategoryProductController categoryProductController =
+      Get.put(CategoryProductController());
+  final RecommendProductController recommendProductController =
+      Get.put(RecommendProductController());
   double? latitude;
   double? longitude;
 
@@ -45,9 +53,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Uncomment if location is needed
       // requestLocationPermission();
       // getCurrentLocation();
 
+      recommendProductController.getRecommenedProduct();
+      specialProductController.getSpecialProduct();
       categoryController.getCategory();
       allProductController.getProduct();
       allShopController.myShops('-73.935242', '40.73061');
@@ -57,9 +68,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> requestLocationPermission() async {
     final ph.PermissionStatus status = await ph.Permission.location.request();
     if (status.isGranted) {
-      // Permission granted; you can now retrieve the location.
+      print('Location permission granted');
     } else if (status.isDenied) {
-      print('Location_permission_denied');
+      print('Location permission denied');
     }
   }
 
@@ -68,8 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       final loc.LocationData locationData = await location.getLocation();
       setState(() {
-        latitude = locationData.latitude!;
-        longitude = locationData.longitude!;
+        latitude = locationData.latitude;
+        longitude = locationData.longitude;
         print('Location is $latitude and $longitude');
       });
     } catch (e) {
@@ -105,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     }),
                     GestureDetector(
                       onTap: () {
-                        Get.to(SearchProductScreen());
+                        Get.to(const SearchProductScreen());
                       },
                       child: Container(
                         height: 34.h,
@@ -130,16 +141,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 SeeAllSection(
                   title: 'Categories',
                   ontap: () {
-                    Get.to(AllCatogoryScreen());
+                    Get.to(const AllCatogoryScreen());
                   },
                 ),
                 heightBox8,
-                // Reactive widget for categories
                 Obx(() {
-                  if (categoryController.inProgress == true) {
-                    return CategoryShimmerEffectWidget();
-                  } else if (categoryController.categoryData == null ||
-                      categoryController.categoryData!.isEmpty) {
+                  if (categoryController.inProgress) {
+                    return const CategoryShimmerEffectWidget();
+                  } else if (categoryController.categoryData?.isEmpty ?? true) {
                     return const Center(child: Text('No categories available'));
                   } else {
                     final categories = categoryController.categoryData!;
@@ -160,8 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   onTap: () {
                                     Get.to(ProductScreen(
                                       shouldBackButton: true,
-                                      categoryId:
-                                          categories[index].id ?? 'Empty',
+                                      categoryId: categories[index].id ?? '',
                                       categoryName:
                                           categories[index].name ?? '',
                                     ));
@@ -182,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Row(
                       children: [
                         Text(
-                          'Special offer',
+                          'Special Offer',
                           style: GoogleFonts.poppins(
                             fontSize: 18.sp,
                             color: AppColors.iconButtonThemeColor,
@@ -199,9 +207,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     GestureDetector(
                       onTap: () {
                         Get.to(ProductScreen(
-                            shouldBackButton: true,
-                            categoryId: '',
-                            categoryName: 'Special-offer'));
+                          shouldBackButton: true,
+                          categoryId: '',
+                          categoryName: 'Special-offer',
+                        ));
                       },
                       child: Text(
                         'See all..',
@@ -214,54 +223,39 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 Obx(() {
-                  if (allProductController.inProgress == true) {
-                    return ProductItemShimmerEffectWidget();
-                  } else if (allProductController.productData == null ||
-                      allProductController.productData!.isEmpty) {
+                  if (specialProductController.inProgress) {
+                    return const ProductItemShimmerEffectWidget();
+                  } else if (specialProductController.productData?.isEmpty ??
+                      true) {
                     return SizedBox(
                       height: 180.h,
-                      child: Center(child: Text('No products available')),
+                      child: const Center(child: Text('No products available')),
                     );
                   } else {
+                    final products = specialProductController.productData!;
+                    print(
+                        'Special data : ${specialProductController.productData}');
                     return SizedBox(
                       height: 180.h,
                       width: MediaQuery.of(context).size.width,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: allProductController.productData!.length > 4
-                            ? 4
-                            : allProductController.productData!.length,
+                        itemCount: products.length,
                         itemBuilder: (context, index) {
-                          if (allProductController
-                                  .productData![index].discount! >
-                              60) {
-                            return Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 4.w),
-                              child: ProductCard(
-                                discount: allProductController
-                                        .productData?[index].discount
-                                        .toString() ??
-                                    '',
-                                image: allProductController
-                                        .productData?[index].images[0].url ??
-                                    '',
-                                price: allProductController
-                                        .productData?[index].price
-                                        .toString() ??
-                                    '',
-                                title: allProductController
-                                        .productData?[index].name ??
-                                    '',
-                                isShowDiscount: true,
-                                productId: allProductController
-                                        .productData?[index].id ??
-                                    '',
-                              ),
-                            );
-                          } else {
-                            return SizedBox
-                                .shrink(); // Return empty widget if no discount
-                          }
+                          final product = products[index];
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 4.w),
+                            child: ProductCard(
+                              discount: product.discount?.toString() ?? '',
+                              image: product.images.isNotEmpty == true
+                                  ? product.images[0].url ?? ''
+                                  : '',
+                              price: product.price?.toString() ?? '',
+                              title: product.name ?? '',
+                              isShowDiscount: true,
+                              productId: product.id ?? '',
+                            ),
+                          );
                         },
                       ),
                     );
@@ -271,86 +265,53 @@ class _HomeScreenState extends State<HomeScreen> {
                 SeeAllSection(
                   title: 'Nearby Stores',
                   ontap: () {
-                    Get.to(ShopScreen(
-                      shouldBackButton: true,
-                    ));
+                    Get.to(const ShopScreen(shouldBackButton: true));
                   },
                 ),
                 heightBox10,
                 Obx(() {
-                  if (allShopController.inProgress == true) {
-                    return ProductItemShimmerEffectWidget();
-                  } else if (allShopController.allShopData == null ||
-                      allShopController.allShopData!.isEmpty) {
+                  if (allShopController.inProgress) {
+                    return const ProductItemShimmerEffectWidget();
+                  } else if (allShopController.allShopData?.isEmpty ?? true) {
                     return SizedBox(
-                      height: 150,
-                      child: Center(child: Text('No shops available')),
+                      height: 150.h,
+                      child: const Center(child: Text('No shops available')),
                     );
                   } else {
+                    final shops = allShopController.allShopData!;
                     return SizedBox(
                       height: 180.h,
                       width: MediaQuery.of(context).size.width,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: allShopController.allShopData?.length ?? 0,
+                        itemCount: shops.length,
                         itemBuilder: (context, index) {
+                          final shop = shops[index];
                           return Padding(
                             padding: EdgeInsets.symmetric(horizontal: 4.w),
                             child: ShopCard(
                               onTapF: () {
                                 Get.to(SellerProfileScreen(
                                   sellerData: {
-                                    'sellerId': allProductController
-                                            .productData?[index].author?.id ??
-                                        '',
-                                    'shopName': allProductController
-                                            .productData?[index]
-                                            .author!
-                                            .shop
-                                            ?.name ??
-                                        'Unknown Shop',
-                                    'shopLogo': allProductController
-                                            .productData?[index]
-                                            .author
-                                            ?.shop
-                                            ?.logo ??
+                                    'sellerId': shop.author?.id ?? '',
+                                    'shopName': shop.name ?? 'Unknown Shop',
+                                    'shopLogo': shop.logo ??
                                         'https://fastly.picsum.photos/id/471/200/300.jpg?hmac=N_ZXTRU2OGQ7b_1b8Pz2X8e6Qyd84Q7xAqJ90bju2WU',
-                                    'shopId': allProductController
-                                            .productData?[index]
-                                            .author
-                                            ?.shop
-                                            ?.id ??
-                                        '',
-                                    'sellerName': allProductController
-                                            .productData?[index].author?.name ??
-                                        'Unknown Seller',
-                                    'location': allProductController
-                                            .productData?[index]
-                                            .author
-                                            ?.shop
-                                            ?.address ??
-                                        'Unknown Location',
-                                    'phone': allProductController
-                                            .productData?[index]
-                                            .author
-                                            ?.phoneNumber ??
-                                        'N/A',
-                                    'description': allProductController
-                                            .productData?[index]
-                                            .author
-                                            ?.shop
-                                            ?.description ??
-                                        'No Description',
+                                    'shopId': shop.id ?? '',
+                                    'sellerName':
+                                        shop.author?.name ?? 'Unknown Seller',
+                                    'location':
+                                        shop.address ?? 'Unknown Location',
+                                    'phone': shop.author?.phoneNumber ?? 'N/A',
+                                    'description':
+                                        shop.description ?? 'No Description',
                                   },
                                 ));
                               },
-                              image: allShopController
-                                      .allShopData?[index].logo ??
+                              image: shop.logo ??
                                   'https://fastly.picsum.photos/id/471/200/300.jpg?hmac=N_ZXTRU2OGQ7b_1b8Pz2X8e6Qyd84Q7xAqJ90bju2WU',
-                              title:
-                                  allShopController.allShopData?[index].name ??
-                                      'Shop Name',
-                              shopData: allShopController.allShopData![index],
+                              title: shop.name ?? 'Shop Name',
+                              shopData: shop,
                             ),
                           );
                         },
@@ -362,57 +323,49 @@ class _HomeScreenState extends State<HomeScreen> {
                 SeeAllSection(
                   title: 'Recommended for You',
                   ontap: () {
-                    Get.to(ProductScreen(
-                        shouldBackButton: true,
-                        categoryId: '',
-                        categoryName: ''));
+                    Get.to(const ProductScreen(
+                      shouldBackButton: true,
+                      categoryId: '',
+                      categoryName: '',
+                    ));
                   },
                 ),
                 heightBox10,
                 Obx(() {
-                  if (allProductController.inProgress == true) {
-                    return ProductItemShimmerEffectWidget();
-                  } else if (allProductController.productData == null ||
-                      allProductController.productData!.isEmpty) {
+                  if (recommendProductController.inProgress) {
+                    return const ProductItemShimmerEffectWidget();
+                  } else if (recommendProductController.productData?.isEmpty ??
+                      true) {
                     return SizedBox(
                       height: 180.h,
-                      child: Center(child: Text('No products available')),
+                      child: const Center(child: Text('No products available')),
                     );
                   } else {
+                    final products = recommendProductController.productData!;
                     return SizedBox(
                       height: 180.h,
                       width: MediaQuery.of(context).size.width,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: allProductController.productData!.length > 4
-                            ? 4
-                            : allProductController.productData!.length,
+                        itemCount: products.length > 4 ? 4 : products.length,
                         itemBuilder: (context, index) {
-                          if (allProductController
-                                  .productData![index].totalSell! ==
-                              0) {
+                          final product = products[index];
+                          if (product.totalSell == 0) {
                             return Padding(
                               padding: EdgeInsets.symmetric(horizontal: 4.w),
                               child: ProductCard(
-                                image: allProductController
-                                        .productData?[index].images[0].url ??
-                                    '',
-                                price: allProductController
-                                        .productData?[index].price
-                                        .toString() ??
-                                    '',
-                                title: allProductController
-                                        .productData?[index].name ??
-                                    '',
+                                image: product.images.isNotEmpty == true
+                                    ? product.images[0].url ?? ''
+                                    : '',
+                                price: product.price?.toString() ?? '',
+                                title: product.name ?? '',
                                 isShowDiscount: true,
-                                productId: allProductController
-                                        .productData?[index].id ??
-                                    '',
+                                productId: product.id ?? '',
+                                discount: product.discount.toString(),
                               ),
                             );
                           } else {
-                            return SizedBox
-                                .shrink(); // Return empty widget if condition not met
+                            return const SizedBox.shrink();
                           }
                         },
                       ),

@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:expriy_deals/app/modules/common/controllers/content_controller.dart';
 import 'package:expriy_deals/app/modules/common/views/notification_screen.dart';
 import 'package:expriy_deals/app/modules/order/views/oder_screen.dart';
 import 'package:expriy_deals/app/modules/profile/controllers/profile_controller.dart';
@@ -19,7 +20,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  ProfileScreen({super.key});
+
+ 
 
   static final customCacheManager = CacheManager(
     Config(
@@ -43,26 +46,30 @@ class ProfileScreen extends StatelessWidget {
             children: [
               heightBox50,
               Center(
-                child: Obx(() {                
-                 return controller.inProgress
+                child: Obx(() {
+                  return controller.inProgress
                       ? const CircularProgressIndicator()
                       : Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             CircleAvatar(
                               radius: 30,
-                              backgroundImage: controller.profileData?.profile != null
-                                  ? NetworkImage(controller.profileData!.profile!)
-                                  : const AssetImage(AssetsPath.appleLogo),
+                              backgroundImage:
+                                  controller.profileData?.profile != null
+                                      ? NetworkImage(
+                                          controller.profileData!.profile!)
+                                      : const AssetImage(AssetsPath.appleLogo),
                             ),
                             heightBox4,
                             Text(
                               controller.profileData?.name ?? 'No name',
-                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                              style: const TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.w700),
                             ),
                             Text(
                               controller.profileData?.email ?? 'No email',
-                              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                              style: const TextStyle(
+                                  fontSize: 12, fontWeight: FontWeight.w500),
                             ),
                           ],
                         );
@@ -83,7 +90,9 @@ class ProfileScreen extends StatelessWidget {
               ProfileDrawerFeature(
                 feature: 'My Orders',
                 icon: Icons.location_on,
-                ontap: () => Get.to(const MyOrderScreen(isBack: true,)),
+                ontap: () => Get.to(const MyOrderScreen(
+                  isBack: true,
+                )),
               ),
               // ProfileDrawerFeature(
               //   feature: 'Payment',
@@ -93,14 +102,15 @@ class ProfileScreen extends StatelessWidget {
               heightBox8,
               Text(
                 'Settings',
-                style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w500),
+                style: GoogleFonts.poppins(
+                    fontSize: 12, fontWeight: FontWeight.w500),
               ),
               heightBox12,
               ProfileDrawerFeature(
                 feature: 'Notification',
                 icon: Icons.notifications,
                 ontap: () {
-                  Get.to( NotificationScreen());
+                  Get.to(NotificationScreen());
                 },
               ),
               heightBox8,
@@ -118,25 +128,30 @@ class ProfileScreen extends StatelessWidget {
               heightBox8,
               Text(
                 'Support',
-                style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w500),
+                style: GoogleFonts.poppins(
+                    fontSize: 12, fontWeight: FontWeight.w500),
               ),
               heightBox12,
               ProfileDrawerFeature(
                 feature: 'Policies',
                 icon: Icons.security,
-                ontap: () => Get.to(const InfoScreen(appBarTitle: 'Privacy & Policies', data: DemoText.policies)),
+                ontap: () => Get.to( InfoScreen(
+                    appBarTitle: 'Privacy & Policies',
+                    param: 'privacyPolicy')),
               ),
               ProfileDrawerFeature(
                 feature: 'About Us',
                 icon: Icons.groups_2_sharp,
-                ontap: () => Get.to(const InfoScreen(appBarTitle: 'About Us', data: DemoText.aboutUs)),
+                ontap: () => Get.to( InfoScreen(
+                    appBarTitle: 'About Us', param: 'aboutUs')),
               ),
               heightBox8,
               heightBox14,
               Align(
                 alignment: Alignment.center,
                 child: InkWell(
-                  onTap: () => DialogUtils.showLogoutDialog(context, controller.logout),
+                  onTap: () =>
+                      DialogUtils.showLogoutDialog(context, controller.logout),
                   child: Container(
                     height: 40,
                     width: 140,
@@ -151,7 +166,8 @@ class ProfileScreen extends StatelessWidget {
                         widthBox4,
                         const Text(
                           'Logout',
-                          style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                              color: Colors.red, fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),

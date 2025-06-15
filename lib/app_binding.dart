@@ -8,9 +8,12 @@ import 'package:expriy_deals/app/modules/order/controllers/my_orders_controller.
 import 'package:expriy_deals/app/modules/order/controllers/order_controller.dart';
 import 'package:expriy_deals/app/modules/payment/controllers/confirmed_payment_controller.dart';
 import 'package:expriy_deals/app/modules/payment/controllers/payment_controller.dart';
+import 'package:expriy_deals/app/modules/product/controllers/Special_product_controller.dart';
 
 import 'package:expriy_deals/app/modules/product/controllers/all_card_controller.dart';
+import 'package:expriy_deals/app/modules/product/controllers/category_product_controller.dart';
 import 'package:expriy_deals/app/modules/product/controllers/delete_card_controller.dart';
+import 'package:expriy_deals/app/modules/product/controllers/recommend_product_controller.dart';
 import 'package:expriy_deals/app/modules/profile/controllers/change_password_controller.dart';
 import 'package:expriy_deals/app/modules/profile/controllers/edit_profile_controller.dart';
 import 'package:expriy_deals/app/modules/profile/controllers/profile_controller.dart';
@@ -31,6 +34,9 @@ class ControllerBinder extends Bindings {
     Get.put(ProfileController());
     Get.put(EditProfileController());
     Get.put(ProductOrderController());
+    Get.put(SpecialProductController());
+    Get.put(RecommendProductController());
+    Get.put(CategoryProductController());
     Get.put(AllCartController());
     Get.put(DeleteCartController());
     Get.put(MyOrdersController());

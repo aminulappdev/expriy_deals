@@ -30,7 +30,7 @@ class PaymentService {
       //   arguments: paymentData,
       // );
       StorageUtil.saveData('order-id', orderId);
-      Get.to(PaymentWebviewScreen(paymentData: paymentData));
+      // Get.to(PaymentWebviewScreen(paymentData: paymentData));
     } else {
       // Error handling
       showSnackBarMessage(

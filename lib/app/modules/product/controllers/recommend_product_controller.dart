@@ -6,14 +6,14 @@ import 'package:expriy_deals/services/network_caller/network_response.dart';
 import 'package:expriy_deals/urls.dart';
 import 'package:get/get.dart';
 
-class AllProductController extends GetxController {
+class RecommendProductController extends GetxController {
   final RxBool _inProgress = false.obs;
   bool get inProgress => _inProgress.value;
 
   RxString? _errorMessage = ''.obs;
   String? get errorMessage => _errorMessage?.value;
 
-  final Rx<ProductModel?> _productModel = Rx<ProductModel?>(null); 
+  final Rx<ProductModel?> _productModel = Rx<ProductModel?>(null);
   List<ProductItemModel>? get productData =>
       _productModel.value!.data?.data ?? [];
 
@@ -23,7 +23,7 @@ class AllProductController extends GetxController {
     // getCategory(Get.arguments);
   }
 
-  Future<bool> getProduct(
+  Future<bool> getRecommenedProduct(
       {String? categoryId, String? authorID, bool? specialOffer}) async {
     final token = StorageUtil.getData(StorageUtil.userAccessToken);
     if (token == null) {
@@ -33,32 +33,15 @@ class AllProductController extends GetxController {
 
     _inProgress.value = true;
 
-    Map<String, dynamic> queryparamByCategory = {
-      'category': categoryId,
-      'limit': 99999
-    };
-    Map<String, dynamic> queryparamByAuthor = {
-      'author': authorID,
+    Map<String, dynamic> queryparamByRecommend = {
+      'sort': '-totalSell',
       'limit': 99999
     };
 
-    Map<String, dynamic> queryparamBySpecialOffer = {
-      'sort': '-discount',
-      'limit': 99999
-    };
-
-    Map<String, dynamic> queryparam = {'limit': 99999};
-
-    final NetworkResponse response =
-        await Get.find<NetworkCaller>().getRequest(Urls.productUrl,
-            queryParams: categoryId != null
-                ? queryparamByCategory
-                : authorID != null
-                    ? queryparamByAuthor
-                    : specialOffer != null
-                        ? queryparamBySpecialOffer
-                        : queryparam,
-            accesToken: StorageUtil.getData(StorageUtil.userAccessToken));
+    final NetworkResponse response = await Get.find<NetworkCaller>().getRequest(
+        Urls.productUrl,
+        queryParams: queryparamByRecommend,
+        accesToken: StorageUtil.getData(StorageUtil.userAccessToken));
 
     if (response.isSuccess) {
       _errorMessage = null;

@@ -19,12 +19,15 @@ class Urls {
   static const String paymentUrl = '$_baseUrl/payments/checkout';
   static const String changePasswordtUrl = '$_baseUrl/auth/change-password';
   static const String notificationUrl = '$_baseUrl/notifications';
+  static const String contentByParam = '$_baseUrl/contents';
 
   static String productDetailsById(
     String id,
   ) {
     return '$_baseUrl/products/$id';
   }
+
+  
 
   static String confirmedPaymentUrlsById(
     String id,

@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'package:expriy_deals/app/modules/product/controllers/Special_product_controller.dart';
 import 'package:expriy_deals/app/modules/product/controllers/all_product_conrtoller.dart';
+import 'package:expriy_deals/app/modules/product/controllers/category_product_controller.dart';
+import 'package:expriy_deals/app/modules/product/controllers/recommend_product_controller.dart';
 import 'package:expriy_deals/app/modules/product/widgets/product_card.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
@@ -27,25 +30,42 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen> {
   final TextEditingController searchController = TextEditingController();
   final ScrollController scrollController = ScrollController();
-  final AllProductController allProductController =
-      Get.put(AllProductController());
+  late final AllProductController allProductController;
+  late final SpecialProductController specialProductController;
+  late final CategoryProductController categoryProductController;
+  late final RecommendProductController recommendProductController;
   String searchQuery = '';
   Timer? _debounce;
+
+  // Determine which controller to use based on categoryName
+  dynamic get activeController {
+    if (widget.categoryName == 'Special-offer') {
+      return specialProductController;
+    } else {
+      return categoryProductController;
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     print('Category ID: ${widget.categoryId}');
-    // Defer getProduct call until after the build phase
+
+    // Initialize controllers
+    allProductController = Get.put(AllProductController());
+    specialProductController = Get.put(SpecialProductController());
+    categoryProductController = Get.put(CategoryProductController());
+    recommendProductController = Get.put(RecommendProductController());
+
+    // Fetch data after the build phase
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.categoryName == 'Special-offer') {
-        print('Special offer data asteche');
-        allProductController.getProduct(specialOffer: true);
-      }
-      if (widget.categoryId == '') {
-        allProductController.getProduct();
+        print('Fetching special offer data');
+        specialProductController.getSpecialProduct();
       } else {
-        allProductController.getProduct(categoryId: widget.categoryId);
+        print('Fetching category data');
+        categoryProductController.getProductByCategory(
+            categoryId: widget.categoryId);
       }
     });
 
@@ -154,43 +174,46 @@ class _ProductScreenState extends State<ProductScreen> {
             heightBox12,
             Expanded(
               child: Obx(() {
-                if (allProductController.inProgress == true) {
+                final controller = activeController;
+                if (controller.inProgress == true) {
                   return const Center(child: CircularProgressIndicator());
-                } else if (allProductController.productData == null ||
-                    allProductController.productData!.isEmpty) {
+                } else if (controller.productData == null ||
+                    controller.productData!.isEmpty) {
                   return const Center(child: Text('No products found'));
                 }
                 final filteredProducts =
-                    _getFilteredProducts(allProductController.productData!);
+                    _getFilteredProducts(controller.productData!);
                 if (filteredProducts.isEmpty && searchQuery.isNotEmpty) {
                   return const Center(
                       child: Text('No matching products found'));
                 }
                 return GridView.builder(
-                    padding: EdgeInsets.zero,
-                    itemCount: filteredProducts.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 16,
-                      childAspectRatio: 1,
-                      crossAxisCount: 2,
-                    ),
-                    itemBuilder: (context, index) {
-                      final product = filteredProducts[index];
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w),
-                        child: ProductCard(
-                          isShowDiscount: true,
-                          image: product.images.isNotEmpty
-                              ? product.images[0].url ?? ''
-                              : '',
-                          title: product.name ?? '',
-                          price: product.price?.toString() ?? '',
-                          productId: product.id ?? '',
-                        ),
-                      );
-                    });
+                  padding: EdgeInsets.zero,
+                  itemCount: filteredProducts.length,
+                  gridDelegate:
+                      const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 1,
+                    crossAxisCount: 2,
+                  ),
+                  itemBuilder: (context, index) {
+                    final product = filteredProducts[index];
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      child: ProductCard(
+                        isShowDiscount: true,
+                        image: product.images.isNotEmpty
+                            ? product.images[0].url ?? ''
+                            : '',
+                        title: product.name ?? '',
+                        price: product.price?.toString() ?? '',
+                        productId: product.id ?? '',
+                        discount: product.discount.toString(),
+                      ),
+                    );
+                  },
+                );
               }),
             ),
           ],

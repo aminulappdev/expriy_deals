@@ -43,10 +43,10 @@ class _MainButtonNavbarScreenState extends State<MainButtonNavbarScreen> {
     ),
   ];
 
-  final List<Widget> _pages = const [
-    HomeScreen(),
-    CartScreen(),
-    MyOrderScreen(isBack: false,),
+  final List<Widget> _pages = [
+    const HomeScreen(),
+    const CartScreen(),
+    const MyOrderScreen(isBack: false,),
     ProfileScreen()
   ];
 

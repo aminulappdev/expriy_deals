@@ -32,7 +32,7 @@ class _ProductCardState extends State<ProductCard> {
   @override
   void initState() {
     // print('Product card theke: ${widget.productId}');
-   
+
     super.initState();
   }
 

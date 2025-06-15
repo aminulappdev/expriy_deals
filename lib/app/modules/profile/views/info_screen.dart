@@ -1,40 +1,68 @@
-
-
+import 'package:expriy_deals/app/modules/common/controllers/content_controller.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:expriy_deals/app/widgets/costom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class InfoScreen extends StatelessWidget {
-  static const String routeName = '/info-screen';
-  const InfoScreen({super.key, required this.appBarTitle, required this.data});
+class InfoScreen extends StatefulWidget {
+  InfoScreen({super.key, required this.appBarTitle, required this.param});
   final String appBarTitle;
-  final String data;
+  final String param;
+
+  @override
+  State<InfoScreen> createState() => _InfoScreenState();
+}
+
+class _InfoScreenState extends State<InfoScreen> {
+  final ContentController contentController = Get.put(ContentController());
+
+  @override
+  void initState() {
+    contentController.contentData(param: widget.param);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-  
     return Scaffold(
-      
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(12.r), 
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-               heightBox20,
-              CustomAppBar(name: appBarTitle),
-              heightBox8,
-              Text(
-                appBarTitle,
-                style: GoogleFonts.poppins(fontSize: 16.sp,fontWeight: FontWeight.w500),
-                textAlign: TextAlign.justify,
-              ),
-              heightBox4,          
-              Html(data: data)
-            ],
-          ),
+          padding: EdgeInsets.all(12.r),
+          child: GetBuilder<ContentController>(builder: (controller) {
+            // if (controller.inProgress == true) {
+            //   return SizedBox(
+            //     height: 500,
+            //     width: 300,
+            //     child: Center(
+            //       child:  CircularProgressIndicator(),
+            //     ),
+            //   );
+            // }
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                heightBox20,
+                CustomAppBar(name: widget.appBarTitle),
+                heightBox8,
+                Text(
+                  widget.appBarTitle,
+                  style: GoogleFonts.poppins(
+                      fontSize: 16.sp, fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.justify,
+                ),
+                heightBox4,
+                Html(
+                    data: widget.param == 'aboutUs'
+                        ? controller.contetData?.aboutUs
+                        : widget.param == 'privacyPolicy'
+                            ? controller.contetData?.privacyPolicy
+                            : '')
+              ],
+            );
+          }),
         ),
       ),
     );
