@@ -3,7 +3,6 @@
 import 'package:expriy_deals/app/modules/order/controllers/order_controller.dart';
 import 'package:expriy_deals/app/modules/order/widgets/price_row.dart';
 import 'package:expriy_deals/app/modules/payment/controllers/payment_services.dart';
-
 import 'package:expriy_deals/app/modules/product/model/product_details_model.dart';
 import 'package:expriy_deals/app/modules/product/widgets/checkout_user_info.dart';
 import 'package:expriy_deals/app/modules/profile/controllers/profile_controller.dart';
@@ -29,7 +28,6 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   final ProductOrderController productOrderController =
       Get.find<ProductOrderController>();
   ProfileController profileController = Get.find<ProfileController>();
-  // final PaymentService paymentService = PaymentService();
   final PaymentService paymentService = PaymentService();
 
   int selectedButtonIndex = 0;
@@ -39,10 +37,10 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
   late String myUserId;
 
-  dynamic price = 0.0;
+  dynamic price = 0.0; // Price after discount per product
   dynamic totalPrice = 0.0;
-  double mainTotalPrice = 0.0;
-  int discount = 0;
+  dynamic mainTotalPrice = 0.0;
+  dynamic discount = 0;
   int item = 1;
 
   @override
@@ -51,14 +49,17 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     profileController.getProfileData();
     myUserId = profileController.profileData?.id ?? '';
 
-    price = (widget.productDetailsData.price ?? 0.0) * quantity;
+    // Calculate discounted price per product
     discount = widget.productDetailsData.discount ?? 0;
+    dynamic originalPrice = widget.productDetailsData.price ?? 0.0;
+    price = originalPrice * ((100 - discount) / 100); // Apply discount to price
+    price = double.parse(price.toStringAsFixed(2));
     _calculateTotalPrice();
     print('Initial: Quantity=$quantity, Price=$price, Total=$mainTotalPrice');
   }
 
   void _calculateTotalPrice() {
-    totalPrice = price * ((100 - discount) / 100); // Shipping fee is $5
+    totalPrice = price * quantity; // Total price is discounted price * quantity
     mainTotalPrice = double.parse(totalPrice.toStringAsFixed(2));
   }
 
@@ -89,10 +90,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                   addressArrowOntap: () {},
                 ),
                 heightBox8,
-                // Address
                 heightBox8,
-                
-              
                 priceCalculator(context),
                 heightBox12,
                 Text(
@@ -108,13 +106,12 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                   priceSize: 14,
                 ),
                 heightBox8,
-
-                PriceRow(
-                  name: 'Discount',
-                  price: '$discount%',
-                  nameSize: 14,
-                  priceSize: 14,
-                ),
+                // PriceRow(
+                //   name: 'Discount',
+                //   price: '$discount%',
+                //   nameSize: 14,
+                //   priceSize: 14,
+                // ),
                 heightBox4,
                 Container(
                   height: 1.5.h,
@@ -228,7 +225,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       image: DecorationImage(
-                        image: widget.productDetailsData.images.isNotEmpty == true
+                        image: widget.productDetailsData.images.isNotEmpty ==
+                                true
                             ? NetworkImage(
                                 '${widget.productDetailsData.images[0].url}')
                             : NetworkImage(
@@ -253,9 +251,6 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                               setState(() {
                                 if (quantity > 1) {
                                   quantity--;
-                                  price =
-                                      (widget.productDetailsData.price ?? 0.0) *
-                                          quantity;
                                   item--;
                                   _calculateTotalPrice();
                                   print(
@@ -278,19 +273,18 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                           GestureDetector(
                             onTap: () {
                               setState(() {
-                                if (widget.productDetailsData.discount! >
-                                    quantity) {
+                                if (widget.productDetailsData.stock !=
+                                        null &&
+                                    quantity <
+                                        widget.productDetailsData.stock!) {
                                   quantity++;
-                                  price =
-                                      (widget.productDetailsData.price ?? 0.0) *
-                                          quantity;
                                   item++;
                                   _calculateTotalPrice();
                                   print(
                                       'Plus: Quantity=$quantity, Price=$price, Total=$mainTotalPrice');
                                 } else {
                                   print(
-                                      'Cannot increase quantity beyond ${widget.productDetailsData.discount}');
+                                      'Cannot increase quantity beyond ${widget.productDetailsData.stock}');
                                 }
                               });
                             },
@@ -312,7 +306,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
               Align(
                 alignment: Alignment.bottomRight,
                 child: Text(
-                  price.toStringAsFixed(2),
+                  (price * quantity)
+                      .toStringAsFixed(2), // Display total for items
                   style: GoogleFonts.poppins(fontSize: 20.sp),
                 ),
               ),
@@ -348,10 +343,6 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
             context,
             productOrderController.orderResponseData?.id ?? 'Id null',
             mainTotalPrice);
-        // Get.to(PaymentFieldScreen(
-        //   orderId: productOrderController.orderResponseData?.id ?? 'Id null',
-        //   price: price,
-        // ));
       }
     } else {
       if (mounted) {

@@ -23,7 +23,8 @@ class AllProductController extends GetxController {
     // getCategory(Get.arguments);
   }
 
-  Future<bool> getProduct({String? categoryId, String? authorID}) async {
+  Future<bool> getProduct(
+      {String? categoryId, String? authorID, bool? specialOffer}) async {
     final token = StorageUtil.getData(StorageUtil.userAccessToken);
     if (token == null) {
       Get.to(SignInScreen());
@@ -32,7 +33,7 @@ class AllProductController extends GetxController {
 
     _inProgress.value = true;
 
-   Map<String, dynamic> queryparamByCategory = {
+    Map<String, dynamic> queryparamByCategory = {
       'category': categoryId,
       'limit': 99999
     };
@@ -40,7 +41,11 @@ class AllProductController extends GetxController {
       'author': authorID,
       'limit': 99999
     };
-   
+
+    Map<String, dynamic> queryparamBySpecialOffer = {
+      'sort': '-discount',
+      'limit': 99999
+    };
 
     Map<String, dynamic> queryparam = {'limit': 99999};
 
@@ -50,7 +55,9 @@ class AllProductController extends GetxController {
                 ? queryparamByCategory
                 : authorID != null
                     ? queryparamByAuthor
-                    : queryparam,
+                    : specialOffer != null
+                        ? queryparamBySpecialOffer
+                        : queryparam,
             accesToken: StorageUtil.getData(StorageUtil.userAccessToken));
 
     if (response.isSuccess) {

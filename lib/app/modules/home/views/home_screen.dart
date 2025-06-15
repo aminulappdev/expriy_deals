@@ -201,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Get.to(ProductScreen(
                             shouldBackButton: true,
                             categoryId: '',
-                            categoryName: 'Special offer'));
+                            categoryName: 'Special-offer'));
                       },
                       child: Text(
                         'See all..',
@@ -234,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemBuilder: (context, index) {
                           if (allProductController
                                   .productData![index].discount! >
-                              0) {
+                              60) {
                             return Padding(
                               padding: EdgeInsets.symmetric(horizontal: 4.w),
                               child: ProductCard(

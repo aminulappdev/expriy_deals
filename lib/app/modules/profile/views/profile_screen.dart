@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:expriy_deals/app/modules/common/views/notification_screen.dart';
 import 'package:expriy_deals/app/modules/order/views/oder_screen.dart';
 import 'package:expriy_deals/app/modules/profile/controllers/profile_controller.dart';
 import 'package:expriy_deals/app/modules/profile/views/change_password_screen.dart';
@@ -94,14 +95,14 @@ class ProfileScreen extends StatelessWidget {
                 'Settings',
                 style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w500),
               ),
-              // heightBox12,
-              // ProfileDrawerFeature(
-              //   feature: 'Notification',
-              //   icon: Icons.notifications,
-              //   ontap: () {
-              //     // NotificationScreen নেভিগেশন যোগ করুন
-              //   },
-              // ),
+              heightBox12,
+              ProfileDrawerFeature(
+                feature: 'Notification',
+                icon: Icons.notifications,
+                ontap: () {
+                  Get.to( NotificationScreen());
+                },
+              ),
               heightBox8,
               ProfileDrawerFeature(
                 feature: 'Change password',

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:expriy_deals/app/modules/product/controllers/all_product_conrtoller.dart';
 import 'package:expriy_deals/app/modules/product/widgets/product_card.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
@@ -26,7 +27,10 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen> {
   final TextEditingController searchController = TextEditingController();
   final ScrollController scrollController = ScrollController();
-  final AllProductController allProductController = Get.put(AllProductController());
+  final AllProductController allProductController =
+      Get.put(AllProductController());
+  String searchQuery = '';
+  Timer? _debounce;
 
   @override
   void initState() {
@@ -34,12 +38,50 @@ class _ProductScreenState extends State<ProductScreen> {
     print('Category ID: ${widget.categoryId}');
     // Defer getProduct call until after the build phase
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.categoryName == 'Special-offer') {
+        print('Special offer data asteche');
+        allProductController.getProduct(specialOffer: true);
+      }
       if (widget.categoryId == '') {
         allProductController.getProduct();
       } else {
         allProductController.getProduct(categoryId: widget.categoryId);
       }
     });
+
+    // Listen to search input changes
+    searchController.addListener(() {
+      _onSearchChanged(searchController.text);
+    });
+  }
+
+  // Debounce search input to improve performance
+  void _onSearchChanged(String value) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 300), () {
+      setState(() {
+        searchQuery = value.trim();
+      });
+    });
+  }
+
+  // Filter products based on search query
+  List<dynamic> _getFilteredProducts(List<dynamic> products) {
+    if (searchQuery.isEmpty) {
+      return products;
+    }
+    return products.where((product) {
+      final title = product.name?.toLowerCase() ?? '';
+      return title.contains(searchQuery.toLowerCase());
+    }).toList();
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    scrollController.dispose();
+    _debounce?.cancel();
+    super.dispose();
   }
 
   @override
@@ -68,37 +110,19 @@ class _ProductScreenState extends State<ProductScreen> {
                     child: Row(
                       children: [
                         widthBox8,
-                        GestureDetector(
-                          onTap: () {
-                            // Implement search functionality here
-                            // String query = searchController.text;
-                            // allProductController.onSearchQueryChangedProducts(query);
-                          },
-                          child: Container(
-                            height: 34.h,
-                            width: 34.h,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColors.iconButtonThemeColor,
-                            ),
-                            child: Center(
-                              child: Icon(
-                                Icons.search_rounded,
-                                size: 24.h,
-                                color: Colors.white,
-                              ),
-                            ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.w),
+                          child: Icon(
+                            Icons.search_rounded,
+                            size: 24.h,
+                            color: AppColors.iconButtonThemeColor,
                           ),
                         ),
-                        widthBox8,
                         Expanded(
                           child: TextFormField(
                             controller: searchController,
-                            onChanged: (value) {
-                              // Trigger search on text change
-                              // allProductController.onSearchQueryChangedProducts(value);
-                            },
                             decoration: const InputDecoration(
+                              hintText: 'Search products',
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
@@ -106,7 +130,22 @@ class _ProductScreenState extends State<ProductScreen> {
                             ),
                           ),
                         ),
-                      ], 
+                        if (searchController.text.isNotEmpty)
+                          GestureDetector(
+                            onTap: () {
+                              searchController.clear();
+                              _onSearchChanged('');
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12.w),
+                              child: Icon(
+                                Icons.clear,
+                                size: 20.h,
+                                color: AppColors.iconButtonThemeColor,
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                 ),
@@ -117,42 +156,46 @@ class _ProductScreenState extends State<ProductScreen> {
               child: Obx(() {
                 if (allProductController.inProgress == true) {
                   return const Center(child: CircularProgressIndicator());
-                } else {
-                  return GridView.builder(
+                } else if (allProductController.productData == null ||
+                    allProductController.productData!.isEmpty) {
+                  return const Center(child: Text('No products found'));
+                }
+                final filteredProducts =
+                    _getFilteredProducts(allProductController.productData!);
+                if (filteredProducts.isEmpty && searchQuery.isNotEmpty) {
+                  return const Center(
+                      child: Text('No matching products found'));
+                }
+                return GridView.builder(
                     padding: EdgeInsets.zero,
-                    itemCount: allProductController.productData?.length ?? 0,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    itemCount: filteredProducts.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisSpacing: 12,
                       mainAxisSpacing: 16,
                       childAspectRatio: 1,
                       crossAxisCount: 2,
                     ),
                     itemBuilder: (context, index) {
+                      final product = filteredProducts[index];
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8.w),
                         child: ProductCard(
                           isShowDiscount: true,
-                          image: allProductController.productData?[index].images[0].url ?? '',
-                          title: allProductController.productData?[index].name ?? '',
-                          price: allProductController.productData?[index].price.toString() ?? '',
-                          productId: allProductController.productData?[index].id ?? '',
+                          image: product.images.isNotEmpty
+                              ? product.images[0].url ?? ''
+                              : '',
+                          title: product.name ?? '',
+                          price: product.price?.toString() ?? '',
+                          productId: product.id ?? '',
                         ),
                       );
-                    },
-                  );
-                }
-              }), 
+                    });
+              }),
             ),
           ],
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    searchController.dispose();
-    scrollController.dispose();
-    super.dispose();
   }
 }

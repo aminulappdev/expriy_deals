@@ -200,12 +200,16 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               heightBox12,
               // Product Details Card
               ShopInfoCard(
-                shopLogo: AssetsPath.headphone,
-                shopName: 'Text therapy',
-                productImage: AssetsPath.headphone,
-                productName: 'Headphone',
-                productPrice: '\$50',
-                productQuantity: 'Qty: 1',
+                shopLogo: widget.myOrdersItemModel.author?.shop?.logo ??
+                    'https://fastly.picsum.photos/id/134/200/300.jpg?hmac=KN18cCDft4FPM0XJpr7EhZLtUP6Z4cZqtF8KThtTvsI',
+                shopName:
+                    widget.myOrdersItemModel.author?.shop?.name ?? 'Shop Name',
+                productImage: widget.myOrdersItemModel.product?.images[0].url ??
+                    'https://fastly.picsum.photos/id/134/200/300.jpg?hmac=KN18cCDft4FPM0XJpr7EhZLtUP6Z4cZqtF8KThtTvsI',
+                productName:
+                    widget.myOrdersItemModel.product?.name ?? 'Product',
+                productPrice: '\$${widget.myOrdersItemModel.product?.price}',
+                productQuantity: 'Qty: ${widget.myOrdersItemModel.quantity}',
               ),
               heightBox12,
               DeliveryInformationCard(
@@ -215,11 +219,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Order ID: ${widget.myOrdersItemModel.id}',
+                      'Order ID: ${widget.myOrdersItemModel.datumId}',
                       style: TextStyle(fontWeight: FontWeight.w400),
                     ),
                     Text(
-                      'Id : 42561',
+                      'Order Status : ${widget.myOrdersItemModel.status}',
                       style: TextStyle(fontWeight: FontWeight.w400),
                     ),
                   ],
@@ -232,4 +236,3 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     );
   }
 }
-

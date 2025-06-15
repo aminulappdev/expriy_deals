@@ -36,7 +36,7 @@ class Data {
     }
 
 }
- 
+
 class MyOrdersItemModel {
     MyOrdersItemModel({
         required this.billingDetails,
@@ -61,7 +61,7 @@ class MyOrdersItemModel {
     final Author? user;
     final Author? author;
     final Product? product;
-    final dynamic totalPrice;
+    final int? totalPrice;
     final int? discount;
     final int? quantity;
     final String? status;
@@ -98,6 +98,7 @@ class Author {
     Author({
         required this.id,
         required this.name,
+        required this.shop,
         required this.email,
         required this.phoneNumber,
         required this.profile,
@@ -105,6 +106,7 @@ class Author {
 
     final String? id;
     final String? name;
+    final Shop? shop;
     final String? email;
     final String? phoneNumber;
     final String? profile;
@@ -113,9 +115,37 @@ class Author {
         return Author(
             id: json["_id"],
             name: json["name"],
+            shop: json["shop"] == null ? null : Shop.fromJson(json["shop"]),
             email: json["email"],
             phoneNumber: json["phoneNumber"],
             profile: json["profile"],
+        );
+    }
+
+}
+
+class Shop {
+    Shop({
+        required this.id,
+        required this.name,
+        required this.logo,
+        required this.banner,
+        required this.bannerColor,
+    });
+
+    final String? id;
+    final String? name;
+    final dynamic logo;
+    final dynamic banner;
+    final String? bannerColor;
+
+    factory Shop.fromJson(Map<String, dynamic> json){ 
+        return Shop(
+            id: json["_id"],
+            name: json["name"],
+            logo: json["logo"],
+            banner: json["banner"],
+            bannerColor: json["bannerColor"],
         );
     }
 
@@ -173,10 +203,10 @@ class Product {
     final String? name;
     final String? details;
     final String? category;
-    final dynamic price;
+    final int? price;
     final int? totalSell;
     final int? stock;
-    final dynamic expiredAt;
+    final DateTime? expiredAt;
     final int? discount;
     final bool? isDeleted;
     final DateTime? createdAt;
@@ -194,7 +224,7 @@ class Product {
             price: json["price"],
             totalSell: json["totalSell"],
             stock: json["stock"],
-            expiredAt: json["expiredAt"],
+            expiredAt: DateTime.tryParse(json["expiredAt"] ?? ""),
             discount: json["discount"],
             isDeleted: json["isDeleted"],
             createdAt: DateTime.tryParse(json["createdAt"] ?? ""),

@@ -27,7 +27,7 @@ class EditProfileController extends GetxController {
     try {
       var uri = Uri.parse(Urls.updateProfileUrl);
       var request = http.MultipartRequest('PATCH', uri);
-      print('Update profile controller token : $token');
+      print('Update profile controller token : $token'); 
       request.headers['Authorization'] = 'Bearer $token';
       // ✅ Set 'data' field with JSON-encoded string
       Map<String, dynamic> jsonFields = {

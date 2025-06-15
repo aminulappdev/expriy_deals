@@ -2,7 +2,6 @@ import 'package:expriy_deals/app/modules/order/widgets/price_row.dart';
 import 'package:expriy_deals/app/utils/assets_path.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -40,12 +39,12 @@ class ShopInfoCard extends StatelessWidget {
               Row(
                 children: [
                   CircleAvatar(
-                    backgroundImage: AssetImage(AssetsPath.headphone),
+                    backgroundImage: NetworkImage(shopLogo),
                     radius: 20.r,
                   ),
                   widthBox10,
                   Text(
-                    'Text therapy',
+                    shopName,
                     style: GoogleFonts.poppins(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.w600,
@@ -63,7 +62,7 @@ class ShopInfoCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8.r),
                       image: DecorationImage(
-                        image: AssetImage(AssetsPath.headphone),
+                        image: NetworkImage(productImage),
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -76,11 +75,11 @@ class ShopInfoCard extends StatelessWidget {
                       children: [
                         Container(
                           color: Colors.transparent,
-                          width: 130.w,
+                          width: 200.w,
                           child: Text(
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            'Headphone',
+                            productName,
                             style: GoogleFonts.poppins(
                               fontSize: 15.sp,
                               fontWeight: FontWeight.w500,
@@ -92,14 +91,14 @@ class ShopInfoCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '\$50',
+                              productPrice,
                               style: GoogleFonts.poppins(
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                             Text(
-                              'Qty: 1',
+                              productQuantity,
                               style: GoogleFonts.poppins(
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w400,
@@ -127,16 +126,16 @@ class ShopInfoCard extends StatelessWidget {
                     ),
                     PriceRow(
                       name: 'Price',
-                      price: '10',
+                      price: productPrice,
                       nameSize: 14,
                       priceSize: 14,
                     ),
-                    PriceRow(
-                      name: 'Shipping fee', 
-                      price: '10',
-                      nameSize: 14,
-                      priceSize: 14,
-                    ),
+                    // PriceRow(
+                    //   name: 'Shipping fee', 
+                    //   price: '10',
+                    //   nameSize: 14,
+                    //   priceSize: 14,
+                    // ),
                     Container(
                       height: 1.h,
                       color: Colors.grey.shade300,
@@ -144,7 +143,7 @@ class ShopInfoCard extends StatelessWidget {
                     ),
                     PriceRow(
                       name: 'Total Price',
-                      price: '10',
+                      price: productPrice,
                       nameSize: 14,
                       priceSize: 14,
                     ),
