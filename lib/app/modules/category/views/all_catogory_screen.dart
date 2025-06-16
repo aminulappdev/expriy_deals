@@ -6,20 +6,23 @@ import 'package:expriy_deals/app/widgets/costom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AllCatogoryScreen extends StatefulWidget {
-  const AllCatogoryScreen({super.key});
+class AllCategoryScreen extends StatefulWidget {
+  const AllCategoryScreen({super.key});
 
   @override
-  State<AllCatogoryScreen> createState() => _AllCatogoryScreenState();
+  State<AllCategoryScreen> createState() => _AllCategoryScreenState();
 }
 
-class _AllCatogoryScreenState extends State<AllCatogoryScreen> {
+class _AllCategoryScreenState extends State<AllCategoryScreen> {
   final categoryController = Get.put(AllCategoryController());
 
   @override
   void initState() {
     super.initState();
-    categoryController.getCategory();
+    // Defer getCategory call to avoid setState during build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      categoryController.getCategory();
+    });
   }
 
   @override
@@ -30,41 +33,43 @@ class _AllCatogoryScreenState extends State<AllCatogoryScreen> {
         child: Column(
           children: [
             heightBox24,
-            CustomAppBar(name: 'All Catogory'),
+            CustomAppBar(name: 'All Categories'), // Fixed typo in title
             heightBox8,
             Obx(() {
-              final categories = categoryController.categoryData;
-              if (categories == null || categories.isEmpty) {
+              if (categoryController.inProgress == true) {
                 return const Center(child: CircularProgressIndicator());
+              } else if (categoryController.categoryData!.isEmpty) {
+                return const Center(child: Text('No categories available'));
               } else {
                 return Expanded(
-                    child: GridView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: categories.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    childAspectRatio: 0.8,
+                  child: GridView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: categoryController.categoryData?.length,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      childAspectRatio: 0.8,
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      final category = categoryController.categoryData![index];
+                      return Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: CategoryCard(
+                          image: category.banner ?? '',
+                          onTap: () {
+                            Get.to(ProductScreen(
+                              shouldBackButton: true,
+                              categoryId: category.id ?? 'Empty',
+                              categoryName: category.name ?? '',
+                            ));
+                          },
+                          name: category.name ?? 'No name',
+                        ),
+                      );
+                    },
                   ),
-                  itemBuilder: (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: CategoryCard(
-                        image: '',
-                        onTap: () {
-                          Get.to(ProductScreen(
-                            shouldBackButton: true,
-                            categoryId: categories[index].id ?? 'Empty',
-                            categoryName: categories[index].name ?? '',
-                          ));
-                        },
-                        name: categoryController.categoryData?[index].name ??
-                            'No name',
-                      ),
-                    );
-                  },
-                ));
+                );
               }
-            })
+            }),
           ],
         ),
       ),

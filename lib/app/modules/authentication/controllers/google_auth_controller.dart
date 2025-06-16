@@ -1,4 +1,5 @@
 import 'package:expriy_deals/app/modules/common/views/main_bottom_nav_bar.dart';
+import 'package:expriy_deals/app/modules/profile/controllers/profile_controller.dart';
 import 'package:expriy_deals/get_storage.dart';
 import 'package:expriy_deals/services/network_caller/network_caller.dart';
 import 'package:expriy_deals/services/network_caller/network_response.dart';
@@ -6,7 +7,7 @@ import 'package:expriy_deals/urls.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+
 
 class GoogleAuthController extends GetxController {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -19,6 +20,8 @@ class GoogleAuthController extends GetxController {
 
   String? _token;
   String? get token => _token;
+
+  final ProfileController profileController = Get.put(ProfileController());
 
   Future<bool> signInWithGoogle() async {
     _inProgress = true;
@@ -65,6 +68,7 @@ class GoogleAuthController extends GetxController {
         print('User access token from Google user:');
         print(StorageUtil.getData(StorageUtil.userAccessToken));
         _errorMessage = null;
+        profileController.getProfileData();
 
         // Navigate to main page
         Future.delayed(Duration.zero, () {

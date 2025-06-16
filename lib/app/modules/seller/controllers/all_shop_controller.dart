@@ -23,7 +23,7 @@ class AllShopController extends GetxController {
     // getCategory(Get.arguments);
   }
 
-  Future<bool> myShops(String? latitude, String? longitude) async {
+  Future<bool> myShops({double? latitude, double? longitude}) async {
     final token = StorageUtil.getData(StorageUtil.userAccessToken);
     if (token == null) {
       Get.to(SignInScreen());
@@ -31,17 +31,19 @@ class AllShopController extends GetxController {
     }
 
     _inProgress.value = true;
-
-
-    Map<String, dynamic> queryparam = {'longitude': latitude, 'latitude': longitude};
+     print('latitude: $latitude, Longitude: $longitude');
+    Map<String, dynamic> queryparam = {
+      'longitude': longitude,
+      'latitude': latitude
+    };
     final NetworkResponse response = await Get.find<NetworkCaller>().getRequest(
         Urls.allShopsUrl,
-       
+        queryParams: latitude != null && longitude != null ? queryparam : null,
         accesToken: StorageUtil.getData(StorageUtil.userAccessToken));
 
     if (response.isSuccess) {
       _errorMessage = null;
-       print('Response Data: ${response.responseData}');
+      print('Response Data: ${response.responseData}');
       allShopModel.value = AllShopModel.fromJson(response.responseData);
       _inProgress.value = false;
       return true;

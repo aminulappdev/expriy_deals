@@ -1,3 +1,4 @@
+import 'package:expriy_deals/app/modules/profile/controllers/profile_controller.dart';
 import 'package:expriy_deals/get_storage.dart';
 import 'package:expriy_deals/services/network_caller/network_caller.dart';
 import 'package:expriy_deals/services/network_caller/network_response.dart';
@@ -10,6 +11,8 @@ class SignInController extends GetxController {
 
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
+
+  ProfileController profileController = Get.put(ProfileController());
 
   Future<bool> signIn(String email, String password) async {
     bool isSuccess = false;
@@ -27,9 +30,11 @@ class SignInController extends GetxController {
 
     if (response.isSuccess) {
       // Save access token using await and ensure data is saved before moving forward
-      await StorageUtil.saveData(
-          StorageUtil.userAccessToken, response.responseData['data']['accessToken']);
+      await StorageUtil.saveData(StorageUtil.userAccessToken,
+          response.responseData['data']['accessToken']);
       print('Access token : ${response.responseData['data']['accessToken']}');
+      profileController.getProfileData();
+
       _errorMessage = null;
       isSuccess = true;
     } else {

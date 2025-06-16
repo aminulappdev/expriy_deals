@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 
 class ShopScreen extends StatefulWidget {
   final bool shouldBackButton;
- 
+
   const ShopScreen({
     super.key,
     required this.shouldBackButton,
@@ -31,10 +31,7 @@ class _ShopScreenState extends State<ShopScreen> {
 
     // Defer getProduct call until after the build phase
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      allShopController.myShops(
-        '23.739974828607025',
-        '90.43835338329617',
-      );
+      allShopController.myShops();
     });
   }
 

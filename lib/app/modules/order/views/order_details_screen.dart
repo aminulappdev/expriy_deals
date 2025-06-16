@@ -91,33 +91,13 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Shipping Information',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          // Add navigation or action for "View"
-                                        },
-                                        child: Text(
-                                          'View',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: 12.sp,
-                                            fontWeight: FontWeight.w400,
-                                            color:
-                                                AppColors.iconButtonThemeColor,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                  Text(
+                                    'Shipping Information',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black87,
+                                    ),
                                   ),
                                   Text(
                                     'Standard local',

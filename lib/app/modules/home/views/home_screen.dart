@@ -52,16 +52,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Uncomment if location is needed
-      // requestLocationPermission();
-      // getCurrentLocation();
-
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // Request location permission and get location before other operations
+      await requestLocationPermission();
+      await getCurrentLocation();
+      // Perform other API calls after location is fetched
       recommendProductController.getRecommenedProduct();
       specialProductController.getSpecialProduct();
       categoryController.getCategory();
       allProductController.getProduct();
-      allShopController.myShops('-73.935242', '40.73061');
+      allShopController.myShops(latitude: latitude, longitude: longitude);
     });
   }
 
@@ -80,6 +80,9 @@ class _HomeScreenState extends State<HomeScreen> {
       final loc.LocationData locationData = await location.getLocation();
       setState(() {
         latitude = locationData.latitude;
+
+        System:
+        locationData.latitude;
         longitude = locationData.longitude;
         print('Location is $latitude and $longitude');
       });
@@ -141,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SeeAllSection(
                   title: 'Categories',
                   ontap: () {
-                    Get.to(const AllCatogoryScreen());
+                    Get.to(const AllCategoryScreen());
                   },
                 ),
                 heightBox8,
@@ -350,23 +353,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemCount: products.length > 4 ? 4 : products.length,
                         itemBuilder: (context, index) {
                           final product = products[index];
-                          if (product.totalSell == 0) {
-                            return Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 4.w),
-                              child: ProductCard(
-                                image: product.images.isNotEmpty == true
-                                    ? product.images[0].url ?? ''
-                                    : '',
-                                price: product.price?.toString() ?? '',
-                                title: product.name ?? '',
-                                isShowDiscount: true,
-                                productId: product.id ?? '',
-                                discount: product.discount.toString(),
-                              ),
-                            );
-                          } else {
-                            return const SizedBox.shrink();
-                          }
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 4.w),
+                            child: ProductCard(
+                              image: product.images.isNotEmpty == true
+                                  ? product.images[0].url ?? ''
+                                  : '',
+                              price: product.price?.toString() ?? '',
+                              title: product.name ?? '',
+                              isShowDiscount: true,
+                              productId: product.id ?? '',
+                              discount: product.discount.toString(),
+                            ),
+                          );
                         },
                       ),
                     );

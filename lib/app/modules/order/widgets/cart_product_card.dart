@@ -1,4 +1,5 @@
 import 'package:expriy_deals/app/utils/app_colors.dart';
+import 'package:expriy_deals/app/utils/assets_path.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,8 +43,14 @@ class CartProductCard extends StatelessWidget {
               width: 100.w,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                      image: AssetImage(imagePath), fit: BoxFit.fill)),
+                  // ignore: unnecessary_null_comparison
+                  image: imagePath != null || imagePath != ''
+                              ? DecorationImage(
+                                  image: NetworkImage(imagePath),
+                                  fit: BoxFit.fill)
+                              : DecorationImage(
+                                  image: AssetImage(AssetsPath.headphone),
+                                  fit: BoxFit.fill)),
             ),
             widthBox4,
             Expanded(

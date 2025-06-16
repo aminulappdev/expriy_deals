@@ -21,8 +21,8 @@ class _InfoScreenState extends State<InfoScreen> {
 
   @override
   void initState() {
-    contentController.contentData(param: widget.param);
     super.initState();
+    contentController.contentData(param: widget.param);
   }
 
   @override
@@ -32,15 +32,49 @@ class _InfoScreenState extends State<InfoScreen> {
         child: Padding(
           padding: EdgeInsets.all(12.r),
           child: GetBuilder<ContentController>(builder: (controller) {
-            // if (controller.inProgress == true) {
-            //   return SizedBox(
-            //     height: 500,
-            //     width: 300,
-            //     child: Center(
-            //       child:  CircularProgressIndicator(),
-            //     ),
-            //   );
-            // }
+            print('all data ${controller.contetData}');
+            if (controller.inProgress) {
+              return SizedBox(
+                height: 500,
+                width: 300,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            if (controller.errorMessage != null) {
+              return SizedBox(
+                height: 500,
+                width: 300,
+                child: Center(
+                  child: Text(
+                    controller.errorMessage ?? "Error loading data",
+                    style: GoogleFonts.poppins(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.red,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              );
+            }
+            if (controller.contetData == null) {
+              return SizedBox(
+                height: 500,
+                width: 300,
+                child: Center(
+                  child: Text(
+                    "No data available",
+                    style: GoogleFonts.poppins(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              );
+            }
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -50,16 +84,25 @@ class _InfoScreenState extends State<InfoScreen> {
                 Text(
                   widget.appBarTitle,
                   style: GoogleFonts.poppins(
-                      fontSize: 16.sp, fontWeight: FontWeight.w500),
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
                   textAlign: TextAlign.justify,
                 ),
                 heightBox4,
                 Html(
-                    data: widget.param == 'aboutUs'
-                        ? controller.contetData?.aboutUs
-                        : widget.param == 'privacyPolicy'
-                            ? controller.contetData?.privacyPolicy
-                            : '')
+                  data: widget.param == 'aboutUs'
+                      ? controller.contetData?.aboutUs ?? ""
+                      : widget.param == 'privacyPolicy'
+                          ? controller.contetData?.privacyPolicy ?? ""
+                          : widget.param == 'termsAndConditions'
+                              ? controller.contetData?.termsAndConditions ?? ""
+                              : widget.param == 'supports'
+                                  ? controller.contetData?.supports ?? ""
+                                  : widget.param == 'faq'
+                                      ? controller.contetData?.faq ?? ""
+                                      : "",
+                ),
               ],
             );
           }),

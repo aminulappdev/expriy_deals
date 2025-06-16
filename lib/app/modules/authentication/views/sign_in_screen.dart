@@ -194,29 +194,29 @@ class _SignInScreenState extends State<SignInScreen> {
 
     if (isSuccess) {
       if (context.mounted) {
-        showSnackBarMessage(context, 'Google দিয়ে সফলভাবে লগইন হয়েছে');
+        showSnackBarMessage(context, 'Successfully logged in with Google',);
       }
     } else {
-      String message = controller.errorMessage ?? 'Google লগইন ব্যর্থ হয়েছে';
+      String message = controller.errorMessage ?? 'Google login failed';
 
       if (message.contains('credentials')) {
         if (context.mounted) {
           await showDialog(
             context: context,
             builder: (_) => AlertDialog(
-              title: Text("অ্যাকাউন্ট সমস্যা"),
+              title: Text("Account Issue"),
               content: Text(
-                  "এই ইমেইলটি ইতিমধ্যে ইমেইল-পাসওয়ার্ড দিয়ে রেজিস্টার করা আছে। অনুগ্রহ করে অন্য Google অ্যাকাউন্ট সিলেক্ট করুন।"),
+                  "This email is already registered with email-password. Please select another Google account."),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text("ঠিক আছে"),
+                  child: Text("OK"),
                 )
               ],
             ),
           );
 
-          // ডায়ালগ বন্ধ করার পর আবার নতুন করে সাইন-ইন চেষ্টা করো
+          // Try signing in again after closing the dialog
           await onTapGoogleSignIn(context);
         }
       } else {

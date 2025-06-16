@@ -133,19 +133,19 @@ class _ProductCardState extends State<ProductCard> {
                       Row(
                         children: [
                           Text(
-                            discountValue.toStringAsFixed(2),
-                            style: GoogleFonts.poppins(
-                                fontSize: 12.sp,
-                                color: AppColors.iconButtonThemeColor,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          widthBox10,
-                          Text(
                             widget.price ?? '00',
                             style: GoogleFonts.poppins(
                                 decoration: TextDecoration.lineThrough,
                                 fontSize: 12.sp,
                                 color: const Color.fromARGB(255, 0, 0, 0),
+                                fontWeight: FontWeight.w600),
+                          ),
+                          widthBox10,
+                          Text(
+                            discountValue.toStringAsFixed(2),
+                            style: GoogleFonts.poppins(
+                                fontSize: 12.sp,
+                                color: AppColors.iconButtonThemeColor,
                                 fontWeight: FontWeight.w600),
                           ),
                         ],
@@ -160,27 +160,4 @@ class _ProductCardState extends State<ProductCard> {
       ),
     );
   }
-
-  // Future<void> getProductScreen() async {
-  //   print('Hello');
-  //   print(widget.productsModel.name);
-  //   print(widget.productsModel.id);
-  //   final bool isSuccess = await procuctDetailsController
-  //       .getProductDetails(widget.productsModel.id!);
-
-  //   if (isSuccess) {
-  //     if (mounted) {
-  //       Navigator.pushNamed(context, ProductDetailScreen.routeName,
-  //           arguments: procuctDetailsController.productModel);
-
-  //       // print('My token ---------------------------------------');
-  //       // print(signUpController.token);
-  //     } else {
-  //       if (mounted) {
-  //         showSnackBarMessage(
-  //             context, procuctDetailsController.errorMessage!, true);
-  //       }
-  //     }
-  //   }
-  // }
 }

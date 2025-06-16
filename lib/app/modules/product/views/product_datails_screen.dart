@@ -36,8 +36,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final AllProductController allProductController =
       Get.put(AllProductController());
 
- 
-
   @override
   void initState() {
     super.initState();
@@ -98,52 +96,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ),
                     heightBox4,
                     Html(data: data.details ?? ''),
-
                     SizedBox(height: 8.h),
-
                     heightBox4,
-                    // AnimatedCrossFade(
-                    //   firstChild: Container(
-                    //     decoration: BoxDecoration(
-                    //         color: Colors.white,
-                    //         borderRadius: BorderRadius.circular(12)),
-                    //     child: Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: [
-                    //         PolicyCustomRow(
-                    //             name: 'Warranty Policy', routeName: ''),
-                    //         PolicyCustomRow(
-                    //             name: 'Return & Refund Policy', routeName: ''),
-                    //         PolicyCustomRow(
-                    //             name: 'Replacement Policy', routeName: ''),
-                    //         PolicyCustomRow(
-                    //             name: 'Return & Refund Policy', routeName: ''),
-                    //         PolicyCustomRow(
-                    //             name: 'Replacement Policy', routeName: ''),
-                    //       ],
-                    //     ),
-                    //   ),
-                    //   secondChild: Container(
-                    //     decoration: BoxDecoration(
-                    //         color: Colors.white,
-                    //         borderRadius: BorderRadius.circular(12)),
-                    //     child: Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: [
-                    //         PolicyCustomRow(
-                    //             name: 'Warranty Policy', routeName: ''),
-                    //         PolicyCustomRow(
-                    //             name: 'Return & Refund Policy', routeName: ''),
-                    //         PolicyCustomRow(
-                    //             name: 'Replacement Policy', routeName: ''),
-                    //       ],
-                    //     ),
-                    //   ),
-                    //   crossFadeState: _isExpandedPolicy
-                    //       ? CrossFadeState.showFirst
-                    //       : CrossFadeState.showSecond,
-                    //   duration: const Duration(milliseconds: 300),
-                    // ),
                     SizedBox(height: 8.h),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -232,48 +186,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ],
                     ),
                     heightBox12,
-                    // Text(
-                    //   'You might also like',
-                    //   style: GoogleFonts.poppins(
-                    //       fontSize: 15.sp, fontWeight: FontWeight.w500),
-                    // ),
-                    // heightBox8,
-                    // Obx(() {
-                    //   if (allProductController.inProgress == true) {
-                    //     return const CircularProgressIndicator();
-                    //   } else {
-                    //     return SizedBox(
-                    //       height: 180.h,
-                    //       width: MediaQuery.of(context).size.width,
-                    //       child: ListView.builder(
-                    //         scrollDirection: Axis.horizontal,
-                    //         itemCount:
-                    //             allProductController.productData?.length ?? 0,
-                    //         itemBuilder: (context, index) {
-                    //           final product =
-                    //               allProductController.productData?[index];
-                    //           if (product?.category?.name ==
-                    //               productDetailsController
-                    //                   .productDetailsData?.category?.name) {
-                    //             return Padding(
-                    //               padding:
-                    //                   EdgeInsets.symmetric(horizontal: 4.w),
-                    //               child: ProductCard(
-                    //                 image: product?.images[0].url,
-                    //                 price: product?.price.toString() ?? '',
-                    //                 title: product?.name,
-                    //                 isShowDiscount: true,
-                    //                 productId: product?.id ?? '',
-                    //                 discount: product?.discount.toString(),
-                    //               ),
-                    //             );
-                    //           }
-                    //           return const SizedBox.shrink();
-                    //         },
-                    //       ),
-                    //     );
-                    //   }
-                    // }),
                     heightBox12,
                     Container(
                       height: 70.h,

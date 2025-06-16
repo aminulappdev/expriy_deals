@@ -7,6 +7,7 @@ import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:expriy_deals/app/widgets/costom_app_bar.dart';
 import 'package:expriy_deals/app/widgets/show_snackBar_message.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class CartScreen extends StatefulWidget {
@@ -34,7 +35,19 @@ class _CartScreenState extends State<CartScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           heightBox24,
-          CustomAppBar(name: 'My Cart',isBack: false,),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                widthBox12,
+                Text(
+                  'My Cart',
+                  style: TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black),
+                ),
+              ],
+            ),
           heightBox12,
           Obx(() {
             if (allCartController.inProgress == true) {
@@ -50,7 +63,8 @@ class _CartScreenState extends State<CartScreen> {
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: 6),
                       child: CartProductCard(
-                        imagePath: AssetsPath.headphone,
+                        imagePath: allCartController
+                                .addToCartData![index].product?.images[0].url ?? '',
                         title: allCartController
                                 .addToCartData![index].product?.name ??
                             '',

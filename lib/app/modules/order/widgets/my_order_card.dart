@@ -1,21 +1,25 @@
+import 'package:expriy_deals/app/modules/payment/controllers/payment_services.dart';
+import 'package:expriy_deals/app/modules/product/views/check_out_screen.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
 import 'package:expriy_deals/app/utils/assets_path.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyOrderCard extends StatelessWidget {
+  final String orderId;
   final String productName;
   final String status;
   final String price;
   final String quantity;
   final String imagePath;
-  final String secondBTNName;
   final VoidCallback mainBTNOntap;
-  final VoidCallback secondBTNOntap;
-  final bool isShowSeconBTN;
-  const MyOrderCard({
+  final dynamic
+      productDetailsData; // Assuming product data is passed for navigation
+
+  MyOrderCard({
     super.key,
     required this.productName,
     required this.status,
@@ -23,19 +27,28 @@ class MyOrderCard extends StatelessWidget {
     required this.quantity,
     required this.imagePath,
     required this.mainBTNOntap,
-    required this.secondBTNOntap,
-    required this.isShowSeconBTN,
-    required this.secondBTNName,
+    required this.productDetailsData,
+    required Null Function() secondBTNOntap,
+    required this.orderId,
   });
+
+  final PaymentService paymentService = PaymentService();
 
   @override
   Widget build(BuildContext context) {
+    final isPending = status.toLowerCase() == 'pending';
+    final isDelivered = status.toLowerCase() == 'delivered';
+    final showSecondButton = isPending || isDelivered;
+    final secondButtonText = isPending ? 'Make Payment' : 'Buy Now';
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 12.w),
       child: Card(
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12), color: Colors.white),
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+          ),
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(
@@ -48,10 +61,17 @@ class MyOrderCard extends StatelessWidget {
                       height: 60.h,
                       width: 60.w,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          image: DecorationImage(
-                              image: AssetImage(AssetsPath.headphone),
-                              fit: BoxFit.fill)),
+                        borderRadius: BorderRadius.circular(8),
+                        image: imagePath.isNotEmpty
+                            ? DecorationImage(
+                                image: NetworkImage(imagePath),
+                                fit: BoxFit.fill,
+                              )
+                            : DecorationImage(
+                                image: AssetImage(AssetsPath.headphone),
+                                fit: BoxFit.fill,
+                              ),
+                      ),
                     ),
                     widthBox8,
                     SizedBox(
@@ -64,11 +84,11 @@ class MyOrderCard extends StatelessWidget {
                             children: [
                               Container(
                                 color: Colors.transparent,
-                                width: 130,
+                                width: 130.w,
                                 child: Text(
+                                  productName,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
-                                  productName,
                                   style: GoogleFonts.poppins(fontSize: 15.sp),
                                 ),
                               ),
@@ -76,15 +96,19 @@ class MyOrderCard extends StatelessWidget {
                                 height: 23.h,
                                 width: 70.w,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(color: Colors.black12)),
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(color: Colors.black12),
+                                ),
                                 child: Center(
-                                    child: Text(
-                                  status,
-                                  style: TextStyle(
-                                      fontSize: 10, color: Colors.red),
-                                )),
-                              )
+                                  child: Text(
+                                    status,
+                                    style: TextStyle(
+                                      fontSize: 10.sp,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                           heightBox12,
@@ -107,26 +131,60 @@ class MyOrderCard extends StatelessWidget {
                   ],
                 ),
                 heightBox8,
-                isShowSeconBTN == false
+                showSecondButton
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             'Total: $price',
                             style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w600),
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          InkWell(
+                            highlightColor: Colors.redAccent,
+                            onTap: () {
+                              if (isPending) {
+                                paymentService.payment(context, orderId, price);
+                              } else if (isDelivered) {
+                                // Navigate to CheckOutScreen for delivered orders
+                                Get.to(() => CheckOutScreen(
+                                      productDetailsData: productDetailsData,
+                                    ));
+                              }
+                            },
+                            child: SizedBox(
+                              width: 110.w,
+                              height: 36.h,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: AppColors.iconButtonThemeColor,
+                                  ),
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    secondButtonText,
+                                    style: TextStyle(
+                                      color: AppColors.iconButtonThemeColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                           InkWell(
                             onTap: mainBTNOntap,
                             child: SizedBox(
-                               width: 120,
-                              height: 36,
+                              width: 90.w,
+                              height: 36.h,
                               child: Container(
-                                height: 40,
-                                width: MediaQuery.of(context).size.width,
                                 decoration: BoxDecoration(
-                                    color: AppColors.iconButtonThemeColor,
-                                    borderRadius: BorderRadius.circular(50)),
+                                  color: AppColors.iconButtonThemeColor,
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
                                 child: Center(
                                   child: Text(
                                     'View Details',
@@ -144,50 +202,29 @@ class MyOrderCard extends StatelessWidget {
                           Text(
                             'Total: $price',
                             style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w600),
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                           InkWell(
                             onTap: mainBTNOntap,
                             child: SizedBox(
-                                width: 90,
-                              height: 36,
+                              width: 120.w,
+                              height: 36.h,
                               child: Container(
-                                height: 40,
-                                width: MediaQuery.of(context).size.width,
                                 decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: AppColors.iconButtonThemeColor),
-                                    borderRadius: BorderRadius.circular(50)),
-                                child: Center(
-                                  child: Text(
-                                    'Buy Again',
-                                    style: TextStyle(
-                                        color: AppColors.iconButtonThemeColor),
-                                  ),
+                                  color: AppColors.iconButtonThemeColor,
+                                  borderRadius: BorderRadius.circular(50),
                                 ),
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: secondBTNOntap,
-                            child: SizedBox(
-                              width: 90,
-                              height: 36,
-                              child: Container(
-                                height: 40,
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                    color: AppColors.iconButtonThemeColor,
-                                    borderRadius: BorderRadius.circular(50)),
                                 child: Center(
                                   child: Text(
-                                    secondBTNName,
+                                    'View Details',
                                     style: TextStyle(color: Colors.white),
                                   ),
                                 ),
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
               ],

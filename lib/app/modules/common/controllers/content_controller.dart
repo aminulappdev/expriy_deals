@@ -6,21 +6,21 @@ import 'package:expriy_deals/services/network_caller/network_response.dart';
 import 'package:expriy_deals/urls.dart';
 import 'package:get/get.dart';
 
+
 class ContentController extends GetxController {
-  var _inProgress = false;
+  bool _inProgress = false;
   bool get inProgress => _inProgress;
 
-  String? _errorMessage = '';
+  String? _errorMessage;
   String? get errorMessage => _errorMessage;
+
+  String? _accessToken;
+  String? get accessToken => _accessToken;
 
   ContentsModel? contentsModel;
   ContentData? get contetData => contentsModel?.data;
 
-  @override
-  void onInit() {
-    super.onInit();
-    // getCategory(Get.arguments);
-  }
+  int? lastPage;
 
   Future<bool> contentData({required String param}) async {
     final token = StorageUtil.getData(StorageUtil.userAccessToken);
@@ -29,24 +29,26 @@ class ContentController extends GetxController {
       return false;
     }
 
+    bool isSuccess = false;
+
     _inProgress = true;
 
-    Map<String, dynamic> params = {"name": param};
+    update();
 
-    final NetworkResponse response = await Get.find<NetworkCaller>().getRequest(
-        Urls.contentByParam,
-        accesToken: StorageUtil.getData(StorageUtil.userAccessToken));
+    final NetworkResponse response = await Get.find<NetworkCaller>()
+        .getRequest(Urls.contentByParam, accesToken: token);
 
     if (response.isSuccess) {
-      _errorMessage = null;
-
       contentsModel = ContentsModel.fromJson(response.responseData);
-      _inProgress = false;
-      return true;
+      print('response data is : $contentsModel');
+      _errorMessage = null;
+      isSuccess = true;
     } else {
       _errorMessage = response.errorMessage;
-      _inProgress = false;
-      return false;
     }
+
+    _inProgress = false;
+    update();
+    return isSuccess;
   }
 }

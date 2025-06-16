@@ -34,7 +34,7 @@ class RecommendProductController extends GetxController {
     _inProgress.value = true;
 
     Map<String, dynamic> queryparamByRecommend = {
-      'sort': '-totalSell',
+      'sort': 'totalSell',
       'limit': 99999
     };
 
