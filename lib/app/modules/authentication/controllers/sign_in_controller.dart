@@ -24,7 +24,7 @@ class SignInController extends GetxController {
       "email": email,
       "password": password
     }; // Replace your body data
-    print('Controller e asche');
+// \0
     final NetworkResponse response = await Get.find<NetworkCaller>()
         .postRequest(Urls.signInUrl, requestBody); // Replace your api url
 
@@ -32,7 +32,7 @@ class SignInController extends GetxController {
       // Save access token using await and ensure data is saved before moving forward
       await StorageUtil.saveData(StorageUtil.userAccessToken,
           response.responseData['data']['accessToken']);
-      print('Access token : ${response.responseData['data']['accessToken']}');
+// \0
       profileController.getProfileData();
 
       _errorMessage = null;

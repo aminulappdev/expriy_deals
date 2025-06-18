@@ -1,6 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:expriy_deals/app/modules/common/controllers/content_controller.dart';
+import 'package:expriy_deals/app/modules/common/views/language_screen.dart';
 import 'package:expriy_deals/app/modules/common/views/notification_screen.dart';
 import 'package:expriy_deals/app/modules/order/views/oder_screen.dart';
 import 'package:expriy_deals/app/modules/profile/controllers/profile_controller.dart';
@@ -8,7 +8,6 @@ import 'package:expriy_deals/app/modules/profile/views/change_password_screen.da
 import 'package:expriy_deals/app/modules/profile/views/edit_profile_screen.dart';
 import 'package:expriy_deals/app/modules/profile/views/info_screen.dart';
 import 'package:expriy_deals/app/modules/profile/widgets/profile_drawer_feature.dart';
-import 'package:expriy_deals/app/utils/app_text.dart';
 import 'package:expriy_deals/app/utils/assets_path.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:expriy_deals/app/utils/show_dialog_utils.dart';
@@ -21,8 +20,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
-
- 
 
   static final customCacheManager = CacheManager(
     Config(
@@ -94,11 +91,11 @@ class ProfileScreen extends StatelessWidget {
                   isBack: true,
                 )),
               ),
-              // ProfileDrawerFeature(
-              //   feature: 'Payment',
-              //   icon: Icons.payment,
-              //   ontap: () => Get.to(const PaymentSuccessScreen()),
-              // ),
+              ProfileDrawerFeature(
+                feature: 'Language',
+                icon: Icons.payment,
+                ontap: () => Get.to(const LanguageScreen()),
+              ),
               heightBox8,
               Text(
                 'Settings',
@@ -135,15 +132,14 @@ class ProfileScreen extends StatelessWidget {
               ProfileDrawerFeature(
                 feature: 'Policies',
                 icon: Icons.security,
-                ontap: () => Get.to( InfoScreen(
-                    appBarTitle: 'Privacy & Policies',
-                    param: 'privacyPolicy')),
+                ontap: () => Get.to(InfoScreen(
+                    appBarTitle: 'Privacy & Policies', param: 'privacyPolicy')),
               ),
               ProfileDrawerFeature(
                 feature: 'About Us',
                 icon: Icons.groups_2_sharp,
-                ontap: () => Get.to( InfoScreen(
-                    appBarTitle: 'About Us', param: 'aboutUs')),
+                ontap: () => Get.to(
+                    InfoScreen(appBarTitle: 'About Us', param: 'aboutUs')),
               ),
               heightBox8,
               heightBox14,

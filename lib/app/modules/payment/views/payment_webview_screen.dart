@@ -56,7 +56,7 @@ class _PaymentWebviewScreenState extends State<PaymentWebviewScreen> {
         onPageFinished: (String url) async {
           debugPrint('Page finished loading: $url');
           if (url.contains("confirm-payment")) {
-            print('Confirmed payment hoye geche............................');
+// \0
             paymentURLController.paymentUrl(url);
             final bool isSuccess = await paymentURLController.paymentUrl(url);
             if (isSuccess) {

@@ -43,7 +43,7 @@ class _ProductCardState extends State<ProductCard> {
         updatePrice * ((100 - double.parse(widget.discount ?? '0')) / 100);
     return GestureDetector(
       onTap: () {
-        print('Product card theke: ${widget.productId}');
+// \0
         Get.to(ProductDetailScreen(
           productId: widget.productId,
         ));

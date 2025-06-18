@@ -29,7 +29,7 @@ class OtpVerifyController extends GetxController {
           StorageUtil.userAccessToken, response.responseData['data']['token']);
       print(
           'Save access token from otp verifiy controller .........................');
-      print(StorageUtil.getData(StorageUtil.userAccessToken));
+// \0
       _errorMessage = null;
       isSuccess = true;
     } else {

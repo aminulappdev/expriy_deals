@@ -40,7 +40,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      print('Product ID details page theke: ${widget.productId}');
+// \0
       productDetailsController.productDetails(widget.productId);
     });
   }
@@ -155,7 +155,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 },
                               ));
                             } else {
-                              print('Data not found or incomplete');
+// \0
                               showSnackBarMessage(
                                   context, 'Seller data not available', false);
                             }
@@ -208,7 +208,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     addToCArtFunction(
                                         data.id!, data.stock.toString());
                                   } else {
-                                    print('productDetailsData is null');
+// \0
                                     showSnackBarMessage(context,
                                         'Product data not available', false);
                                   }

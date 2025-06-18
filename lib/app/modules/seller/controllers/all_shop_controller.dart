@@ -31,7 +31,7 @@ class AllShopController extends GetxController {
     }
 
     _inProgress.value = true;
-     print('latitude: $latitude, Longitude: $longitude');
+// \0
     Map<String, dynamic> queryparam = {
       'longitude': longitude,
       'latitude': latitude
@@ -43,7 +43,7 @@ class AllShopController extends GetxController {
 
     if (response.isSuccess) {
       _errorMessage = null;
-      print('Response Data: ${response.responseData}');
+// \0
       allShopModel.value = AllShopModel.fromJson(response.responseData);
       _inProgress.value = false;
       return true;

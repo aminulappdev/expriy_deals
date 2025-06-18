@@ -1,0 +1,197 @@
+{
+    "en": {
+        "title": "English",
+        "code": "en",
+        "sign-in": "Sign In",
+        "shipping_info": {
+            "app_bar_title": "Shipping Information",
+            "section_title": "Shipping Information",
+            "timeline_steps": [
+                {
+                    "description": "Arrived at Logistic Hub"
+                },
+                {
+                    "description": "Package Picked Up"
+                },
+                {
+                    "description": "Packed and Ready to Ship"
+                },
+                {
+                    "description": "Order Confirmed"
+                }
+            ]
+        },
+        "order_details": {
+            "app_bar_title": "Order Details",
+            "shipping_info_title": "Shipping Information",
+            "shipping_method": "Standard local",
+            "shipping_id_label": "Id: 42561",
+            "timeline_steps": [
+                {
+                    "description": "Arrived at Logistic Hub"
+                },
+                {
+                    "description": "Package Picked Up"
+                },
+                {
+                    "description": "Order Confirmed"
+                }
+            ],
+            "delivery_address_title": "Deliery Address",
+            "order_details_title": "Order Details",
+            "order_id_label": "Order ID: ",
+            "order_status_label": "Order Status : "
+        },
+        "my_orders": {
+            "title": "My Orders",
+            "no_orders": "No Order Available"
+        },
+        "cart": {
+            "title": "My Cart",
+            "no_cart": "No Card Available",
+            "success_message": "Deleted cart",
+            "error_message": "Error occurred"
+        },
+        "payment_webview": {
+            "app_bar_title": "Payment",
+            "error_message": "Error occurred"
+        },
+        "payment_success": {
+            "success_message": "Payment successful"
+        },
+        "payment_details": {
+            "date_label": "Date",
+            "transaction_id_label": "Transaction ID",
+            "name_label": "Name",
+            "amount_label": "Amount",
+            "total_label": "Total",
+            "download_pdf_button": "Get pdf reciept",
+            "go_to_homepage": "Go to homepage",
+            "error_message": "Error: {error}"
+        },
+        "search_products": {
+            "app_bar_title": "Search products",
+            "search_hint": "Search products",
+            "filter_label": "Filter",
+            "category_label": "Category",
+            "no_categories": "No categories found",
+            "no_products": "No products found",
+            "no_matching_products": "No matching products found"
+        },
+        "product": {
+            "search_hint": "Search products",
+            "no_products": "No products found",
+            "no_matching_products": "No matching products found"
+        },
+        "product_details": {
+            "app_bar_title": "Product Details",
+            "section_title": "Product Details",
+            "visit_store_button": "Visit Store",
+            "add_to_cart_button": "Add to cart",
+            "buy_now_button": "Buy now",
+            "success_message": "Successfully added to cart",
+            "error_messages": {
+                "add_to_cart_failed": "Failed to add to cart",
+                "product_data_not_available": "Product data not available",
+                "seller_data_not_available": "Seller data not available"
+            }
+        },
+        "checkout": {
+            "app_bar_title": "Checkout",
+            "price_details_title": "Price Details",
+            "price_label": "Price ({item} item)",
+            "total_payment_label": "Total Payment:",
+            "standard_delivery_label": "Standard delivery",
+            "place_order_button": "Place order",
+            "error_message": "Please fill-up your address"
+        },
+        "add_category": {
+            "app_bar_title": "Add category",
+            "item_name_label": "Item Name",
+            "upload_image_label": "Uplpad image",
+            "add_product_label": "Add product",
+            "save_button": "Save",
+            "email_validation": {
+                "empty": "Enter email",
+                "invalid": "Enter a valid email address"
+            }
+        },
+        "add_product": {
+            "app_bar_title": "Add product",
+            "upload_image_label": "Uplpad image",
+            "add_product_label": "Add product",
+            "item_name_label": "Item Name",
+            "item_details_label": "Item Details",
+            "category_label": "Category",
+            "item_price_label": "Item Price",
+            "item_quantity_label": "Item Quantity",
+            "expiry_date_label": "Expriye date",
+            "days_hint": "Dayes",
+            "discount_hint": "Discount %",
+            "save_button": "Save",
+            "validation": {
+                "empty_email": "Enter email",
+                "invalid_email": "Enter a valid email address",
+                "empty_field": "Enter password"
+            }
+        },
+        "profile": {
+            "settings_section": "Settings",
+            "support_section": "Support",
+            "edit_profile_feature": "Edit Profile",
+            "my_orders_feature": "My Orders",
+            "notification_feature": "Notification",
+            "change_password_feature": "Change password",
+            "policies_feature": "Policies",
+            "about_us_feature": "About Us",
+            "logout_button": "Logout",
+            "error_message": "Profile data not available"
+        },
+        "info": {
+            "no_data_message": "No data available",
+            "error_message": "Error loading data"
+        },
+        "change_password": {
+            "app_bar_title": "Change Password",
+            "current_password_hint": "Current password",
+            "new_password_hint": "New password",
+            "confirm_password_hint": "Confirm password",
+            "change_password_button": "Change Password",
+            "success_message": "Change password successfully done",
+            "validation": {
+                "empty_password": "Enter password"
+            }
+        },
+        "edit_profile": {
+            "app_bar_title": "Update profile",
+            "name_label": "Name",
+            "email_label": "Email adress",
+            "contact_label": "Contact Information",
+            "address_label": "Adress",
+            "city_label": "City",
+            "state_label": "State",
+            "zipcode_label": "Zipcode",
+            "country_label": "Country",
+            "update_button": "Update",
+            "success_message": "Profile updated"
+        },
+        "shops": {
+            "app_bar_title": "Shops",
+            "no_shops": "No shops found"
+        },
+        "seller_profile": {
+            "products_tab": "Products",
+            "about_tab": "About"
+        },
+        "seller_products": {
+            "item_label": "Item"
+        },
+        "seller_about": {
+            "store_name_label": "Strore Name : ",
+            "owner_name_label": "Owner name : ",
+            "store_description_label": "Store Description : ",
+            "location_label": "Location",
+            "contact_information_label": "Contact information"
+        }
+    }
+}

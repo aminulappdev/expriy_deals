@@ -87,7 +87,7 @@ class PdfController extends GetxController {
         'PDF receipt has been generated and saved',
         snackPosition: SnackPosition.BOTTOM,
       );
-    print('My file is $file');
+// \0
       // Optional: Open the PDF file
       await OpenFile.open(file.path);
     } catch (e) {

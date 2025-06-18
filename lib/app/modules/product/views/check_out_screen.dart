@@ -55,7 +55,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     price = originalPrice * ((100 - discount) / 100); // Apply discount to price
     price = double.parse(price.toStringAsFixed(2));
     _calculateTotalPrice();
-    print('Initial: Quantity=$quantity, Price=$price, Total=$mainTotalPrice');
+// \0
   }
 
   void _calculateTotalPrice() {
@@ -65,7 +65,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('Building CheckOutScreen');
+// \0
     return Scaffold(
       body: GetBuilder<ProfileController>(builder: (controller) {
         return SingleChildScrollView(
@@ -273,8 +273,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                           GestureDetector(
                             onTap: () {
                               setState(() {
-                                if (widget.productDetailsData.stock !=
-                                        null &&
+                                if (widget.productDetailsData.stock != null &&
                                     quantity <
                                         widget.productDetailsData.stock!) {
                                   quantity++;
@@ -336,8 +335,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     );
 
     if (isSuccess) {
-      print('Reference id is...........');
-      print(productOrderController.orderResponseData?.id);
+// \0
+// \0
       if (mounted) {
         paymentService.payment(
             context,
@@ -346,7 +345,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       }
     } else {
       if (mounted) {
-        print('Error show ----------------------------------');
+// \0
         showSnackBarMessage(
             context, productOrderController.errorMessage!, true);
       }

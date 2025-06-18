@@ -188,7 +188,7 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
           await otpVerifyController.otyVerify(otpCtrl.text, widget.token);
       print(
           'My token ---------------------------------------\n-------\n------');
-      print(widget.token);
+// \0
 
       if (isSuccess) {
         if (mounted) {

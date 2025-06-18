@@ -193,8 +193,8 @@ class PostControllerWithFormData extends GetxController {
 
       // ✅ Add image if available
       if (image != null) {
-        print('Image ache ekhane ................................');
-        print(image);
+// \0
+// \0
         String imagePath = image.path;
         String? mimeType = lookupMimeType(imagePath) ?? 'image/jpeg';
  
@@ -211,8 +211,8 @@ class PostControllerWithFormData extends GetxController {
       var streamedResponse = await request.send();
       var responseBody = await streamedResponse.stream.bytesToString();
 
-      print('📥 Server Response:');
-      print(responseBody);
+// \0
+// \0
 
       var decodedResponse = jsonDecode(responseBody);
 

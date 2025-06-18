@@ -22,7 +22,7 @@ class AddToCartController extends GetxController {
       "product": productId,
       "quantity": quantity
     };
-    print('Controller e asche');
+// \0
     final NetworkResponse response = await Get.find<NetworkCaller>()
         .postRequest(Urls.addToCartUrl, requestBody,accesToken: StorageUtil.getData(StorageUtil.userAccessToken)); // Replace your api url
 

@@ -31,8 +31,8 @@ class ConfirmedPaymentController extends GetxController {
     if (response.isSuccess) {
       confirmedPaymentResponseModel = ConfirmedPaymentResponseModel.fromJson(response.responseData);
       box.write('payment-reference-id', id); 
-      print('My data is .............................');
-      print(confirmedPaymentResponseModel?.data?.price);
+// \0
+// \0
       _errorMessage = null;
       isSuccess = true;
     } else {

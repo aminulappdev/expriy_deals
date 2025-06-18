@@ -246,7 +246,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
         if (isSuccess) {
           // ignore: avoid_print
-          print('Resend otp success.............');
+// \0
           Get.to(VerifyEmailScreen(
             token: resendOTPController.otpToken ?? 'Empty token',
           ));

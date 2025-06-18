@@ -32,7 +32,7 @@ class _InfoScreenState extends State<InfoScreen> {
         child: Padding(
           padding: EdgeInsets.all(12.r),
           child: GetBuilder<ContentController>(builder: (controller) {
-            print('all data ${controller.contetData}');
+// \0
             if (controller.inProgress) {
               return SizedBox(
                 height: 500,

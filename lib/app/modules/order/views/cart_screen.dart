@@ -2,9 +2,7 @@ import 'package:expriy_deals/app/modules/order/widgets/cart_product_card.dart';
 import 'package:expriy_deals/app/modules/product/controllers/all_card_controller.dart';
 import 'package:expriy_deals/app/modules/product/controllers/delete_card_controller.dart';
 import 'package:expriy_deals/app/modules/product/views/check_out_screen.dart';
-import 'package:expriy_deals/app/utils/assets_path.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
-import 'package:expriy_deals/app/widgets/costom_app_bar.dart';
 import 'package:expriy_deals/app/widgets/show_snackBar_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -54,7 +52,26 @@ class _CartScreenState extends State<CartScreen> {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            } else {
+            } 
+            else if (allCartController.addToCartData == null ||
+                  allCartController.addToCartData!.isEmpty) {
+                return SizedBox(
+                  height: 500.h,
+                  width: double.infinity,
+                  child: Center(
+                    child: Text(
+                      'shipping_info.app_bar_title'.tr,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                );
+              } 
+            
+            else {
               return Expanded(
                 child: ListView.builder(
                   padding: EdgeInsets.zero,

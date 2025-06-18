@@ -49,7 +49,7 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   void initState() {
     super.initState();
-    print('Category ID: ${widget.categoryId}');
+// \0
 
     // Initialize controllers
     allProductController = Get.put(AllProductController());
@@ -60,10 +60,10 @@ class _ProductScreenState extends State<ProductScreen> {
     // Fetch data after the build phase
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.categoryName == 'Special-offer') {
-        print('Fetching special offer data');
+// \0
         specialProductController.getSpecialProduct();
       } else {
-        print('Fetching category data');
+// \0
         categoryProductController.getProductByCategory(
             categoryId: widget.categoryId);
       }

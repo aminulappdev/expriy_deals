@@ -26,8 +26,8 @@ class PaymentURLController extends GetxController {
 
     if (response.isSuccess) {
       //  Navigator.pushNamed(context, PaymentSuccessScreen.routeName);
-      print('Payment Controller theke done');
-      print('Payment link: $paymentLink');
+// \0
+// \0
       Get.to(PaymentSuccessScreen());
 
       _errorMessage = null;

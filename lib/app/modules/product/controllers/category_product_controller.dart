@@ -24,7 +24,7 @@ class CategoryProductController extends GetxController {
   }
 
   Future<bool> getProductByCategory({String? categoryId}) async {
-    print('Caregory controller e asche ...');
+// \0
     final token = StorageUtil.getData(StorageUtil.userAccessToken);
     if (token == null) {
       Get.to(SignInScreen());

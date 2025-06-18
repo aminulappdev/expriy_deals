@@ -40,7 +40,7 @@ class ContentController extends GetxController {
 
     if (response.isSuccess) {
       contentsModel = ContentsModel.fromJson(response.responseData);
-      print('response data is : $contentsModel');
+// \0
       _errorMessage = null;
       isSuccess = true;
     } else {

@@ -61,12 +61,11 @@ class GoogleAuthController extends GetxController {
       final NetworkResponse response = await Get.find<NetworkCaller>()
           .postRequest(Urls.googleAuthUrl, requestBody);
 
-      if (response.isSuccess) {
-        print(response.responseData['data']['accessToken']);
+      if (response.isSuccess) {       
         StorageUtil.saveData(
             StorageUtil.userAccessToken, response.responseData['data']['accessToken']);
-        print('User access token from Google user:');
-        print(StorageUtil.getData(StorageUtil.userAccessToken));
+// \0
+// \0
         _errorMessage = null;
         profileController.getProfileData();
 

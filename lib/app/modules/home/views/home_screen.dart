@@ -48,29 +48,26 @@ class _HomeScreenState extends State<HomeScreen> {
       Get.put(RecommendProductController());
   double? latitude;
   double? longitude;
+  bool _isApiCalled = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // Request location permission and get location before other operations
-      await requestLocationPermission();
-      await getCurrentLocation();
-      // Perform other API calls after location is fetched
-      recommendProductController.getRecommenedProduct();
-      specialProductController.getSpecialProduct();
-      categoryController.getCategory();
-      allProductController.getProduct();
-      allShopController.myShops(latitude: latitude, longitude: longitude);
+      if (!_isApiCalled) {
+        _isApiCalled = true;
+        await requestLocationPermission();
+        await getCurrentLocation();
+      }
     });
   }
 
   Future<void> requestLocationPermission() async {
     final ph.PermissionStatus status = await ph.Permission.location.request();
     if (status.isGranted) {
-      print('Location permission granted');
-    } else if (status.isDenied) {
-      print('Location permission denied');
+// \0
+    } else {
+// \0
     }
   }
 
@@ -78,16 +75,18 @@ class _HomeScreenState extends State<HomeScreen> {
     final loc.Location location = loc.Location();
     try {
       final loc.LocationData locationData = await location.getLocation();
-      setState(() {
-        latitude = locationData.latitude;
+      latitude = locationData.latitude;
+      longitude = locationData.longitude;
+// \0
 
-        System:
-        locationData.latitude;
-        longitude = locationData.longitude;
-        print('Location is $latitude and $longitude');
-      });
+      // API কলগুলো এখানে করা হচ্ছে
+      recommendProductController.getRecommenedProduct();
+      specialProductController.getSpecialProduct();
+      categoryController.getCategory();
+      allProductController.getProduct();
+      allShopController.myShops(latitude: latitude, longitude: longitude);
     } catch (e) {
-      print('Error getting location: $e');
+// \0
     }
   }
 
@@ -226,10 +225,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 Obx(() {
-                  if (specialProductController.inProgress) {
+                  if (specialProductController.inProgress ||
+                      specialProductController.productData == null) {
                     return const ProductItemShimmerEffectWidget();
-                  } else if (specialProductController.productData?.isEmpty ??
-                      true) {
+                  } else if (specialProductController.productData!.isEmpty) {
                     return SizedBox(
                       height: 180.h,
                       child: const Center(child: Text('No products available')),
@@ -237,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   } else {
                     final products = specialProductController.productData!;
                     print(
-                        'Special data : ${specialProductController.productData}');
+                        'Special data: ${specialProductController.productData}');
                     return SizedBox(
                       height: 180.h,
                       width: MediaQuery.of(context).size.width,

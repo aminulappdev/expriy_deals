@@ -29,12 +29,12 @@ class _PaymentDetailsScreen extends State<PaymentDetailsScreen> {
   void initState() {
     super.initState();
     // Confirm payment on the page load
-    print('Payment Details page e asche ........................');
+// \0
     print(
         'Order ID Payment Details page er : ${StorageUtil.getData('order-id')}');
     confirmedPaymentController.confirmPaymentfunction(
         '${StorageUtil.getData('order-id')}'); // Change with your actual ID
-    print('Details page data ....................');
+// \0
   }
 
   @override

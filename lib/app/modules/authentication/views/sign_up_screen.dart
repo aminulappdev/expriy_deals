@@ -246,7 +246,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
 
   Future<void> onTapToNextButton() async {
-    print('Work');
+// \0
     if (_formKey.currentState!.validate()) {
       final bool isSuccess = await createUserController.createUser(
           nameCtrl.text,

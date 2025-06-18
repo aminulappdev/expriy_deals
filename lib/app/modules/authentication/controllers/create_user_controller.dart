@@ -124,7 +124,7 @@ class CreateUserController extends GetxController {
       "phoneNumber": number,
       "password": password,
     };
-    print('Controller e asche');
+// \0
     final NetworkResponse response = await Get.find<NetworkCaller>()
         .postRequest(Urls.createUserUrl, requestBody); // Replace your api url
 

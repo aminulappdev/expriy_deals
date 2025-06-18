@@ -17,7 +17,7 @@ class DeleteCartController extends GetxController {
     _inProgress = true;
     update();
 
-    print('Controller e asche');
+// \0
     final NetworkResponse response = await Get.find<NetworkCaller>()
         .deleteRequest(Urls.deleteCartById(cartId),
             accesToken: StorageUtil.getData(

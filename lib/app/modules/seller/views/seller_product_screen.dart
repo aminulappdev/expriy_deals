@@ -47,7 +47,7 @@ class _SellerProductScreenState extends State<SellerProductScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       allProductController.getProduct(authorID: widget.sellerData['sellerId']);
-      print('Seller ID: ${widget.sellerData['sellerId']}');
+// \0
     });
   }
 

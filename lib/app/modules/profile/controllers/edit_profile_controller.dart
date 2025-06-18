@@ -23,11 +23,11 @@ class EditProfileController extends GetxController {
     bool isSuccess = false;
     _inProgress = true;
     update();
-    print('Controller e asche');
+// \0
     try {
       var uri = Uri.parse(Urls.updateProfileUrl);
       var request = http.MultipartRequest('PATCH', uri);
-      print('Update profile controller token : $token'); 
+// \0 
       request.headers['Authorization'] = 'Bearer $token';
       // ✅ Set 'data' field with JSON-encoded string
       Map<String, dynamic> jsonFields = {
@@ -45,8 +45,8 @@ class EditProfileController extends GetxController {
 
       // ✅ Add image if available
       if (image != null) {
-        print('Image ache ekhane ................................');
-        print(image);
+// \0
+// \0
         String imagePath = image.path;
         String? mimeType = lookupMimeType(imagePath) ?? 'image/jpeg';
 
@@ -63,8 +63,8 @@ class EditProfileController extends GetxController {
       var streamedResponse = await request.send();
       var responseBody = await streamedResponse.stream.bytesToString();
 
-      print('📥 Server Response:');
-      print(responseBody);
+// \0
+// \0
 
       var decodedResponse = jsonDecode(responseBody) as Map<String, dynamic>;
       // var decodedResponse = jsonDecode(responseBody);

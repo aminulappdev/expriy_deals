@@ -21,7 +21,7 @@ class _SellerProfileScreenState extends State<SellerProfileScreen> {
 
   @override
   void initState() {
-    print('seller data: ${widget.sellerData}');
+// \0
     super.initState();
   }
   @override
