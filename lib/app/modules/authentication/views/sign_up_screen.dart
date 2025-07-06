@@ -1,5 +1,5 @@
-import 'dart:io';
 
+import 'dart:io';
 import 'package:email_validator/email_validator.dart';
 import 'package:expriy_deals/app/modules/authentication/controllers/create_user_controller.dart';
 import 'package:expriy_deals/app/modules/authentication/views/sign_in_screen.dart';
@@ -18,7 +18,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
@@ -28,25 +27,15 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController nameCtrl = TextEditingController();
-  TextEditingController numberCtrl = TextEditingController();
-  TextEditingController emailCtrl = TextEditingController();
-  TextEditingController passwordCtrl = TextEditingController();
-  final CreateUserController createUserController =
-      Get.put(CreateUserController());
-
-  File? image;
+  final TextEditingController nameCtrl = TextEditingController();
+  final TextEditingController numberCtrl = TextEditingController();
+  final TextEditingController emailCtrl = TextEditingController();
+  final TextEditingController passwordCtrl = TextEditingController();
+  final CreateUserController createUserController = Get.put(CreateUserController());
   final ImagePickerHelper _imagePickerHelper = ImagePickerHelper();
-
+  File? image;
   bool _obscureText = true;
-
   bool showButton = false;
-
-  void toggleShowButton() {
-    setState(() {
-      showButton = !showButton;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,15 +47,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               heightBox20,
-              CustomAppBar(
-                name: 'Sign Up',
-              ),
+              CustomAppBar(name: 'sign_up.app_bar_title'.tr), // Localized "Sign Up"
               heightBox16,
               Align(
                 alignment: Alignment.center,
                 child: WelcomeText(
-                  title: 'Create New Account',
-                  subtitle: 'Please fill your detail information.',
+                  title: 'sign_up.header_title'.tr, // Localized "Create New Account"
+                  subtitle: 'sign_up.header_subtitle'.tr, // Localized "Please fill your detail information."
                 ),
               ),
               heightBox50,
@@ -75,87 +62,100 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Full Name',
-                        style: GoogleFonts.poppins(
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xff626262))),
+                    Text(
+                      'sign_up.full_name_label'.tr, // Localized "Full Name"
+                      style: GoogleFonts.poppins(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xff626262),
+                      ),
+                    ),
                     heightBox8,
                     TextFormField(
                       controller: nameCtrl,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      keyboardType: TextInputType.emailAddress,
+                      keyboardType: TextInputType.name,
                       validator: (String? value) {
-                        if (value!.isEmpty) {
-                          return 'Enter name';
+                        if (value == null || value.isEmpty) {
+                          return 'sign_up.empty_name_error'.tr; // Localized "Enter name"
                         }
                         return null;
                       },
                       decoration: InputDecoration(
-                          hintText: 'Enter your full name',
-                          hintStyle: TextStyle(color: Colors.grey)),
+                        hintText: 'sign_up.full_name_hint'.tr, // Localized "Enter your full name"
+                        hintStyle: GoogleFonts.poppins(color: Colors.grey),
+                      ),
                     ),
                     heightBox8,
-                    Text('Number',
-                        style: GoogleFonts.poppins(
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xff626262))),
+                    Text(
+                      'sign_up.number_label'.tr, // Localized "Number"
+                      style: GoogleFonts.poppins(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xff626262),
+                      ),
+                    ),
                     heightBox8,
                     TextFormField(
                       maxLength: 15,
                       controller: numberCtrl,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.phone,
                       validator: (String? value) {
-                        if (value!.isEmpty) {
-                          return 'Enter number';
+                        if (value == null || value.isEmpty) {
+                          return 'sign_up.empty_number_error'.tr; // Localized "Enter number"
                         }
-
                         return null;
                       },
                       decoration: InputDecoration(
-                          hintText: 'Enter your number',
-                          hintStyle: TextStyle(color: Colors.grey)),
+                        hintText: 'sign_up.number_hint'.tr, // Localized "Enter your number"
+                        hintStyle: GoogleFonts.poppins(color: Colors.grey),
+                      ),
                     ),
                     heightBox8,
-                    Text('Email',
-                        style: GoogleFonts.poppins(
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xff626262))),
+                    Text(
+                      'sign_up.email_label'.tr, // Localized "Email"
+                      style: GoogleFonts.poppins(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xff626262),
+                      ),
+                    ),
                     heightBox8,
                     TextFormField(
                       controller: emailCtrl,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       keyboardType: TextInputType.emailAddress,
                       validator: (String? value) {
-                        if (value!.isEmpty) {
-                          return 'Enter email';
+                        if (value == null || value.isEmpty) {
+                          return 'sign_up.empty_email_error'.tr; // Localized "Enter email"
                         }
-                        if (EmailValidator.validate(value) == false) {
-                          return 'Enter a valid email address';
+                        if (!EmailValidator.validate(value)) {
+                          return 'sign_up.invalid_email_error'.tr; // Localized "Enter a valid email address"
                         }
                         return null;
                       },
                       decoration: InputDecoration(
-                          hintText: 'example@gmail.com',
-                          hintStyle: TextStyle(color: Colors.grey)),
+                        hintText: 'sign_up.email_hint'.tr, // Localized "example@gmail.com"
+                        hintStyle: GoogleFonts.poppins(color: Colors.grey),
+                      ),
                     ),
                     heightBox8,
-                  
-                    Text('Password',
-                        style: GoogleFonts.poppins(
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xff626262))),
+                    Text(
+                      'sign_up.password_label'.tr, // Localized "Password"
+                      style: GoogleFonts.poppins(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xff626262),
+                      ),
+                    ),
                     heightBox8,
                     TextFormField(
                       controller: passwordCtrl,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (String? value) {
-                        if (value!.isEmpty) {
-                          return 'Enter password';
+                        if (value == null || value.isEmpty) {
+                          return 'sign_up.empty_password_error'.tr; // Localized "Enter password"
                         }
                         return null;
                       },
@@ -163,37 +163,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       decoration: InputDecoration(
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscureText
-                                ? Icons.visibility_off
-                                : Icons.visibility,
+                            _obscureText ? Icons.visibility_off : Icons.visibility,
                             color: Colors.grey,
                           ),
                           onPressed: () {
-                            setState(() {
-                              _obscureText = !_obscureText;
-                            });
+                            setState(() => _obscureText = !_obscureText);
                           },
                         ),
-                        hintText: '***********',
-                        hintStyle: TextStyle(color: Colors.grey),
+                        hintText: 'sign_up.password_hint'.tr, // Localized "***********"
+                        hintStyle: GoogleFonts.poppins(color: Colors.grey),
                       ),
                     ),
                     AgreeConditionCheck(
                       onChanged: (value) {
-                        setState(() {
-                          showButton = value;
-                        });
+                        setState(() => showButton = value);
                       },
                     ),
-                   
-                   
                     heightBox24,
                     Visibility(
                       visible: showButton,
                       replacement: Opacity(
                         opacity: 0.5,
                         child: CustomElevatedButton(
-                          text: 'Verify Email',
+                          text: 'sign_up.verify_email_button'.tr, // Localized "Verify Email"
                           onPressed: () {},
                         ),
                       ),
@@ -203,14 +195,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             alignment: Alignment.center,
                             children: [
                               CustomElevatedButton(
-                                onPressed: controller.inProgress
-                                    ? () {}
-                                    : () => onTapToNextButton(),
-                                text:
-                                    controller.inProgress ? '' : 'Verify Email',
+                                onPressed: controller.inProgress ? () {} : () => onTapToNextButton(),
+                                text: controller.inProgress ? '' : 'sign_up.verify_email_button'.tr, // Localized "Verify Email"
                               ),
                               if (controller.inProgress)
-                                SizedBox(
+                                const SizedBox(
                                   width: 24,
                                   height: 24,
                                   child: CircularProgressIndicator(
@@ -225,15 +214,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     heightBox12,
                     AuthenticationFooterSection(
-                      fTextName: 'Already have an account? ',
-                      fTextColor: Color(0xff33363F),
-                      sTextName: 'Log In',
-                      sTextColor: Color.fromARGB(255, 253, 107, 45),
+                      fTextName: 'sign_up.footer_first_text'.tr, // Localized "Already have an account? "
+                      fTextColor: const Color(0xff33363F),
+                      sTextName: 'sign_up.footer_second_text'.tr, // Localized "Log In"
+                      sTextColor: const Color.fromARGB(255, 253, 107, 45),
                       ontap: () {
-                        Get.to(SignInScreen());
+                        Get.to(() => const SignInScreen());
                       },
                     ),
-                    heightBox100
+                    heightBox100,
                   ],
                 ),
               ),
@@ -244,51 +233,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-
   Future<void> onTapToNextButton() async {
-// \0
     if (_formKey.currentState!.validate()) {
       final bool isSuccess = await createUserController.createUser(
-          nameCtrl.text,
-          numberCtrl.text,
-          emailCtrl.text,
-        
-          passwordCtrl.text);
+        nameCtrl.text,
+        numberCtrl.text,
+        emailCtrl.text,
+        passwordCtrl.text,
+      );
 
-      if (isSuccess) {
-        if (mounted) {
-          print(
-              'Otp Token : ${createUserController.createUserData?.otpToken?.token}');
-          showSnackBarMessage(context, 'New user created');
-          Get.to(VerifyEmailScreen(
-            token: '${createUserController.createUserData?.otpToken?.token}',
-          ));
-          // print('My token ---------------------------------------');
-          // print(signUpController.token);
-        } else {
-          if (mounted) {
-            showSnackBarMessage(
-                context, createUserController.errorMessage!, true);
-          }
-        }
+      if (isSuccess && mounted) {
+        showSnackBarMessage(context, 'sign_up.success_message'.tr); // Localized "New user created"
+        Get.to(() => VerifyEmailScreen(token: createUserController.createUserData?.otpToken?.token ?? ''));
+      } else if (mounted) {
+        showSnackBarMessage(context, createUserController.errorMessage ?? 'sign_up.error_message'.tr, true); // Localized "Failed to create user"
       }
     }
   }
 
-  void clearTextField() {
-    emailCtrl.clear();
-    nameCtrl.clear();
-    emailCtrl.clear();
-    passwordCtrl.clear();
-  }
-
   @override
   void dispose() {
-    super.dispose();
-
-    emailCtrl.dispose();
     nameCtrl.dispose();
+    numberCtrl.dispose();
     emailCtrl.dispose();
     passwordCtrl.dispose();
+    super.dispose();
   }
 }

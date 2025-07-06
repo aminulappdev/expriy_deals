@@ -1,24 +1,23 @@
 // lib/core/utils/dialog_utils.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:expriy_deals/app/widgets/custom_alert_dialoge.dart';
 
 class DialogUtils {
-  // ডিলিট অ্যাকাউন্ট ডায়ালগ
   static void showDeleteAccountDialog(BuildContext context, VoidCallback onConfirm) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => CustomAlertDialog(
-        title: 'Do you want to delete this account?',
+        title: 'delete_message'.tr,
         noOntap: () => Navigator.pop(context),
         yesOntap: onConfirm,
       ),
     );
   }
 
-  // লগআউট ডায়ালগ
   static void showLogoutDialog(BuildContext context, VoidCallback onConfirm) {
     showDialog(
       context: context,
@@ -28,7 +27,7 @@ class DialogUtils {
         title: Center(
           child: Text(
             textAlign: TextAlign.center,
-            'Do you want to log out this profile?',
+            'logout_message'.tr,
             style: GoogleFonts.poppins(fontSize: 20),
           ),
         ),

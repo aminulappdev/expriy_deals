@@ -6,7 +6,6 @@ import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -18,10 +17,10 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  List<String> buttonTexts = [
-    'Get Started',
-    'Keep Reading',
-    'Begin Your First Letter'
+  final List<String> buttonTexts = [
+    'onboarding_screen.get_started'.tr, // Localized "Get Started"
+    'onboarding_screen.keep_reading'.tr, // Localized "Keep Reading"
+    'onboarding_screen.begin_your_first_letter'.tr, // Localized "Begin Your First Letter"
   ];
 
   final PageController _pageController = PageController();
@@ -37,37 +36,33 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             child: PageView(
               controller: _pageController,
               onPageChanged: (index) {
-                setState(
-                  () {
-                    _currentPage = index;
-                  },
-                );
+                setState(() {
+                  _currentPage = index;
+                });
               },
               children: [
                 OnboardingPage(
                   showBackButton: false,
                   imageHeight: 280,
                   onBoardingRow: false,
-                  title: "Turn Near-Expiry Products into Sales!",
-                  subtitle:
-                      "Use our map view to find stores and products near you, or browse by categories.",
+                  title: 'onboarding_screen.page1_title'.tr, // Localized "Turn Near-Expiry Products into Sales!"
+                  subtitle: 'onboarding_screen.page1_subtitle'.tr, // Localized subtitle
                   pageController: _pageController,
                 ),
                 OnboardingPage(
                   showBackButton: true,
                   imageHeight: 280,
                   onBoardingRow: true,
-                  title:
-                      "This is your space to care, to be heard, to feel safe.",
-                  subtitle: "",
+                  title: 'onboarding_screen.page2_title'.tr, // Localized "This is your space..."
+                  subtitle: 'onboarding.page2_subtitle'.tr, // Localized subtitle
                   pageController: _pageController,
                 ),
                 OnboardingPage(
                   showBackButton: true,
                   imageHeight: 280,
                   onBoardingRow: false,
-                  title: "You are safe here. You are seen. You are heard.",
-                  subtitle: "",
+                  title: 'onboarding.page3_title'.tr, // Localized "You are safe here..."
+                  subtitle: 'onboarding.page3_subtitle'.tr, // Localized subtitle
                   pageController: _pageController,
                 ),
               ],
@@ -100,11 +95,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   onTap: () {
                     if (_currentPage < 2) {
                       _pageController.nextPage(
-                        duration: Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                       );
                     } else {
-                     Get.to(SignInScreen());
+                      Get.to(() => const SignInScreen());
                     }
                   },
                   child: Row(
@@ -113,14 +108,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       Text(
                         buttonTexts[_currentPage],
                         style: GoogleFonts.poppins(
-                            fontSize: 20.sp,
-                            color: AppColors.iconButtonThemeColor),
+                          fontSize: 20.sp,
+                          color: AppColors.iconButtonThemeColor,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       widthBox4,
                       Icon(
                         Icons.arrow_forward_ios,
                         color: AppColors.iconButtonThemeColor,
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -131,17 +128,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   height: 2,
                   width: 350,
                   decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [
-                    Colors.white,
-                    AppColors.iconButtonThemeColor,
-                  ])),
+                    gradient: LinearGradient(colors: [
+                      Colors.white,
+                      AppColors.iconButtonThemeColor,
+                    ]),
+                  ),
                 ),
-              )
+              ),
             ],
           ),
           heightBox20,
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 }

@@ -3,6 +3,7 @@ import 'package:expriy_deals/app/utils/assets_path.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class CartProductCard extends StatelessWidget {
   final String imagePath;
@@ -118,7 +119,7 @@ class CartProductCard extends StatelessWidget {
                         ),
                         child: Center(
                             child: Text(
-                          'Delete',
+                          'delete'.tr,
                           style:
                               TextStyle(color: AppColors.iconButtonThemeColor),
                         )),
@@ -135,7 +136,7 @@ class CartProductCard extends StatelessWidget {
                             color: AppColors.iconButtonThemeColor),
                         child: Center(
                             child: Text(
-                          'Buy',
+                          'buy'.tr,
                           style: TextStyle(
                               color: const Color.fromARGB(255, 255, 255, 255)),
                         )),

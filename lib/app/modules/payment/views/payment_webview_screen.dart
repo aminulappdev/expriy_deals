@@ -1,17 +1,13 @@
-
 import 'package:expriy_deals/app/modules/payment/controllers/confirmed_payment_controller.dart';
 import 'package:expriy_deals/app/modules/payment/controllers/payment_url_controller.dart';
 import 'package:expriy_deals/app/modules/payment/views/payment_success_screen.dart';
 import 'package:expriy_deals/app/widgets/show_snackBar_message.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
 
 class PaymentWebviewScreen extends StatefulWidget {
   final Map<String, dynamic> paymentData;
-  
 
   const PaymentWebviewScreen({
     super.key,
@@ -23,11 +19,9 @@ class PaymentWebviewScreen extends StatefulWidget {
 }
 
 class _PaymentWebviewScreenState extends State<PaymentWebviewScreen> {
-  // ignore: unused_field
   late WebViewController _controller;
-  final ConfirmedPaymentController confirmedPaymentController =
-      ConfirmedPaymentController();
-  final PaymentURLController paymentURLController = PaymentURLController();
+  final ConfirmedPaymentController confirmedPaymentController = Get.find<ConfirmedPaymentController>();
+  final PaymentURLController paymentURLController = Get.find<PaymentURLController>();
 
   @override
   Widget build(BuildContext context) {
@@ -36,16 +30,16 @@ class _PaymentWebviewScreenState extends State<PaymentWebviewScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black, size: 18),
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 18),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Text("Payment"),
+        title: Text('payment_webview.app_bar_title'.tr), // Localized "Payment"
         centerTitle: true,
       ),
       body: WebView(
-        initialUrl: widget.paymentData['link'],
+        initialUrl: widget.paymentData['link'] ?? '',
         javascriptMode: JavascriptMode.unrestricted,
         onWebViewCreated: (WebViewController webViewController) {
           _controller = webViewController;
@@ -56,17 +50,19 @@ class _PaymentWebviewScreenState extends State<PaymentWebviewScreen> {
         onPageFinished: (String url) async {
           debugPrint('Page finished loading: $url');
           if (url.contains("confirm-payment")) {
-// \0
-            paymentURLController.paymentUrl(url);
             final bool isSuccess = await paymentURLController.paymentUrl(url);
             if (isSuccess) {
-              await confirmPayment('${widget.paymentData['reference']}');
-              Get.to(PaymentSuccessScreen());
-              
+              await confirmPayment('${widget.paymentData['reference'] ?? ''}');
+              Get.to(() => const PaymentSuccessScreen());
+            } else {
+              if (mounted) {
+                showSnackBarMessage(
+                  context,
+                  paymentURLController.errorMessage ?? 'payment_webview.error_message'.tr, // Localized "An error occurred"
+                  true,
+                );
+              }
             }
-    
-            // Call your payment result handler or anything you want here
-            debugPrint('::::::::::::: if condition ::::::::::::::::');
           }
         },
       ),
@@ -74,22 +70,23 @@ class _PaymentWebviewScreenState extends State<PaymentWebviewScreen> {
   }
 
   Future<void> confirmPayment(String reference) async {
-    final bool isSuccess =
-        await confirmedPaymentController.confirmPaymentfunction(reference);
-    if (isSuccess) {
+    if (reference.isEmpty) {
       if (mounted) {
-      } else {
-        if (mounted) {
-          showSnackBarMessage(
-              context, confirmedPaymentController.errorMessage!, true);
-        }
+        showSnackBarMessage(
+          context,
+          'payment_webview.error_message'.tr, // Localized "An error occurred"
+          true,
+        );
       }
-    } else {
-      if (mounted) {
-        // print('Error show ----------------------------------');
-        showSnackBarMessage(context,
-            confirmedPaymentController.errorMessage ?? 'Ekhanei problem', true);
-      }
+      return;
+    }
+    final bool isSuccess = await confirmedPaymentController.confirmPaymentfunction(reference);
+    if (!isSuccess && mounted) {
+      showSnackBarMessage(
+        context,
+        confirmedPaymentController.errorMessage ?? 'payment_webview.error_message'.tr, // Localized "An error occurred"
+        true,
+      );
     }
   }
 }

@@ -3,6 +3,7 @@ import 'package:expriy_deals/app/modules/order/views/order_details_screen.dart';
 import 'package:expriy_deals/app/modules/order/widgets/my_order_card.dart';
 import 'package:expriy_deals/app/modules/product/views/check_out_screen.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
+import 'package:expriy_deals/app/widgets/show_snackBar_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -20,8 +21,8 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
 
   @override
   void initState() {
-    myOrdersController.myOrder();
     super.initState();
+    myOrdersController.myOrder();
   }
 
   @override
@@ -38,7 +39,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
               children: [
                 widthBox12,
                 Text(
-                  'My Orders',
+                  'my_orders.title'.tr, // Localized "My Orders"
                   style: TextStyle(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w600,
@@ -49,7 +50,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
             ),
             heightBox10,
             Obx(() {
-              if (myOrdersController.inProgress == true) {
+              if (myOrdersController.inProgress) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
@@ -58,10 +59,10 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                 return SizedBox(
                   height: 500.h,
                   width: double.infinity,
-                  child: const Center(
+                  child: Center(
                     child: Text(
-                      'No Order Available',
-                      style: TextStyle(
+                      'my_orders.no_orders'.tr, // Localized "No orders available"
+                      style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
                         color: Colors.black,
@@ -84,14 +85,30 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                         quantity: order.quantity.toString(),
                         status: order.status ?? '',
                         mainBTNOntap: () {
-                          Get.to(OrderDetailsScreen(
-                            myOrdersItemModel: order,
-                          ));
+                          if (order.id != null) {
+                            Get.to(() => OrderDetailsScreen(
+                                  myOrdersItemModel: order,
+                                ));
+                          } else {
+                            showSnackBarMessage(
+                              context,
+                              'order_details.error_message'.tr, // Localized error message
+                              true,
+                            );
+                          }
                         },
                         secondBTNOntap: () {
-                          Get.to(CheckOutScreen(
-                            productDetailsData: order.product!,
-                          ));
+                          if (order.product != null) {
+                            Get.to(() => CheckOutScreen(
+                                  productDetailsData: order.product!,
+                                ));
+                          } else {
+                            showSnackBarMessage(
+                              context,
+                              'product_details.error_messages.product_data_not_available'.tr, // Localized error message
+                              true,
+                            );
+                          }
                         },
                         productDetailsData: order.product!,
                       );

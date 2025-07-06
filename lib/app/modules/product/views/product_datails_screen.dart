@@ -1,13 +1,9 @@
 // ignore_for_file: avoid_print
-
 import 'package:expriy_deals/app/modules/product/controllers/add_to_cart_controller.dart';
 import 'package:expriy_deals/app/modules/product/controllers/all_product_conrtoller.dart';
 import 'package:expriy_deals/app/modules/product/controllers/product_details_controller.dart';
 import 'package:expriy_deals/app/modules/product/views/check_out_screen.dart';
-import 'package:expriy_deals/app/modules/product/widgets/policy_custom_row.dart';
-import 'package:expriy_deals/app/modules/product/widgets/product_card.dart';
 import 'package:expriy_deals/app/modules/product/widgets/product_caresoul_slider.dart';
-import 'package:expriy_deals/app/modules/product/widgets/see_more_button.dart';
 import 'package:expriy_deals/app/modules/seller/views/seller_profile_screen.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
@@ -29,18 +25,14 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  final ProductDetailsController productDetailsController =
-      Get.put(ProductDetailsController());
-  final AddToCartController addToCartController =
-      Get.put(AddToCartController());
-  final AllProductController allProductController =
-      Get.put(AllProductController());
+  final ProductDetailsController productDetailsController = Get.put(ProductDetailsController());
+  final AddToCartController addToCartController = Get.put(AddToCartController());
+  final AllProductController allProductController = Get.put(AllProductController());
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-// \0
       productDetailsController.productDetails(widget.productId);
     });
   }
@@ -53,116 +45,96 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           padding: EdgeInsets.all(16.0.h),
           child: SingleChildScrollView(
             child: Obx(() {
-              if (productDetailsController.inProgress == true) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+              if (productDetailsController.inProgress) {
+                return const Center(child: CircularProgressIndicator());
               } else {
                 final data = productDetailsController.productDetailsData;
-                final double updatePrice = double.parse(data!.price.toString());
-                final double discountValue = updatePrice *
-                    ((100 - int.parse(data.discount!.toString())) / 100);
+                final double updatePrice = double.parse(data?.price?.toString() ?? '0');
+                final double discountValue = updatePrice * ((100 - (int.parse(data?.discount?.toString() ?? '0'))) / 100);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CustomAppBar(name: 'Product Details'),
+                    CustomAppBar(name: 'product_details.app_bar_title'.tr), // Localized "Product Details"
                     heightBox12,
                     HomeCarouselSlider(
-                      images:
-                          productDetailsController.productDetailsData?.images ??
-                              [],
+                      images: productDetailsController.productDetailsData?.images ?? [],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          data.name ?? 'No Name',
-                          style: GoogleFonts.poppins(
-                            fontSize: 20.sp,
-                          ),
+                          data?.name ?? 'info.no_data_message'.tr, // Localized "No data available"
+                          style: GoogleFonts.poppins(fontSize: 20.sp),
                         ),
                         Text(
                           '\$${discountValue.toStringAsFixed(2)}',
-                          style: GoogleFonts.poppins(
-                              fontSize: 16.h, fontWeight: FontWeight.w500),
+                          style: GoogleFonts.poppins(fontSize: 16.h, fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
                     heightBox8,
                     Text(
-                      'Product Details',
-                      style: GoogleFonts.poppins(
-                          fontSize: 14.sp, fontWeight: FontWeight.w400),
+                      'product_details.section_title'.tr, // Localized "Product Details"
+                      style: GoogleFonts.poppins(fontSize: 14.sp, fontWeight: FontWeight.w400),
                     ),
                     heightBox4,
-                    Html(data: data.details ?? ''),
-                    SizedBox(height: 8.h),
+                    Html(data: data?.details ?? ''),
                     heightBox4,
-                    SizedBox(height: 8.h),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            data.author?.shop?.logo != null
+                            data?.author?.shop?.logo != null
                                 ? CircleAvatar(
                                     radius: 18.r,
-                                    backgroundImage:
-                                        NetworkImage(data!.author!.shop!.logo!),
+                                    backgroundImage: NetworkImage(data!.author!.shop!.logo!),
                                   )
                                 : CircleAvatar(
                                     backgroundColor: AppColors.themeColor,
                                     radius: 18.r,
                                     child: Text(
-                                      data.author?.shop?.name?.isNotEmpty ==
-                                              true
-                                          ? data.author!.shop!.name!
-                                              .substring(0, 1)
+                                      data?.author?.shop?.name?.isNotEmpty == true
+                                          ? data!.author!.shop!.name!.substring(0, 1)
                                           : '',
-                                      style: GoogleFonts.poppins(
-                                          color: Colors.white, fontSize: 18.sp),
+                                      style: GoogleFonts.poppins(color: Colors.white, fontSize: 18.sp),
                                     ),
                                   ),
                             widthBox4,
                             Text(
-                              data.author?.shop?.name ?? 'Unknown Shop',
-                              style: GoogleFonts.poppins(
-                                  fontSize: 18.sp, fontWeight: FontWeight.w500),
+                              data?.author?.shop?.name ?? 'seller_about.store_name_label'.tr, // Localized "Store Name: "
+                              style: GoogleFonts.poppins(fontSize: 18.sp, fontWeight: FontWeight.w500),
                             ),
                           ],
                         ),
                         heightBox8,
                         InkWell(
                           onTap: () {
-                            if (data.author != null &&
-                                data.author!.shop != null) {
-                              Get.to(SellerProfileScreen(
-                                sellerData: {
-                                  'sellerId': data.author!.id ?? '',
-                                  'shopName':
-                                      data.author!.shop!.name ?? 'Unknown Shop',
-                                  'shopLogo': data.author!.shop!.logo,
-                                  'shopId': data.author!.shop!.id ?? '',
-                                  'sellerName':
-                                      data.author!.name ?? 'Unknown Seller',
-                                  'location': data.author!.shop?.address ??
-                                      'Unknown Location',
-                                  'phone': data.author!.phoneNumber ?? 'N/A',
-                                  'description':
-                                      data.author!.shop!.description ??
-                                          'No Description',
-                                },
-                              ));
+                            if (data?.author != null && data?.author!.shop != null) {
+                              Get.to(() => SellerProfileScreen(
+                                    sellerData: {
+                                      'sellerId': data?.author!.id ?? '',
+                                      'shopName': data?.author!.shop!.name ?? 'seller_about.store_name_label'.tr,
+                                      'shopLogo': data?.author!.shop!.logo,
+                                      'shopId': data?.author!.shop!.id ?? '',
+                                      'sellerName': data?.author!.name ?? 'info.no_data_message'.tr,
+                                      'location': data?.author!.shop?.address ?? 'info.no_data_message'.tr,
+                                      'phone': data?.author!.phoneNumber ?? 'info.no_data_message'.tr,
+                                      'description': data?.author!.shop!.description ?? 'info.no_data_message'.tr,
+                                    },
+                                  ));
                             } else {
-// \0
                               showSnackBarMessage(
-                                  context, 'Seller data not available', false);
+                                context,
+                                'product_details.error_messages.seller_data_not_available'.tr, // Localized "Seller data not available"
+                                true,
+                              );
                             }
                           },
                           child: Container(
                             height: 32.h,
-                            width: 130,
+                            width: 150,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
                               color: const Color(0xff308960),
@@ -170,22 +142,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                const Icon(Icons.shopping_bag_outlined,
-                                    color: Colors.white),
+                                const Icon(Icons.shopping_bag_outlined, color: Colors.white),
                                 Text(
-                                  'Visit Store',
-                                  style:
-                                      GoogleFonts.poppins(color: Colors.white),
+                                  'product_details.visit_store_button'.tr, // Localized "Visit Store"
+                                  style: GoogleFonts.poppins(color: Colors.white),
                                 ),
-                                const Icon(Icons.arrow_forward_ios,
-                                    color: Colors.white),
+                                const Icon(Icons.arrow_forward_ios, color: Colors.white,size: 14,),
                               ],
                             ),
                           ),
                         ),
                       ],
                     ),
-                    heightBox12,
                     heightBox12,
                     Container(
                       height: 70.h,
@@ -204,27 +172,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               height: 40.h,
                               child: GestureDetector(
                                 onTap: () {
-                                  if (data.id != null) {
-                                    addToCArtFunction(
-                                        data.id!, data.stock.toString());
+                                  if (data?.id != null && data?.stock != null) {
+                                    addToCartFunction(data!.id!, data.stock.toString());
                                   } else {
-// \0
-                                    showSnackBarMessage(context,
-                                        'Product data not available', false);
+                                    showSnackBarMessage(
+                                      context,
+                                      'product_details.error_messages.product_data_not_available'.tr, // Localized "Product data not available"
+                                      true,
+                                    );
                                   }
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: AppColors.iconButtonThemeColor),
+                                    border: Border.all(color: AppColors.iconButtonThemeColor),
                                     borderRadius: BorderRadius.circular(30),
                                   ),
                                   child: Center(
                                     child: Text(
-                                      'Add to cart',
-                                      style: GoogleFonts.poppins(
-                                          color:
-                                              AppColors.iconButtonThemeColor),
+                                      'product_details.add_to_cart_button'.tr, // Localized "Add to cart"
+                                      style: GoogleFonts.poppins(color: AppColors.iconButtonThemeColor),
                                     ),
                                   ),
                                 ),
@@ -238,10 +204,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               height: 42.h,
                               child: CustomElevatedButton(
                                 onPressed: () {
-                                  Get.to(
-                                      CheckOutScreen(productDetailsData: data));
+                                  if (data != null) {
+                                    Get.to(() => CheckOutScreen(productDetailsData: data));
+                                  } else {
+                                    showSnackBarMessage(
+                                      context,
+                                      'product_details.error_messages.product_data_not_available'.tr, // Localized "Product data not available"
+                                      true,
+                                    );
+                                  }
                                 },
-                                text: 'Buy now',
+                                text: 'product_details.buy_now_button'.tr, // Localized "Buy now"
                               ),
                             ),
                           ),
@@ -258,20 +231,22 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Future<void> addToCArtFunction(String productId, String quantity) async {
-    final bool isSuccess =
-        await addToCartController.addToCart(productId, quantity);
+  Future<void> addToCartFunction(String productId, String quantity) async {
+    final bool isSuccess = await addToCartController.addToCart(productId, quantity);
     if (isSuccess) {
       if (mounted) {
         showSnackBarMessage(
           context,
-          'Successfully added to cart',
+          'product_details.success_messages.added_to_cart'.tr, // Localized "Successfully added to cart"
         );
       }
     } else {
       if (mounted) {
-        showSnackBarMessage(context,
-            addToCartController.errorMessage ?? 'Failed to add to cart', false);
+        showSnackBarMessage(
+          context,
+          addToCartController.errorMessage ?? 'product_details.error_messages.failed_to_add_to_cart'.tr, // Localized "Failed to add to cart"
+          true,
+        );
       }
     }
   }

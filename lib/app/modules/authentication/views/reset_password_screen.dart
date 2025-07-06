@@ -1,3 +1,4 @@
+
 import 'package:expriy_deals/app/modules/authentication/controllers/reset_password_controller.dart';
 import 'package:expriy_deals/app/modules/authentication/views/sign_in_screen.dart';
 import 'package:expriy_deals/app/modules/authentication/widgets/auth_header_text.dart';
@@ -21,10 +22,9 @@ class ResetPasswordScreen extends StatefulWidget {
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController passwordCtrl = TextEditingController();
-  TextEditingController confirmPasswordCtrl = TextEditingController();
-  final ResetPasswordController resetPasswordController =
-      Get.put(ResetPasswordController());
+  final TextEditingController passwordCtrl = TextEditingController();
+  final TextEditingController confirmPasswordCtrl = TextEditingController();
+  final ResetPasswordController resetPasswordController = Get.put(ResetPasswordController());
 
   bool _obscureText = true;
 
@@ -38,13 +38,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               heightBox20,
-              CustomAppBar(
-                name: 'Reset Password',
-              ),
+              CustomAppBar(name: 'reset_password.app_bar_title'.tr), // Localized "Reset Password"
               heightBox16,
               AuthHeaderText(
-                title: 'Let’s secure your space.',
-                subtitle: 'Create a new password to secure your account.',
+                title: 'reset_password.header_title'.tr, // Localized "Let’s secure your space."
+                subtitle: 'reset_password.header_subtitle'.tr, // Localized subtitle
                 titleFontSize: 15,
                 subtitleFontSize: 12,
                 sizeBoxHeight: 300,
@@ -55,18 +53,21 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Enter New Password',
-                        style: GoogleFonts.poppins(
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xff626262))),
+                    Text(
+                      'reset_password.new_password_label'.tr, // Localized "Enter New Password"
+                      style: GoogleFonts.poppins(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xff626262),
+                      ),
+                    ),
                     heightBox8,
                     TextFormField(
                       controller: passwordCtrl,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (String? value) {
-                        if (value!.isEmpty) {
-                          return 'Enter password';
+                        if (value == null || value.isEmpty) {
+                          return 'reset_password.empty_password_error'.tr; // Localized "Enter password"
                         }
                         return null;
                       },
@@ -74,9 +75,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       decoration: InputDecoration(
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscureText
-                                ? Icons.visibility_off
-                                : Icons.visibility,
+                            _obscureText ? Icons.visibility_off : Icons.visibility,
                             color: Colors.grey,
                           ),
                           onPressed: () {
@@ -85,23 +84,29 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             });
                           },
                         ),
-                        hintText: '***********',
-                        hintStyle: TextStyle(color: Colors.grey),
+                        hintText: 'reset_password.password_hint'.tr, // Localized "***********"
+                        hintStyle: GoogleFonts.poppins(color: Colors.grey),
                       ),
                     ),
                     heightBox12,
-                    Text('Confirm Password',
-                        style: GoogleFonts.poppins(
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xff626262))),
+                    Text(
+                      'reset_password.confirm_password_label'.tr, // Localized "Confirm Password"
+                      style: GoogleFonts.poppins(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xff626262),
+                      ),
+                    ),
                     heightBox8,
                     TextFormField(
                       controller: confirmPasswordCtrl,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (String? value) {
-                        if (value!.isEmpty) {
-                          return 'Enter password';
+                        if (value == null || value.isEmpty) {
+                          return 'reset_password.empty_password_error'.tr; // Localized "Enter password"
+                        }
+                        if (value != passwordCtrl.text) {
+                          return 'reset_password.password_mismatch_error'.tr; // Localized "Passwords do not match"
                         }
                         return null;
                       },
@@ -109,9 +114,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       decoration: InputDecoration(
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscureText
-                                ? Icons.visibility_off
-                                : Icons.visibility,
+                            _obscureText ? Icons.visibility_off : Icons.visibility,
                             color: Colors.grey,
                           ),
                           onPressed: () {
@@ -120,8 +123,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             });
                           },
                         ),
-                        hintText: '***********',
-                        hintStyle: TextStyle(color: Colors.grey),
+                        hintText: 'reset_password.password_hint'.tr, // Localized "***********"
+                        hintStyle: GoogleFonts.poppins(color: Colors.grey),
                       ),
                     ),
                     heightBox24,
@@ -131,15 +134,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           alignment: Alignment.center,
                           children: [
                             CustomElevatedButton(
-                              onPressed: controller.inProgress
-                                  ? () {}
-                                  : () => onTapToNextButton(),
-                              text: controller.inProgress
-                                  ? ''
-                                  : 'Update Password',
+                              onPressed: controller.inProgress ? () {} : () => onTapToNextButton(),
+                              text: controller.inProgress ? '' : 'reset_password.update_button'.tr, // Localized "Update Password"
                             ),
                             if (controller.inProgress)
-                              SizedBox(
+                              const SizedBox(
                                 width: 24,
                                 height: 24,
                                 child: CircularProgressIndicator(
@@ -164,34 +163,24 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   Future<void> onTapToNextButton() async {
     if (_formKey.currentState!.validate()) {
       final bool isSuccess = await resetPasswordController.resetPassword(
-          passwordCtrl.text,
-          confirmPasswordCtrl.text,
-          StorageUtil.getData(StorageUtil.userAccessToken));
+        passwordCtrl.text,
+        confirmPasswordCtrl.text,
+        StorageUtil.getData(StorageUtil.userAccessToken) ?? '',
+      );
 
-      if (isSuccess) {
-        if (mounted) {
-          showSnackBarMessage(context, 'Reset password successfully done');
-          Get.to(SignInScreen());
-        } else {
-          if (mounted) {
-            showSnackBarMessage(
-                context, resetPasswordController.errorMessage!, true);
-          }
-        }
+      if (isSuccess && mounted) {
+        showSnackBarMessage(context, 'reset_password.success_message'.tr); // Localized "Reset password successfully done"
+        Get.to(() => const SignInScreen());
+      } else if (mounted) {
+        showSnackBarMessage(context, resetPasswordController.errorMessage ?? 'reset_password.error_message'.tr, true); // Localized fallback error
       }
     }
   }
 
-  void clearTextField() {
-    passwordCtrl.clear();
-    confirmPasswordCtrl.clear();
-  }
-
   @override
   void dispose() {
-    super.dispose();
-
     passwordCtrl.dispose();
     confirmPasswordCtrl.dispose();
+    super.dispose();
   }
 }

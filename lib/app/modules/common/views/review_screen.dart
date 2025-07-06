@@ -5,16 +5,11 @@ import 'package:expriy_deals/app/utils/assets_path.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:get/get.dart';
 
-class ReviewScreen extends StatefulWidget {
+class ReviewScreen extends StatelessWidget {
   const ReviewScreen({super.key});
-
-  @override
-  State<ReviewScreen> createState() => _ReviewScreenState();
-}
-
-class _ReviewScreenState extends State<ReviewScreen> {
-  bool isChecked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -27,26 +22,28 @@ class _ReviewScreenState extends State<ReviewScreen> {
           children: [
             heightBox20,
             Image(
-              image: AssetImage(AssetsPath.review),
+              image: const AssetImage(AssetsPath.review),
+              fit: BoxFit.contain,
             ),
             heightBox12,
             Text(
-              'Your application is under review',
-              style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.iconButtonThemeColor),
-            )
-            ,
+              'review.title'.tr, // Localized "Your application is under review"
+              style: GoogleFonts.poppins(
+                fontSize: 22.sp,
+                fontWeight: FontWeight.w700,
+                color: AppColors.iconButtonThemeColor,
+              ),
+              textAlign: TextAlign.center,
+            ),
             heightBox10,
-             Text(
-              'We will notify you as soon as youraccount has been approved',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
-                  textAlign: TextAlign.center,
-            )
+            Text(
+              'review.subtitle'.tr, // Localized "We will notify you as soon as your account has been approved"
+              style: GoogleFonts.poppins(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w400,
+              ),
+              textAlign: TextAlign.center,
+            ),
           ],
         ),
       ),

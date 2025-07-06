@@ -2,8 +2,10 @@ import 'package:expriy_deals/app/modules/common/controllers/translator_controlle
 import 'package:expriy_deals/app/modules/common/controllers/translator_services.dart';
 import 'package:expriy_deals/app/modules/common/views/main_bottom_nav_bar.dart';
 import 'package:expriy_deals/app/modules/onboarding/views/onboarding_screen.dart';
+import 'package:expriy_deals/app/utils/get_storage.dart';
 import 'package:expriy_deals/app_binding.dart';
 import 'package:expriy_deals/get_storage.dart';
+import 'package:expriy_deals/translator.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,6 +26,8 @@ class ExpriyDeals extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String langCode = box.read('language_code') ?? 'es';
+    String countryCode = box.read('country_code') ?? 'ES';
     return FutureBuilder(
       future: translations.loadTranslations(),
       builder: (context, snapshot) {
@@ -37,9 +41,9 @@ class ExpriyDeals extends StatelessWidget {
                 initialBinding: ControllerBinder(),
                 debugShowCheckedModeBanner: false,
                 title: 'expriy-deals',
-                translations: translations,
-                locale: Get.put(TranslationController()).locale.value,
-                fallbackLocale: const Locale('en', 'US'),
+                translations: AppTranslations(),
+                locale: Locale(langCode, countryCode), // Default: Spanish
+                fallbackLocale: Locale('es', 'ES'),
                 theme: ThemeData(
                   scaffoldBackgroundColor: Colors.white,
                   primaryColor: Color(0xffA57EA5).withOpacity(0.1),

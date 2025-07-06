@@ -1,3 +1,4 @@
+
 import 'dart:async';
 import 'package:expriy_deals/app/modules/authentication/controllers/otp_verify_controller.dart';
 import 'package:expriy_deals/app/modules/authentication/views/sign_in_screen.dart';
@@ -22,22 +23,21 @@ class OTPVerifyScreen extends StatefulWidget {
 
 class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController otpCtrl = TextEditingController();
-  final OtpVerifyController otpVerifyController =
-      Get.put(OtpVerifyController());
+  final TextEditingController otpCtrl = TextEditingController();
+  final OtpVerifyController otpVerifyController = Get.put(OtpVerifyController());
 
   RxInt remainingTime = 60.obs;
   late Timer timer;
-  RxBool enableResendCodeButtom = false.obs;
+  RxBool enableResendCodeButton = false.obs;
 
   @override
   void initState() {
-    resendOTP();
     super.initState();
+    resendOTP();
   }
 
   void resendOTP() {
-    enableResendCodeButtom.value = false;
+    enableResendCodeButton.value = false;
     remainingTime.value = 60;
     timer = Timer.periodic(
       const Duration(seconds: 1),
@@ -45,7 +45,7 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
         remainingTime.value--;
         if (remainingTime.value == 0) {
           t.cancel();
-          enableResendCodeButtom.value = true;
+          enableResendCodeButton.value = true;
         }
       },
     );
@@ -61,13 +61,11 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               heightBox20,
-              CustomAppBar(
-                name: 'OTP Verification',
-              ),
+              CustomAppBar(name: 'otp_verify.app_bar_title'.tr), // Localized "OTP Verification"
               heightBox16,
               AuthHeaderText(
-                title: 'Enter OTP',
-                subtitle: 'We have just sentb you 6 digitcode via uour email.',
+                title: 'otp_verify.header_title'.tr, // Localized "Enter OTP"
+                subtitle: 'otp_verify.header_subtitle'.tr, // Localized subtitle
                 titleFontSize: 20,
                 subtitleFontSize: 12,
                 sizeBoxHeight: 200,
@@ -84,21 +82,26 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
                       controller: otpCtrl,
                       keyboardType: TextInputType.number,
                       animationType: AnimationType.fade,
-                      animationDuration: Duration(milliseconds: 300),
-                      onChanged: (value) {},
+                      animationDuration: const Duration(milliseconds: 300),
+                      validator: (value) {
+                        if (value == null || value.length < 6) {
+                          return 'otp_verify.invalid_otp_error'.tr; // Localized "Enter a valid 6-digit OTP"
+                        }
+                        return null;
+                      },
                       pinTheme: PinTheme(
-                          selectedColor: Colors.black,
-                          activeColor: Colors.orange,
-                          borderWidth: 0.5,
-                          shape: PinCodeFieldShape.circle,
-                          borderRadius: BorderRadius.circular(100.r),
-                          inactiveColor: const Color(0xffD9A48E),
-                          fieldHeight: 50.h,
-                          fieldWidth: 50.h,
-                          activeFillColor: Colors.white,
-                          // ignore: deprecated_member_use
-                          inactiveFillColor: Color(0xffD9A48E).withOpacity(0.1),
-                          selectedFillColor: Colors.white),
+                        selectedColor: Colors.black,
+                        activeColor: Colors.orange,
+                        borderWidth: 0.5,
+                        shape: PinCodeFieldShape.circle,
+                        borderRadius: BorderRadius.circular(100.r),
+                        inactiveColor: const Color(0xffD9A48E),
+                        fieldHeight: 50.h,
+                        fieldWidth: 50.h,
+                        activeFillColor: Colors.white,
+                        inactiveFillColor: const Color(0xffD9A48E).withOpacity(0.1),
+                        selectedFillColor: Colors.white,
+                      ),
                       backgroundColor: Colors.transparent,
                       enableActiveFill: true,
                       appContext: context,
@@ -110,13 +113,11 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
                           alignment: Alignment.center,
                           children: [
                             CustomElevatedButton(
-                              onPressed: controller.inProgress
-                                  ? () {}
-                                  : () => onTapToNextButton(),
-                              text: controller.inProgress ? '' : 'Confirm',
+                              onPressed: controller.inProgress ? () {} : () => onTapToNextButton(),
+                              text: controller.inProgress ? '' : 'otp_verify.confirm_button'.tr, // Localized "Confirm"
                             ),
                             if (controller.inProgress)
-                              SizedBox(
+                              const SizedBox(
                                 width: 24,
                                 height: 24,
                                 child: CircularProgressIndicator(
@@ -131,22 +132,20 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
                     heightBox12,
                     Obx(
                       () => Visibility(
-                        visible: !enableResendCodeButtom.value,
+                        visible: !enableResendCodeButton.value,
                         replacement: GestureDetector(
-                          onTap: () {
-                            resendOTP();
-                          },
+                          onTap: resendOTP,
                           child: RichText(
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                    text: 'Didn’t receive code? ',
-                                    style: GoogleFonts.poppins(
-                                        color: Colors.black, fontSize: 16.sp)),
+                                  text: 'otp_verify.did_not_receive'.tr, // Localized "Didn’t receive code? "
+                                  style: GoogleFonts.poppins(color: Colors.black, fontSize: 16.sp),
+                                ),
                                 TextSpan(
-                                    text: 'Resend code',
-                                    style: GoogleFonts.poppins(
-                                        color: Colors.orange, fontSize: 16.sp)),
+                                  text: 'otp_verify.resend_code'.tr, // Localized "Resend code"
+                                  style: GoogleFonts.poppins(color: Colors.orange, fontSize: 16.sp),
+                                ),
                               ],
                             ),
                           ),
@@ -155,17 +154,17 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                  text: 'Resend code',
-                                  style: GoogleFonts.poppins(
-                                      color: Colors.black, fontSize: 16.sp)),
+                                text: 'otp_verify.resend_code'.tr, // Localized "Resend code"
+                                style: GoogleFonts.poppins(color: Colors.black, fontSize: 16.sp),
+                              ),
                               TextSpan(
-                                  text: ' $remainingTime',
-                                  style: GoogleFonts.poppins(
-                                      color: Colors.orange, fontSize: 16.sp)),
+                                text: ' $remainingTime',
+                                style: GoogleFonts.poppins(color: Colors.orange, fontSize: 16.sp),
+                              ),
                               TextSpan(
-                                  text: 's',
-                                  style: GoogleFonts.poppins(
-                                      color: Colors.black, fontSize: 16.sp)),
+                                text: 'otp_verify.seconds'.tr, // Localized "s"
+                                style: GoogleFonts.poppins(color: Colors.black, fontSize: 16.sp),
+                              ),
                             ],
                           ),
                         ),
@@ -184,34 +183,20 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
 
   Future<void> onTapToNextButton() async {
     if (_formKey.currentState!.validate()) {
-      final bool isSuccess =
-          await otpVerifyController.otyVerify(otpCtrl.text, widget.token);
-      print(
-          'My token ---------------------------------------\n-------\n------');
-// \0
-
-      if (isSuccess) {
-        if (mounted) {
-          showSnackBarMessage(context, 'Otp verification successfully done');
-          Get.to(SignInScreen());
-        } else {
-          if (mounted) {
-            showSnackBarMessage(
-                context, otpVerifyController.errorMessage!, true);
-          }
-        }
+      final bool isSuccess = await otpVerifyController.otyVerify(otpCtrl.text, widget.token);
+      if (isSuccess && mounted) {
+        showSnackBarMessage(context, 'otp_verify.success_message'.tr); // Localized "Otp verification successfully done"
+        Get.to(() => const SignInScreen());
+      } else if (mounted) {
+        showSnackBarMessage(context, otpVerifyController.errorMessage ?? 'otp_verify.error_message'.tr, true); // Localized fallback error
       }
     }
   }
 
-  void clearTextField() {
-    otpCtrl.clear();
-  }
-
   @override
   void dispose() {
-    super.dispose();
-
     otpCtrl.dispose();
+    timer.cancel();
+    super.dispose();
   }
 }

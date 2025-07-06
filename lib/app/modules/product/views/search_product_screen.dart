@@ -19,8 +19,8 @@ class SearchProductScreen extends StatefulWidget {
 class _SearchProductScreenState extends State<SearchProductScreen> {
   final AllProductController allProductController = Get.find<AllProductController>();
   final AllCategoryController allCategoryController = Get.find<AllCategoryController>();
-  bool _showCategories = false; // State variable to toggle category visibility
-  String? _selectedCategoryId; // Track selected category ID
+  bool _showCategories = false;
+  String? _selectedCategoryId;
   final TextEditingController searchCtrl = TextEditingController();
   String searchQuery = '';
   Timer? _debounce;
@@ -30,7 +30,6 @@ class _SearchProductScreenState extends State<SearchProductScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       allCategoryController.getCategory();
-      // Fetch all products initially
       allProductController.getProduct(categoryId: null);
     });
   }
@@ -42,7 +41,6 @@ class _SearchProductScreenState extends State<SearchProductScreen> {
     super.dispose();
   }
 
-  // Debounce search input to improve performance
   void _onSearchChanged(String value) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 300), () {
@@ -52,12 +50,10 @@ class _SearchProductScreenState extends State<SearchProductScreen> {
     });
   }
 
-  // Filter products based on search query (only return matching products)
   List<dynamic> _getFilteredProducts(List<dynamic> products) {
     if (searchQuery.isEmpty) {
       return products;
     }
-
     return products.where((product) {
       final title = product.name?.toLowerCase() ?? '';
       return title.contains(searchQuery.toLowerCase());
@@ -73,7 +69,7 @@ class _SearchProductScreenState extends State<SearchProductScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             heightBox24,
-            CustomAppBar(name: 'Search products'),
+            CustomAppBar(name: 'search_products.app_bar_title'.tr), // Localized "Search products"
             heightBox12,
             Row(
               children: [
@@ -82,9 +78,7 @@ class _SearchProductScreenState extends State<SearchProductScreen> {
                     height: 48.h,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(24),
-                      border: Border.all(
-                        color: Colors.grey[300]!,
-                      ),
+                      border: Border.all(color: Colors.grey[300]!),
                     ),
                     child: Row(
                       children: [
@@ -100,8 +94,8 @@ class _SearchProductScreenState extends State<SearchProductScreen> {
                           child: TextFormField(
                             controller: searchCtrl,
                             onChanged: _onSearchChanged,
-                            decoration: const InputDecoration(
-                              hintText: 'Search products',
+                            decoration: InputDecoration(
+                              hintText: 'search_products.search_hint'.tr, // Localized "Search products"
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
@@ -140,34 +134,33 @@ class _SearchProductScreenState extends State<SearchProductScreen> {
                     setState(() {
                       _showCategories = value ?? false;
                       if (!_showCategories) {
-                        _selectedCategoryId = null; // Reset selected category
-                        allProductController.getProduct(categoryId: null); // Fetch all products
+                        _selectedCategoryId = null;
+                        allProductController.getProduct(categoryId: null);
                       }
                     });
                   },
                 ),
                 Text(
-                  'Filter',
+                  'search_products.filter_label'.tr, // Localized "Filter"
                   style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
                 ),
               ],
             ),
             heightBox12,
-            // Conditionally show category section based on _showCategories
             if (_showCategories) ...[
               Text(
-                'Category',
+                'search_products.category_label'.tr, // Localized "Category"
                 style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
               ),
               heightBox8,
               SizedBox(
                 height: 30.h,
                 child: Obx(() {
-                  if (allCategoryController.inProgress == true) {
+                  if (allCategoryController.inProgress) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (allCategoryController.categoryData == null ||
                       allCategoryController.categoryData!.isEmpty) {
-                    return const Center(child: Text('No categories found'));
+                    return Center(child: Text('search_products.no_categories'.tr)); // Localized "No categories found"
                   } else {
                     return ListView.builder(
                       scrollDirection: Axis.horizontal,
@@ -180,7 +173,7 @@ class _SearchProductScreenState extends State<SearchProductScreen> {
                           child: GestureDetector(
                             onTap: () {
                               setState(() {
-                                _selectedCategoryId = category.id; // Update selected category
+                                _selectedCategoryId = category.id;
                               });
                               allProductController.getProduct(categoryId: category.id);
                             },
@@ -189,9 +182,7 @@ class _SearchProductScreenState extends State<SearchProductScreen> {
                               width: 150.w,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(24),
-                                color: isSelected
-                                    ? Colors.blue
-                                    : AppColors.iconButtonThemeColor,
+                                color: isSelected ? Colors.blue : AppColors.iconButtonThemeColor,
                                 boxShadow: [
                                   if (isSelected)
                                     BoxShadow(
@@ -206,7 +197,7 @@ class _SearchProductScreenState extends State<SearchProductScreen> {
                                 padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
                                 child: Center(
                                   child: Text(
-                                    category.name ?? 'Category',
+                                    category.name ?? 'info.no_data_message'.tr, // Localized "No data available"
                                     style: TextStyle(
                                       fontSize: 12.sp,
                                       color: Colors.white,
@@ -216,8 +207,9 @@ class _SearchProductScreenState extends State<SearchProductScreen> {
                                   ),
                                 ),
                               ),
+                            ),
                           ),
-                        ));
+                        );
                       },
                     );
                   }
@@ -227,15 +219,15 @@ class _SearchProductScreenState extends State<SearchProductScreen> {
             ],
             Expanded(
               child: Obx(() {
-                if (allProductController.inProgress == true) {
+                if (allProductController.inProgress) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (allProductController.productData == null ||
                     allProductController.productData!.isEmpty) {
-                  return const Center(child: Text('No products found'));
+                  return Center(child: Text('search_products.no_products'.tr)); // Localized "No products found"
                 }
                 final filteredProducts = _getFilteredProducts(allProductController.productData!);
                 if (filteredProducts.isEmpty && searchQuery.isNotEmpty) {
-                  return Center(child: Text('No matching products found'));
+                  return Center(child: Text('search_products.no_matching_products'.tr)); // Localized "No matching products found"
                 }
                 return GridView.builder(
                   padding: EdgeInsets.zero,
@@ -253,7 +245,7 @@ class _SearchProductScreenState extends State<SearchProductScreen> {
                       child: ProductCard(
                         isShowDiscount: true,
                         image: product.images.isNotEmpty ? product.images[0].url ?? '' : '',
-                        title: product.name ?? 'Product',
+                        title: product.name ?? 'info.no_data_message'.tr, // Localized "No data available"
                         price: product.price?.toString() ?? '0',
                         productId: product.id ?? '',
                       ),

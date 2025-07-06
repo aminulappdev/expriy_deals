@@ -1,5 +1,4 @@
 // ignore_for_file: avoid_print
-
 import 'package:expriy_deals/app/modules/order/controllers/order_controller.dart';
 import 'package:expriy_deals/app/modules/order/widgets/price_row.dart';
 import 'package:expriy_deals/app/modules/payment/controllers/payment_services.dart';
@@ -25,9 +24,8 @@ class CheckOutScreen extends StatefulWidget {
 }
 
 class _CheckOutScreenState extends State<CheckOutScreen> {
-  final ProductOrderController productOrderController =
-      Get.find<ProductOrderController>();
-  ProfileController profileController = Get.find<ProfileController>();
+  final ProductOrderController productOrderController = Get.find<ProductOrderController>();
+  final ProfileController profileController = Get.find<ProfileController>();
   final PaymentService paymentService = PaymentService();
 
   int selectedButtonIndex = 0;
@@ -37,10 +35,10 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
   late String myUserId;
 
-  dynamic price = 0.0; // Price after discount per product
-  dynamic totalPrice = 0.0;
-  dynamic mainTotalPrice = 0.0;
-  dynamic discount = 0;
+  double price = 0.0;
+  double totalPrice = 0.0;
+  double mainTotalPrice = 0.0;
+  int discount = 0;
   int item = 1;
 
   @override
@@ -49,23 +47,20 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     profileController.getProfileData();
     myUserId = profileController.profileData?.id ?? '';
 
-    // Calculate discounted price per product
     discount = widget.productDetailsData.discount ?? 0;
-    dynamic originalPrice = widget.productDetailsData.price ?? 0.0;
-    price = originalPrice * ((100 - discount) / 100); // Apply discount to price
+    double originalPrice = widget.productDetailsData.price?.toDouble() ?? 0.0;
+    price = originalPrice * ((100 - discount) / 100);
     price = double.parse(price.toStringAsFixed(2));
     _calculateTotalPrice();
-// \0
   }
 
   void _calculateTotalPrice() {
-    totalPrice = price * quantity; // Total price is discounted price * quantity
+    totalPrice = price * quantity;
     mainTotalPrice = double.parse(totalPrice.toStringAsFixed(2));
   }
 
   @override
   Widget build(BuildContext context) {
-// \0
     return Scaffold(
       body: GetBuilder<ProfileController>(builder: (controller) {
         return SingleChildScrollView(
@@ -75,44 +70,34 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 heightBox20,
-                CustomAppBar(name: 'Checkout'),
+                CustomAppBar(name: 'checkout.app_bar_title'.tr), // Localized "Checkout"
                 heightBox12,
                 CheckoutUserInfo(
-                  city: controller.profileData?.city ?? 'city',
-                  zipcode: controller.profileData?.zipCode ?? 'zipcode',
-                  country: controller.profileData?.country ?? 'country',
-                  name: controller.profileData?.name ?? 'name',
-                  number:
-                      controller.profileData?.document ?? '+49 176 12345678',
+                  city: controller.profileData?.city ?? 'info.no_data_message'.tr, // Localized "No data available"
+                  zipcode: controller.profileData?.zipCode ?? 'info.no_data_message'.tr,
+                  country: controller.profileData?.country ?? 'info.no_data_message'.tr,
+                  name: controller.profileData?.name ?? 'info.no_data_message'.tr,
+                  number: controller.profileData?.document ?? '+49 176 12345678',
                   status: '',
-                  address: controller.profileData?.address ?? 'address',
+                  address: controller.profileData?.address ?? 'info.no_data_message'.tr,
                   editOntap: () {},
                   addressArrowOntap: () {},
                 ),
                 heightBox8,
-                heightBox8,
                 priceCalculator(context),
                 heightBox12,
                 Text(
-                  'Price Details',
-                  style: GoogleFonts.poppins(
-                      fontSize: 15.sp, fontWeight: FontWeight.w500),
+                  'checkout.price_details_title'.tr, // Localized "Price Details"
+                  style: GoogleFonts.poppins(fontSize: 15.sp, fontWeight: FontWeight.w500),
                 ),
                 heightBox12,
                 PriceRow(
-                  name: 'Price ($item item)',
+                  name: 'checkout.price_label'.tr.replaceFirst('{item}', item.toString()), // Localized "Price ({item} item)"
                   price: price.toStringAsFixed(2),
                   nameSize: 14,
                   priceSize: 14,
                 ),
                 heightBox8,
-                // PriceRow(
-                //   name: 'Discount',
-                //   price: '$discount%',
-                //   nameSize: 14,
-                //   priceSize: 14,
-                // ),
-                heightBox4,
                 Container(
                   height: 1.5.h,
                   width: MediaQuery.of(context).size.width,
@@ -120,7 +105,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                 ),
                 heightBox12,
                 PriceRow(
-                  name: 'Total Payment:',
+                  name: 'checkout.total_payment_label'.tr, // Localized "Total Payment:"
                   price: mainTotalPrice.toStringAsFixed(2),
                   nameSize: 16,
                   priceSize: 16,
@@ -139,57 +124,48 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 12.w),
                         child: SizedBox(
-                            width: 159.w,
-                            height: 42.h,
-                            child: GetBuilder<ProductOrderController>(
-                              builder: (orderController) {
-                                bool isLoading = orderController.inProgress;
-
-                                return Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    IgnorePointer(
-                                      ignoring: isLoading,
-                                      child: CustomElevatedButton(
-                                        onPressed: () {
-                                          if (controller.profileData?.address ==
-                                              '') {
-                                            showSnackBarMessage(
-                                              context,
-                                              'Please fill-up your address',
-                                              true,
-                                            );
-                                          } else {
-                                            productOrderFunction(
-                                              controller.profileData?.address ??
-                                                  'address',
-                                              controller.profileData?.city ??
-                                                  'city',
-                                              controller.profileData?.state ??
-                                                  'state',
-                                              controller.profileData?.zipCode ??
-                                                  'zipcode',
-                                              controller.profileData?.country ??
-                                                  'country',
-                                            );
-                                          }
-                                        },
-                                        text: isLoading ? '' : 'Place order',
-                                      ),
+                          width: 159.w,
+                          height: 42.h,
+                          child: GetBuilder<ProductOrderController>(
+                            builder: (orderController) {
+                              bool isLoading = orderController.inProgress;
+                              return Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  IgnorePointer(
+                                    ignoring: isLoading,
+                                    child: CustomElevatedButton(
+                                      onPressed: () {
+                                        if (controller.profileData?.address == null || controller.profileData!.address!.isEmpty) {
+                                          showSnackBarMessage(
+                                            context,
+                                            'checkout.error_messages.empty_address'.tr, // Localized "Please fill-up your address"
+                                            true,
+                                          );
+                                        } else {
+                                          productOrderFunction(
+                                            controller.profileData!.address!,
+                                            controller.profileData?.city ?? 'info.no_data_message'.tr,
+                                            controller.profileData?.state ?? 'info.no_data_message'.tr,
+                                            controller.profileData?.zipCode ?? 'info.no_data_message'.tr,
+                                            controller.profileData?.country ?? 'info.no_data_message'.tr,
+                                          );
+                                        }
+                                      },
+                                      text: isLoading ? '' : 'checkout.place_order_button'.tr, // Localized "Place order"
                                     ),
-                                    if (isLoading)
-                                      const SizedBox(
-                                        width: 20,
-                                        height: 20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                  ],
-                                );
-                              },
-                            )),
+                                  ),
+                                  if (isLoading)
+                                    const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                    ),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -225,12 +201,9 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       image: DecorationImage(
-                        image: widget.productDetailsData.images.isNotEmpty ==
-                                true
-                            ? NetworkImage(
-                                '${widget.productDetailsData.images[0].url}')
-                            : NetworkImage(
-                                'https://defaultimageurl.com/default.png'),
+                        image: widget.productDetailsData.images.isNotEmpty
+                            ? NetworkImage(widget.productDetailsData.images[0].url ?? '')
+                            : const NetworkImage('https://defaultimageurl.com/default.png'),
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -240,7 +213,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Standard delivery',
+                        'checkout.standard_delivery_label'.tr, // Localized "Standard delivery"
                         style: GoogleFonts.poppins(fontSize: 14.sp),
                       ),
                       heightBox14,
@@ -253,15 +226,14 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                   quantity--;
                                   item--;
                                   _calculateTotalPrice();
-                                  print(
-                                      'Minus: Quantity=$quantity, Price=$price, Total=$mainTotalPrice');
+                                  debugPrint('Minus: Quantity=$quantity, Price=$price, Total=$mainTotalPrice');
                                 }
                               });
                             },
                             child: CircleAvatar(
                               radius: 13.r,
                               backgroundColor: Colors.grey,
-                              child: Icon(Icons.remove),
+                              child: const Icon(Icons.remove),
                             ),
                           ),
                           widthBox8,
@@ -273,27 +245,20 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                           GestureDetector(
                             onTap: () {
                               setState(() {
-                                if (widget.productDetailsData.stock != null &&
-                                    quantity <
-                                        widget.productDetailsData.stock!) {
+                                if (widget.productDetailsData.stock != null && quantity < widget.productDetailsData.stock!) {
                                   quantity++;
                                   item++;
                                   _calculateTotalPrice();
-                                  print(
-                                      'Plus: Quantity=$quantity, Price=$price, Total=$mainTotalPrice');
+                                  debugPrint('Plus: Quantity=$quantity, Price=$price, Total=$mainTotalPrice');
                                 } else {
-                                  print(
-                                      'Cannot increase quantity beyond ${widget.productDetailsData.stock}');
+                                  debugPrint('Cannot increase quantity beyond ${widget.productDetailsData.stock}');
                                 }
                               });
                             },
                             child: CircleAvatar(
                               radius: 13.r,
                               backgroundColor: AppColors.iconButtonThemeColor,
-                              child: Icon(
-                                Icons.add,
-                                color: Colors.white,
-                              ),
+                              child: const Icon(Icons.add, color: Colors.white),
                             ),
                           ),
                         ],
@@ -305,8 +270,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
               Align(
                 alignment: Alignment.bottomRight,
                 child: Text(
-                  (price * quantity)
-                      .toStringAsFixed(2), // Display total for items
+                  (price * quantity).toStringAsFixed(2),
                   style: GoogleFonts.poppins(fontSize: 20.sp),
                 ),
               ),
@@ -317,15 +281,9 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     );
   }
 
-  Future<void> productOrderFunction(
-    String address,
-    String city,
-    String state,
-    String zipCode,
-    String country,
-  ) async {
+  Future<void> productOrderFunction(String address, String city, String state, String zipCode, String country) async {
     final bool isSuccess = await productOrderController.orderProduct(
-      widget.productDetailsData.id!,
+      widget.productDetailsData.id ?? '',
       quantity,
       address,
       city,
@@ -335,19 +293,20 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     );
 
     if (isSuccess) {
-// \0
-// \0
       if (mounted) {
         paymentService.payment(
-            context,
-            productOrderController.orderResponseData?.id ?? 'Id null',
-            mainTotalPrice);
+          context,
+          productOrderController.orderResponseData?.id ?? 'info.no_data_message'.tr, // Localized "No data available"
+          mainTotalPrice,
+        );
       }
     } else {
       if (mounted) {
-// \0
         showSnackBarMessage(
-            context, productOrderController.errorMessage!, true);
+          context,
+          productOrderController.errorMessage ?? 'checkout.error_messages.order_failed'.tr, // Localized "Failed to place order"
+          true,
+        );
       }
     }
   }

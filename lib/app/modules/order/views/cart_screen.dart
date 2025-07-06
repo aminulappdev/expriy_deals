@@ -19,10 +19,11 @@ class _CartScreenState extends State<CartScreen> {
   final AllCartController allCartController = Get.find<AllCartController>();
   final DeleteCartController deleteCartController =
       Get.find<DeleteCartController>();
+
   @override
   void initState() {
-    allCartController.getCart();
     super.initState();
+    allCartController.getCart();
   }
 
   @override
@@ -34,54 +35,53 @@ class _CartScreenState extends State<CartScreen> {
         children: [
           heightBox24,
           Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                widthBox12,
-                Text(
-                  'My Cart',
-                  style: TextStyle(
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black),
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              widthBox12,
+              Text(
+                'cart.title'.tr, // Localized "My Cart"
+                style: TextStyle(
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
           heightBox12,
           Obx(() {
-            if (allCartController.inProgress == true) {
+            if (allCartController.inProgress) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            } 
-            else if (allCartController.addToCartData == null ||
-                  allCartController.addToCartData!.isEmpty) {
-                return SizedBox(
-                  height: 500.h,
-                  width: double.infinity,
-                  child: Center(
-                    child: Text(
-                      'shipping_info.app_bar_title'.tr,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black,
-                      ),
+            } else if (allCartController.addToCartData == null ||
+                allCartController.addToCartData!.isEmpty) {
+              return SizedBox(
+                height: 500.h,
+                width: double.infinity,
+                child: Center(
+                  child: Text(
+                    'cart.no_cart'.tr, // Localized "No cart available"
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
                     ),
                   ),
-                );
-              } 
-            
-            else {
+                ),
+              );
+            } else {
               return Expanded(
                 child: ListView.builder(
                   padding: EdgeInsets.zero,
                   itemCount: allCartController.addToCartData!.length,
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 6),
+                      padding: const EdgeInsets.symmetric(vertical: 6),
                       child: CartProductCard(
                         imagePath: allCartController
-                                .addToCartData![index].product?.images[0].url ?? '',
+                                .addToCartData![index].product?.images[0].url ??
+                            '',
                         title: allCartController
                                 .addToCartData![index].product?.name ??
                             '',
@@ -97,18 +97,25 @@ class _CartScreenState extends State<CartScreen> {
                                 .toString() ??
                             '',
                         deleteOntap: () {
-                          deleteContact(allCartController
-                              .addToCartData![index].id
+                          deleteCart(allCartController.addToCartData![index].id
                               .toString());
                         },
                         buyOntap: () {
-                          allCartController.addToCartData?[index].product !=
-                                  null
-                              ? Get.to(CheckOutScreen(
+                          if (allCartController
+                                  .addToCartData?[index].product !=
+                              null) {
+                            Get.to(() => CheckOutScreen(
                                   productDetailsData: allCartController
                                       .addToCartData![index].product!,
-                                ))
-                              : printError(info: 'productDetailsData is null');
+                                ));
+                          } else {
+                            debugPrint('Error: productDetailsData is null');
+                            showSnackBarMessage(
+                                context,
+                                'product_details.error_messages.product_data_not_available'
+                                    .tr, // Localized error message
+                                true);
+                          }
                         },
                       ),
                     );
@@ -116,29 +123,27 @@ class _CartScreenState extends State<CartScreen> {
                 ),
               );
             }
-          })
+          }),
         ],
       ),
     );
   }
 
-  Future<void> deleteContact(String id) async {
+  Future<void> deleteCart(String id) async {
     final bool isSuccess = await deleteCartController.deleteCart(id);
 
     if (isSuccess) {
       if (mounted) {
-        showSnackBarMessage(context, 'Deleted cart');
-        Get.find<AllCartController>().getCart();
-      } else {
-        if (mounted) {
-          showSnackBarMessage(
-              context, deleteCartController.errorMessage!, true);
-        }
+        showSnackBarMessage(context, 'cart.success_message'.tr); // Localized "Cart deleted"
+        allCartController.getCart();
       }
     } else {
       if (mounted) {
-        // print('Error show ----------------------------------');
-        showSnackBarMessage(context, deleteCartController.errorMessage!, true);
+        showSnackBarMessage(
+          context,
+          deleteCartController.errorMessage ?? 'cart.error_message'.tr, // Localized fallback error message
+          true,
+        );
       }
     }
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DeliveryBanner extends StatelessWidget {
@@ -28,7 +29,7 @@ class DeliveryBanner extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Shipped',
+                  'shiped'.tr,
                   style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontSize: 18.sp,
@@ -36,7 +37,7 @@ class DeliveryBanner extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Your order is on the way!',
+                  'banner_message'.tr,
                   style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontSize: 12.sp,

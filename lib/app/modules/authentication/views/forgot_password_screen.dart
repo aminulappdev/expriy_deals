@@ -1,3 +1,4 @@
+
 import 'package:expriy_deals/app/modules/authentication/views/verify_email_forgot_screen.dart';
 import 'package:expriy_deals/app/modules/authentication/widgets/auth_header_text.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
@@ -8,17 +9,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ForgotPasswordScreen extends StatefulWidget {
+class ForgotPasswordScreen extends StatelessWidget {
   final String email;
   final String token;
-  const ForgotPasswordScreen(
-      {super.key, required this.email, required this.token});
+  const ForgotPasswordScreen({super.key, required this.email, required this.token});
 
-  @override
-  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
-}
-
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,31 +24,28 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               heightBox20,
-              CustomAppBar(
-                name: 'Forgot Password',
-              ),
+              CustomAppBar(name: 'forgot_password.app_bar_title'.tr), // Localized "Forgot Password"
               heightBox16,
               AuthHeaderText(
-                title: 'No worries!',
-                subtitle:
-                    'Enter your registered email address or mobile number and we’ll send you instructions to reset your password. Let’s get you back on track quickly and securely!"',
+                title: 'forgot_password.header_title'.tr, // Localized "No worries!"
+                subtitle: 'forgot_password.header_subtitle'.tr, // Localized subtitle
                 titleFontSize: 15,
                 subtitleFontSize: 12,
                 sizeBoxHeight: 400,
               ),
               heightBox12,
               Text(
-                'Email Address',
-                style: GoogleFonts.poppins(
-                    fontSize: 14.sp, fontWeight: FontWeight.w500),
+                'forgot_password.email_label'.tr, // Localized "Email Address"
+                style: GoogleFonts.poppins(fontSize: 14.sp, fontWeight: FontWeight.w500),
               ),
               heightBox12,
               Container(
                 height: 70.h,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    border: Border.all(color: Color(0xffDCDCDC))),
+                  borderRadius: BorderRadius.circular(50.r),
+                  border:  Border.all(color: Color(0xffDCDCDC)),
+                ),
                 child: Padding(
                   padding: EdgeInsets.all(8.0.h),
                   child: Row(
@@ -63,36 +55,33 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       CircleAvatar(
                         radius: 21.r,
                         backgroundColor: Theme.of(context).primaryColor,
-                        child: Icon(Icons.email_sharp),
+                        child: const Icon(Icons.email_sharp, color: Colors.white),
                       ),
                       SizedBox(
                         width: 250.w,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Email:',
-                                style: GoogleFonts.poppins(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w500)),
+                            Text(
+                              'forgot_password.email_label'.tr, // Localized "Email:"
+                              style: GoogleFonts.poppins(fontSize: 12.sp, fontWeight: FontWeight.w500),
+                            ),
                             heightBox8,
-                            Text(widget.email,
-                                style: GoogleFonts.poppins(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w500)),
+                            Text(
+                              email.isNotEmpty ? email : 'forgot_password.no_email'.tr, // Localized "No email"
+                              style: GoogleFonts.poppins(fontSize: 14.sp, fontWeight: FontWeight.w500),
+                            ),
                           ],
                         ),
                       ),
                       GestureDetector(
                         onTap: () {
-                          Get.to(VerifyEmailScreenWithForgot(token: widget.token,));
+                          Get.to(() => VerifyEmailScreenWithForgot(token: token));
                         },
                         child: CircleAvatar(
                           radius: 21.r,
                           backgroundColor: AppColors.iconButtonThemeColor,
-                          child: Icon(
-                            Icons.arrow_forward,
-                            color: Colors.white,
-                          ),
+                          child: const Icon(Icons.arrow_forward, color: Colors.white),
                         ),
                       ),
                     ],
@@ -100,7 +89,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ),
               ),
               heightBox12,
-              
             ],
           ),
         ),

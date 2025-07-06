@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:get/get.dart';
 
 class ShippingInfoScreen extends StatelessWidget {
-  const ShippingInfoScreen({
-    super.key,
-  });
+  const ShippingInfoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Shipping Information",
-          style:
-              GoogleFonts.poppins(fontSize: 18.sp, fontWeight: FontWeight.w600),
+          'shipping_info.app_bar_title'.tr, // Localized "Shipping Information"
+          style: GoogleFonts.poppins(
+            fontSize: 18.sp,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -29,7 +30,7 @@ class ShippingInfoScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Shipping Information",
+              'shipping_info.section_title'.tr, // Localized "Shipping Information"
               style: GoogleFonts.poppins(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
@@ -43,25 +44,25 @@ class ShippingInfoScreen extends StatelessWidget {
                   TimelineStep(
                     date: "April 28, 2023",
                     time: "11:30 AM",
-                    description: "Arrived at Logistic Hub",
+                    description: 'shipping_info.timeline_steps[0].description'.tr, // Localized "Arrived at Logistic Hub"
                     isCompleted: true,
                   ),
                   TimelineStep(
                     date: "April 27, 2023",
                     time: "4:30 PM",
-                    description: "Package Picked Up",
+                    description: 'shipping_info.timeline_steps[1].description'.tr, // Localized "Package Picked Up"
                     isCompleted: false,
                   ),
                   TimelineStep(
                     date: "April 26, 2023",
                     time: "9:30 AM",
-                    description: "Packed and Ready to Ship",
+                    description: 'shipping_info.timeline_steps[2].description'.tr, // Localized "Packed and Ready to Ship"
                     isCompleted: false,
                   ),
                   TimelineStep(
                     date: "April 25, 2023",
                     time: "9:30 AM",
-                    description: "Order Confirmed",
+                    description: 'shipping_info.timeline_steps[3].description'.tr, // Localized "Order Confirmed"
                     isCompleted: false,
                     isLast: true,
                   ),

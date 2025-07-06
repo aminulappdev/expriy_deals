@@ -10,6 +10,7 @@ import 'package:expriy_deals/app/widgets/costom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:get/get.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
   final MyOrdersItemModel myOrdersItemModel;
@@ -29,6 +30,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
   @override
   void initState() {
+    super.initState();
     if (widget.myOrdersItemModel.status == 'pending') {
       isPending = true;
     } else if (widget.myOrdersItemModel.status == 'delivered') {
@@ -41,7 +43,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       isPending = true;
       isOngoing = true;
     }
-    super.initState();
   }
 
   @override
@@ -54,11 +55,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               heightBox20,
-              CustomAppBar(name: 'Order Details'),
+              CustomAppBar(name: 'order_details.app_bar_title'.tr), // Localized "Order Details"
               heightBox14,
               DeliveryBanner(),
-              heightBox12,
-
               heightBox12,
               // Consolidated Shipping Information Card with Timeline
               Card(
@@ -92,7 +91,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Shipping Information',
+                                    'order_details.shipping_info_title'.tr, // Localized "Shipping Information"
                                     style: GoogleFonts.poppins(
                                       fontSize: 14.sp,
                                       fontWeight: FontWeight.w600,
@@ -100,7 +99,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                     ),
                                   ),
                                   Text(
-                                    'Standard local',
+                                    'order_details.shipping_method'.tr, // Localized "Local Standard"
                                     style: GoogleFonts.poppins(
                                       fontSize: 12.sp,
                                       fontWeight: FontWeight.w400,
@@ -108,7 +107,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                     ),
                                   ),
                                   Text(
-                                    'Id: 42561',
+                                    'order_details.shipping_id_label'.tr, // Localized "Id: 42561"
                                     style: GoogleFonts.poppins(
                                       fontSize: 12.sp,
                                       fontWeight: FontWeight.w400,
@@ -118,26 +117,24 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                   SizedBox(
                                     height: 240.h,
                                     child: ListView(
-                                      physics:
-                                          NeverScrollableScrollPhysics(), // Disable scrolling inside ListView
+                                      physics: const NeverScrollableScrollPhysics(),
                                       children: [
                                         TimelineStep(
                                           date: "",
                                           time: "",
-                                          description:
-                                              "Arrived at Logistic Hub",
+                                          description: 'order_details.timeline_steps[0].description'.tr, // Localized "Arrived at Logistic Hub"
                                           isCompleted: isPending,
                                         ),
                                         TimelineStep(
                                           date: "",
                                           time: "",
-                                          description: "Package Picked Up",
+                                          description: 'order_details.timeline_steps[1].description'.tr, // Localized "Package Picked Up"
                                           isCompleted: isOngoing,
                                         ),
                                         TimelineStep(
                                           date: "",
                                           time: "",
-                                          description: "Order Confirmed",
+                                          description: 'order_details.timeline_steps[2].description'.tr, // Localized "Order Confirmed"
                                           isCompleted: isDelivered,
                                           isLast: true,
                                         ),
@@ -156,23 +153,22 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               ),
               heightBox12,
               DeliveryInformationCard(
-                title: 'Deliery Address',
+                title: 'order_details.delivery_address_title'.tr, // Localized "Delivery Address"
                 icon: Icons.car_repair_rounded,
                 widget: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.myOrdersItemModel.user?.name ?? 'name',
-                      style: TextStyle(fontWeight: FontWeight.w400),
+                      widget.myOrdersItemModel.user?.name ?? 'info.no_data_message'.tr, // Localized fallback "No data available"
+                      style: const TextStyle(fontWeight: FontWeight.w400),
                     ),
                     Text(
-                      widget.myOrdersItemModel.user?.phoneNumber ?? 'number',
-                      style: TextStyle(fontWeight: FontWeight.w400),
+                      widget.myOrdersItemModel.user?.phoneNumber ?? 'info.no_data_message'.tr, // Localized fallback "No data available"
+                      style: const TextStyle(fontWeight: FontWeight.w400),
                     ),
                     Text(
-                      widget.myOrdersItemModel.billingDetails?.address ??
-                          'Address',
-                      style: TextStyle(fontWeight: FontWeight.w400),
+                      widget.myOrdersItemModel.billingDetails?.address ?? 'info.no_data_message'.tr, // Localized fallback "No data available"
+                      style: const TextStyle(fontWeight: FontWeight.w400),
                     ),
                   ],
                 ),
@@ -183,28 +179,28 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 shopLogo: widget.myOrdersItemModel.author?.shop?.logo ??
                     'https://fastly.picsum.photos/id/134/200/300.jpg?hmac=KN18cCDft4FPM0XJpr7EhZLtUP6Z4cZqtF8KThtTvsI',
                 shopName:
-                    widget.myOrdersItemModel.author?.shop?.name ?? 'Shop Name',
+                    widget.myOrdersItemModel.author?.shop?.name ?? 'seller_about.store_name_label'.tr, // Localized fallback "Store Name: "
                 productImage: widget.myOrdersItemModel.product?.images[0].url ??
                     'https://fastly.picsum.photos/id/134/200/300.jpg?hmac=KN18cCDft4FPM0XJpr7EhZLtUP6Z4cZqtF8KThtTvsI',
                 productName:
-                    widget.myOrdersItemModel.product?.name ?? 'Product',
-                productPrice: '\$${widget.myOrdersItemModel.product?.price}',
+                    widget.myOrdersItemModel.product?.name ?? 'info.no_data_message'.tr, // Localized fallback "No data available"
+                productPrice: '\$${widget.myOrdersItemModel.product?.price ?? '0'}',
                 productQuantity: 'Qty: ${widget.myOrdersItemModel.quantity}',
               ),
               heightBox12,
               DeliveryInformationCard(
-                title: 'Order Details',
+                title: 'order_details.order_details_title'.tr, // Localized "Order Details"
                 icon: Icons.location_on,
                 widget: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Order ID: ${widget.myOrdersItemModel.datumId}',
-                      style: TextStyle(fontWeight: FontWeight.w400),
+                      'order_details.order_id_label'.tr + (widget.myOrdersItemModel.datumId ?? 'info.no_data_message'.tr), // Localized "Order ID: "
+                      style: const TextStyle(fontWeight: FontWeight.w400),
                     ),
                     Text(
-                      'Order Status : ${widget.myOrdersItemModel.status}',
-                      style: TextStyle(fontWeight: FontWeight.w400),
+                      'order_details.order_status_label'.tr + (widget.myOrdersItemModel.status ?? 'info.no_data_message'.tr), // Localized "Order Status: "
+                      style: const TextStyle(fontWeight: FontWeight.w400),
                     ),
                   ],
                 ),

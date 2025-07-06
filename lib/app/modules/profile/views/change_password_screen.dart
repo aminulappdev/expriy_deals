@@ -1,5 +1,4 @@
 
-
 import 'package:expriy_deals/app/modules/common/views/main_bottom_nav_bar.dart';
 import 'package:expriy_deals/app/modules/profile/controllers/change_password_controller.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
@@ -10,7 +9,7 @@ import 'package:expriy_deals/get_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   static const String routeName = '/reset-password-screen';
@@ -22,16 +21,11 @@ class ChangePasswordScreen extends StatefulWidget {
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController oldPasswordCtrl = TextEditingController();
-  TextEditingController passwordCtrl = TextEditingController();
-  TextEditingController confirmPasswordCtrl = TextEditingController();
-  final ChangePasswordController changePasswordController =
-      Get.find<ChangePasswordController>();
-
+  final TextEditingController oldPasswordCtrl = TextEditingController();
+  final TextEditingController passwordCtrl = TextEditingController();
+  final TextEditingController confirmPasswordCtrl = TextEditingController();
+  final ChangePasswordController changePasswordController = Get.find<ChangePasswordController>();
   bool _obscureText = true;
-
-  String email = '';
-  String accessToken = '';
 
   @override
   Widget build(BuildContext context) {
@@ -43,36 +37,33 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               heightBox20,
-              CustomAppBar(
-                name: 'Change Password',
-              ),
+              CustomAppBar(name: 'change_password.app_bar_title'.tr), // Localized "Change Password"
               heightBox16,
-              heightBox12,
               Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      'change_password.current_password_hint'.tr, // Localized "Current password"
+                      style: GoogleFonts.poppins(fontSize: 12.sp, fontWeight: FontWeight.w400, color: const Color(0xff626262)),
+                    ),
+                    heightBox8,
                     TextFormField(
                       controller: oldPasswordCtrl,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (String? value) {
-                        if (value!.isEmpty) {
-                          return 'Enter password';
+                        if (value == null || value.isEmpty) {
+                          return 'change_password.error_messages.enter_current_password'.tr; // Localized "Enter current password"
                         }
                         return null;
                       },
                       obscureText: _obscureText,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.lock,
-                          color: Colors.grey,
-                        ),
+                        prefixIcon: const Icon(Icons.lock, color: Colors.grey),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscureText
-                                ? Icons.visibility_off
-                                : Icons.visibility,
+                            _obscureText ? Icons.visibility_off : Icons.visibility,
                             color: Colors.grey,
                           ),
                           onPressed: () {
@@ -81,31 +72,34 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             });
                           },
                         ),
-                        hintText: 'Current password',
-                        hintStyle: TextStyle(color: Colors.grey),
+                        hintText: 'change_password.current_password_hint'.tr, // Localized "Current password"
+                        hintStyle: const TextStyle(color: Colors.grey),
                       ),
+                    ),
+                    heightBox8,
+                    Text(
+                      'change_password.new_password_hint'.tr, // Localized "New password"
+                      style: GoogleFonts.poppins(fontSize: 12.sp, fontWeight: FontWeight.w400, color: const Color(0xff626262)),
                     ),
                     heightBox8,
                     TextFormField(
                       controller: passwordCtrl,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (String? value) {
-                        if (value!.isEmpty) {
-                          return 'Enter password';
+                        if (value == null || value.isEmpty) {
+                          return 'change_password.error_messages.enter_new_password'.tr; // Localized "Enter new password"
+                        }
+                        if (value.length < 6) {
+                          return 'change_password.error_messages.password_too_short'.tr; // Localized "Password must be at least 6 characters"
                         }
                         return null;
                       },
                       obscureText: _obscureText,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.lock,
-                          color: Colors.grey,
-                        ),
+                        prefixIcon: const Icon(Icons.lock, color: Colors.grey),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscureText
-                                ? Icons.visibility_off
-                                : Icons.visibility,
+                            _obscureText ? Icons.visibility_off : Icons.visibility,
                             color: Colors.grey,
                           ),
                           onPressed: () {
@@ -114,31 +108,34 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             });
                           },
                         ),
-                        hintText: 'New password',
-                        hintStyle: TextStyle(color: Colors.grey),
+                        hintText: 'change_password.new_password_hint'.tr, // Localized "New password"
+                        hintStyle: const TextStyle(color: Colors.grey),
                       ),
+                    ),
+                    heightBox8,
+                    Text(
+                      'change_password.confirm_password_hint'.tr, // Localized "Confirm password"
+                      style: GoogleFonts.poppins(fontSize: 12.sp, fontWeight: FontWeight.w400, color: const Color(0xff626262)),
                     ),
                     heightBox8,
                     TextFormField(
                       controller: confirmPasswordCtrl,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (String? value) {
-                        if (value!.isEmpty) {
-                          return 'Enter password';
+                        if (value == null || value.isEmpty) {
+                          return 'change_password.error_messages.enter_confirm_password'.tr; // Localized "Enter confirm password"
+                        }
+                        if (value != passwordCtrl.text) {
+                          return 'change_password.error_messages.passwords_do_not_match'.tr; // Localized "Passwords do not match"
                         }
                         return null;
                       },
                       obscureText: _obscureText,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.lock,
-                          color: Colors.grey,
-                        ),
+                        prefixIcon: const Icon(Icons.lock, color: Colors.grey),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscureText
-                                ? Icons.visibility_off
-                                : Icons.visibility,
+                            _obscureText ? Icons.visibility_off : Icons.visibility,
                             color: Colors.grey,
                           ),
                           onPressed: () {
@@ -147,32 +144,25 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             });
                           },
                         ),
-                        hintText: 'Confirm password',
-                        hintStyle: TextStyle(color: Colors.grey),
+                        hintText: 'change_password.confirm_password_hint'.tr, // Localized "Confirm password"
+                        hintStyle: const TextStyle(color: Colors.grey),
                       ),
                     ),
                     heightBox24,
-                     GetBuilder<ChangePasswordController>(
+                    GetBuilder<ChangePasswordController>(
                       builder: (controller) {
                         return Stack(
                           alignment: Alignment.center,
                           children: [
                             CustomElevatedButton(
-                              onPressed: controller.inProgress
-                                  ? () {}
-                                  : () => onTapToNextButton(),
-                              text: controller.inProgress
-                                  ? ''
-                                  : 'Change Password',
+                              onPressed: controller.inProgress ? () {} : () => onTapToNextButton(),
+                              text: controller.inProgress ? '' : 'change_password.change_password_button'.tr, // Localized "Change Password"
                             ),
                             if (controller.inProgress)
-                              SizedBox(
+                              const SizedBox(
                                 width: 24,
                                 height: 24,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
+                                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                               ),
                           ],
                         );
@@ -191,40 +181,40 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Future<void> onTapToNextButton() async {
     if (_formKey.currentState!.validate()) {
       final bool isSuccess = await changePasswordController.changePassword(
-          oldPasswordCtrl.text,
-          passwordCtrl.text,
-          confirmPasswordCtrl.text,
-          StorageUtil.getData(StorageUtil.userAccessToken));
+        oldPasswordCtrl.text,
+        passwordCtrl.text,
+        confirmPasswordCtrl.text,
+        StorageUtil.getData(StorageUtil.userAccessToken),
+      );
 
       if (isSuccess) {
         if (mounted) {
-          showSnackBarMessage(context, 'Change password successfully done');
-          Get.to(MainButtonNavbarScreen());
-        } else {
-          if (mounted) {
-            showSnackBarMessage(
-                context, changePasswordController.errorMessage!, true);
-          }
+          showSnackBarMessage(context, 'change_password.success_messages.password_changed'.tr); // Localized "Password changed successfully"
+          Get.to(const MainButtonNavbarScreen());
         }
       } else {
         if (mounted) {
           showSnackBarMessage(
-              context, changePasswordController.errorMessage!, true);
+            context,
+            changePasswordController.errorMessage ?? 'change_password.error_messages.change_failed'.tr, // Localized "Failed to change password"
+            true,
+          );
         }
       }
     }
   }
 
   void clearTextField() {
+    oldPasswordCtrl.clear();
     passwordCtrl.clear();
     confirmPasswordCtrl.clear();
   }
 
   @override
   void dispose() {
-    super.dispose();
-
+    oldPasswordCtrl.dispose();
     passwordCtrl.dispose();
     confirmPasswordCtrl.dispose();
+    super.dispose();
   }
 }

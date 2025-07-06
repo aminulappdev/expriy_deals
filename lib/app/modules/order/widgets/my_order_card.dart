@@ -39,7 +39,7 @@ class MyOrderCard extends StatelessWidget {
     final isPending = status.toLowerCase() == 'pending';
     final isDelivered = status.toLowerCase() == 'delivered';
     final showSecondButton = isPending || isDelivered;
-    final secondButtonText = isPending ? 'Make Payment' : 'Buy Now';
+    final secondButtonText = isPending ? 'make_payment'.tr : 'buy_now'.tr;
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 12.w),
@@ -187,7 +187,7 @@ class MyOrderCard extends StatelessWidget {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    'View Details',
+                                    'view_details'.tr,
                                     style: TextStyle(color: Colors.white),
                                   ),
                                 ),

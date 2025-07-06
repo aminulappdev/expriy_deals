@@ -37,7 +37,6 @@ class _ProductScreenState extends State<ProductScreen> {
   String searchQuery = '';
   Timer? _debounce;
 
-  // Determine which controller to use based on categoryName
   dynamic get activeController {
     if (widget.categoryName == 'Special-offer') {
       return specialProductController;
@@ -49,33 +48,24 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   void initState() {
     super.initState();
-// \0
-
-    // Initialize controllers
     allProductController = Get.put(AllProductController());
     specialProductController = Get.put(SpecialProductController());
     categoryProductController = Get.put(CategoryProductController());
     recommendProductController = Get.put(RecommendProductController());
 
-    // Fetch data after the build phase
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.categoryName == 'Special-offer') {
-// \0
         specialProductController.getSpecialProduct();
       } else {
-// \0
-        categoryProductController.getProductByCategory(
-            categoryId: widget.categoryId);
+        categoryProductController.getProductByCategory(categoryId: widget.categoryId);
       }
     });
 
-    // Listen to search input changes
     searchController.addListener(() {
       _onSearchChanged(searchController.text);
     });
   }
 
-  // Debounce search input to improve performance
   void _onSearchChanged(String value) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 300), () {
@@ -85,7 +75,6 @@ class _ProductScreenState extends State<ProductScreen> {
     });
   }
 
-  // Filter products based on search query
   List<dynamic> _getFilteredProducts(List<dynamic> products) {
     if (searchQuery.isEmpty) {
       return products;
@@ -121,11 +110,9 @@ class _ProductScreenState extends State<ProductScreen> {
                   child: Container(
                     height: 48.h,
                     decoration: BoxDecoration(
-                      color: Color(0xffFAFAFA),
+                      color: const Color(0xffFAFAFA),
                       borderRadius: BorderRadius.circular(24),
-                      border: Border.all(
-                        color: Colors.grey[300]!,
-                      ),
+                      border: Border.all(color: Colors.grey[300]!),
                     ),
                     child: Row(
                       children: [
@@ -141,8 +128,8 @@ class _ProductScreenState extends State<ProductScreen> {
                         Expanded(
                           child: TextFormField(
                             controller: searchController,
-                            decoration: const InputDecoration(
-                              hintText: 'Search products',
+                            decoration: InputDecoration(
+                              hintText: 'search_products.search_hint'.tr, // Localized "Search products"
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
@@ -175,23 +162,19 @@ class _ProductScreenState extends State<ProductScreen> {
             Expanded(
               child: Obx(() {
                 final controller = activeController;
-                if (controller.inProgress == true) {
+                if (controller.inProgress) {
                   return const Center(child: CircularProgressIndicator());
-                } else if (controller.productData == null ||
-                    controller.productData!.isEmpty) {
-                  return const Center(child: Text('No products found'));
+                } else if (controller.productData == null || controller.productData!.isEmpty) {
+                  return Center(child: Text('search_products.no_products'.tr)); // Localized "No products found"
                 }
-                final filteredProducts =
-                    _getFilteredProducts(controller.productData!);
+                final filteredProducts = _getFilteredProducts(controller.productData!);
                 if (filteredProducts.isEmpty && searchQuery.isNotEmpty) {
-                  return const Center(
-                      child: Text('No matching products found'));
+                  return Center(child: Text('search_products.no_matching_products'.tr)); // Localized "No matching products found"
                 }
                 return GridView.builder(
                   padding: EdgeInsets.zero,
                   itemCount: filteredProducts.length,
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 16,
                     childAspectRatio: 1,
@@ -203,10 +186,8 @@ class _ProductScreenState extends State<ProductScreen> {
                       padding: EdgeInsets.symmetric(horizontal: 8.w),
                       child: ProductCard(
                         isShowDiscount: true,
-                        image: product.images.isNotEmpty
-                            ? product.images[0].url ?? ''
-                            : '',
-                        title: product.name ?? '',
+                        image: product.images.isNotEmpty ? product.images[0].url ?? '' : '',
+                        title: product.name ?? 'info.no_data_message'.tr, // Localized "No data available"
                         price: product.price?.toString() ?? '',
                         productId: product.id ?? '',
                         discount: product.discount.toString(),

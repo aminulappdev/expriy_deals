@@ -1,3 +1,4 @@
+
 import 'package:expriy_deals/app/modules/authentication/views/otp_forgot_screen.dart';
 import 'package:expriy_deals/app/modules/authentication/widgets/auth_header_text.dart';
 import 'package:expriy_deals/app/utils/assets_path.dart';
@@ -7,24 +8,11 @@ import 'package:expriy_deals/app/widgets/gradiant_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class VerifyEmailScreenWithForgot extends StatefulWidget {
+class VerifyEmailScreenWithForgot extends StatelessWidget {
   final String token;
   const VerifyEmailScreenWithForgot({super.key, required this.token});
-
-  @override
-  State<VerifyEmailScreenWithForgot> createState() =>
-      _VerifyEmailScreenWithForgotState();
-}
- 
-class _VerifyEmailScreenWithForgotState
-    extends State<VerifyEmailScreenWithForgot> {
-  // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,33 +24,27 @@ class _VerifyEmailScreenWithForgotState
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               heightBox20,
-              CustomAppBar(
-                name: 'Check Email',
-              ),
+              CustomAppBar(name: 'verify_email_forgot.app_bar_title'.tr), // Localized "Check Email"
               heightBox100,
               CircleAvatar(
-                backgroundColor: Color(0xFFD9A48E).withValues(alpha: 0.1),
-                backgroundImage: AssetImage(AssetsPath.emailLogo),
+                backgroundColor: const Color(0xFFD9A48E).withOpacity(0.1),
+                backgroundImage: const AssetImage(AssetsPath.emailLogo),
                 radius: 36.r,
               ),
               heightBox16,
               AuthHeaderText(
-                title: 'A letter has been sent.',
-                subtitle:
-                    'Your next step is inside your inbox. Check your email to unlock it.',
-                titleFontSize: 20, 
+                title: 'verify_email_forgot.header_title'.tr, // Localized "A letter has been sent."
+                subtitle: 'verify_email_forgot.header_subtitle'.tr, // Localized subtitle
+                titleFontSize: 20,
                 subtitleFontSize: 12,
                 sizeBoxHeight: 215,
               ),
               heightBox30,
               CustomElevatedButton(
                 onPressed: () {
-                  Get.to(OTPVerifyForgotScreen(
-                    token: widget.token,
-                  ));
-                  // Navigator.pushNamed(context, OTPVerifyForgotScreen.routeName);
+                  Get.to(() => OTPVerifyForgotScreen(token: token));
                 },
-                text: 'Read My Letter',
+                text: 'verify_email_forgot.confirm_button'.tr, // Localized "Read My Letter"
               ),
               heightBox8,
             ],

@@ -1,5 +1,5 @@
-// ignore_for_file: deprecated_member_use
 
+// ignore_for_file: deprecated_member_use
 import 'package:expriy_deals/app/modules/common/views/language_screen.dart';
 import 'package:expriy_deals/app/modules/common/views/notification_screen.dart';
 import 'package:expriy_deals/app/modules/order/views/oder_screen.dart';
@@ -11,7 +11,7 @@ import 'package:expriy_deals/app/modules/profile/widgets/profile_drawer_feature.
 import 'package:expriy_deals/app/utils/assets_path.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:expriy_deals/app/utils/show_dialog_utils.dart';
-
+import 'package:expriy_deals/app/widgets/show_snackBar_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -53,20 +53,23 @@ class ProfileScreen extends StatelessWidget {
                               radius: 30,
                               backgroundImage:
                                   controller.profileData?.profile != null
-                                      ? NetworkImage(
-                                          controller.profileData!.profile!)
+                                      ? NetworkImage(controller.profileData!.profile!)
                                       : const AssetImage(AssetsPath.appleLogo),
                             ),
                             heightBox4,
                             Text(
-                              controller.profileData?.name ?? 'No name',
-                              style: const TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.w700),
+                              controller.profileData?.name ?? 'info.no_data_message'.tr, // Localized "No data available"
+                              style: GoogleFonts.poppins(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                             Text(
-                              controller.profileData?.email ?? 'No email',
-                              style: const TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.w500),
+                              controller.profileData?.email ?? 'info.no_data_message'.tr, // Localized "No data available"
+                              style: GoogleFonts.poppins(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ],
                         );
@@ -74,80 +77,73 @@ class ProfileScreen extends StatelessWidget {
               ),
               heightBox12,
               ProfileDrawerFeature(
-                feature: 'Edit Profile',
+                feature: 'profile.edit_profile_feature'.tr, // Localized "Edit Profile"
                 icon: Icons.person,
                 ontap: () {
                   if (controller.profileData != null) {
-                    Get.to(EditProfile(profileData: controller.profileData!));
+                    Get.to(() => EditProfile(profileData: controller.profileData!));
                   } else {
-                    Get.snackbar('Error', 'Profile data not available');
+                    showSnackBarMessage(
+                      context,
+                      'profile.error_messages.profile_data_not_available'.tr, // Localized "Profile data not available"
+                      true,
+                    );
                   }
                 },
               ),
               ProfileDrawerFeature(
-                feature: 'My Orders',
-                icon: Icons.location_on,
-                ontap: () => Get.to(const MyOrderScreen(
-                  isBack: true,
-                )),
+                feature: 'profile.my_orders_feature'.tr, // Localized "My Orders"
+                icon: Icons.shopping_bag,
+                ontap: () => Get.to(() => const MyOrderScreen(isBack: true)),
               ),
               ProfileDrawerFeature(
-                feature: 'Language',
-                icon: Icons.payment,
-                ontap: () => Get.to(const LanguageScreen()),
+                feature: 'profile.language_feature'.tr, // Localized "Language"
+                icon: Icons.language,
+                ontap: () => Get.to(() => const LanguageScreen()),
               ),
               heightBox8,
               Text(
-                'Settings',
-                style: GoogleFonts.poppins(
-                    fontSize: 12, fontWeight: FontWeight.w500),
+                'profile.settings_section'.tr, // Localized "Settings"
+                style: GoogleFonts.poppins(fontSize: 12.sp, fontWeight: FontWeight.w500),
               ),
               heightBox12,
               ProfileDrawerFeature(
-                feature: 'Notification',
+                feature: 'profile.notification_feature'.tr, // Localized "Notification"
                 icon: Icons.notifications,
-                ontap: () {
-                  Get.to(NotificationScreen());
-                },
+                ontap: () => Get.to(() => const NotificationScreen()),
               ),
-              heightBox8,
               ProfileDrawerFeature(
-                feature: 'Change password',
+                feature: 'profile.change_password_feature'.tr, // Localized "Change password"
                 icon: Icons.lock,
-                ontap: () => Get.to(const ChangePasswordScreen()),
+                ontap: () => Get.to(() => const ChangePasswordScreen()),
               ),
-              // heightBox8,
-              // ProfileDrawerFeature(
-              //   feature: 'Delete account',
-              //   icon: Icons.delete,
-              //   ontap: () {},
-              // ),
               heightBox8,
               Text(
-                'Support',
-                style: GoogleFonts.poppins(
-                    fontSize: 12, fontWeight: FontWeight.w500),
+                'profile.support_section'.tr, // Localized "Support"
+                style: GoogleFonts.poppins(fontSize: 12.sp, fontWeight: FontWeight.w500),
               ),
               heightBox12,
               ProfileDrawerFeature(
-                feature: 'Policies',
+                feature: 'profile.policies_feature'.tr, // Localized "Policies"
                 icon: Icons.security,
-                ontap: () => Get.to(InfoScreen(
-                    appBarTitle: 'Privacy & Policies', param: 'privacyPolicy')),
+                ontap: () => Get.to(() => InfoScreen(
+                      appBarTitle: 'profile.policies_feature'.tr,
+                      param: 'privacyPolicy',
+                    )),
               ),
               ProfileDrawerFeature(
-                feature: 'About Us',
+                feature: 'profile.about_us_feature'.tr, // Localized "About Us"
                 icon: Icons.groups_2_sharp,
-                ontap: () => Get.to(
-                    InfoScreen(appBarTitle: 'About Us', param: 'aboutUs')),
+                ontap: () => Get.to(() => InfoScreen(
+                      appBarTitle: 'profile.about_us_feature'.tr,
+                      param: 'aboutUs',
+                    )),
               ),
-              heightBox8,
               heightBox14,
               Align(
                 alignment: Alignment.center,
                 child: InkWell(
-                  onTap: () =>
-                      DialogUtils.showLogoutDialog(context, controller.logout),
+                  onTap: () => DialogUtils.showLogoutDialog(context, controller.logout),
                   child: Container(
                     height: 40,
                     width: 140,
@@ -160,10 +156,12 @@ class ProfileScreen extends StatelessWidget {
                       children: [
                         const Icon(Icons.logout, color: Colors.red),
                         widthBox4,
-                        const Text(
-                          'Logout',
-                          style: TextStyle(
-                              color: Colors.red, fontWeight: FontWeight.w600),
+                        Text(
+                          'profile.logout_button'.tr, // Localized "Logout"
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ],
                     ),

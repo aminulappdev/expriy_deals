@@ -3,9 +3,9 @@
 import 'package:expriy_deals/app/modules/category/controllers/all_category_controller.dart';
 import 'package:expriy_deals/app/modules/category/views/all_catogory_screen.dart';
 import 'package:expriy_deals/app/modules/category/widget/category_card.dart';
+import 'package:expriy_deals/app/modules/home/widgets/category_item_shimmer.dart';
 import 'package:expriy_deals/app/modules/home/widgets/product_item_shimmer.dart';
 import 'package:expriy_deals/app/modules/home/widgets/see_all_section.dart';
-import 'package:expriy_deals/app/modules/home/widgets/category_item_shimmer.dart';
 import 'package:expriy_deals/app/modules/product/controllers/Special_product_controller.dart';
 import 'package:expriy_deals/app/modules/product/controllers/all_product_conrtoller.dart';
 import 'package:expriy_deals/app/modules/product/controllers/category_product_controller.dart';
@@ -65,9 +65,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> requestLocationPermission() async {
     final ph.PermissionStatus status = await ph.Permission.location.request();
     if (status.isGranted) {
-// \0
+      // Location permission granted
     } else {
-// \0
+      // Location permission denied
     }
   }
 
@@ -77,16 +77,15 @@ class _HomeScreenState extends State<HomeScreen> {
       final loc.LocationData locationData = await location.getLocation();
       latitude = locationData.latitude;
       longitude = locationData.longitude;
-// \0
 
-      // API কলগুলো এখানে করা হচ্ছে
+      // API calls
       recommendProductController.getRecommenedProduct();
       specialProductController.getSpecialProduct();
       categoryController.getCategory();
       allProductController.getProduct();
       allShopController.myShops(latitude: latitude, longitude: longitude);
     } catch (e) {
-// \0
+      // Handle location error
     }
   }
 
@@ -141,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 heightBox16,
                 heightBox16,
                 SeeAllSection(
-                  title: 'Categories',
+                  title: 'home_screen.categories'.tr,
                   ontap: () {
                     Get.to(const AllCategoryScreen());
                   },
@@ -151,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (categoryController.inProgress) {
                     return const CategoryShimmerEffectWidget();
                   } else if (categoryController.categoryData?.isEmpty ?? true) {
-                    return const Center(child: Text('No categories available'));
+                    return Center(child: Text('home_screen.no_categories_available'.tr));
                   } else {
                     final categories = categoryController.categoryData!;
                     return SizedBox(
@@ -192,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Row(
                       children: [
                         Text(
-                          'Special Offer',
+                          'home_screen.special_offer'.tr,
                           style: GoogleFonts.poppins(
                             fontSize: 18.sp,
                             color: AppColors.iconButtonThemeColor,
@@ -215,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ));
                       },
                       child: Text(
-                        'See all..',
+                        'home_screen.see_all'.tr,
                         style: GoogleFonts.poppins(
                           fontSize: 12.sp,
                           color: Colors.green,
@@ -231,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   } else if (specialProductController.productData!.isEmpty) {
                     return SizedBox(
                       height: 180.h,
-                      child: const Center(child: Text('No products available')),
+                      child: Center(child: Text('home_screen.no_products_available'.tr)),
                     );
                   } else {
                     final products = specialProductController.productData!;
@@ -265,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 }),
                 heightBox12,
                 SeeAllSection(
-                  title: 'Nearby Stores',
+                  title: 'home_screen.nearby_stores'.tr,
                   ontap: () {
                     Get.to(const ShopScreen(shouldBackButton: true));
                   },
@@ -277,7 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   } else if (allShopController.allShopData?.isEmpty ?? true) {
                     return SizedBox(
                       height: 150.h,
-                      child: const Center(child: Text('No shops available')),
+                      child: Center(child: Text('home_screen.no_shops_available'.tr)),
                     );
                   } else {
                     final shops = allShopController.allShopData!;
@@ -323,7 +322,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 }),
                 heightBox12,
                 SeeAllSection(
-                  title: 'Recommended for You',
+                  title: 'home_screen.recommended_for_you'.tr,
                   ontap: () {
                     Get.to(const ProductScreen(
                       shouldBackButton: true,
@@ -340,7 +339,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       true) {
                     return SizedBox(
                       height: 180.h,
-                      child: const Center(child: Text('No products available')),
+                      child: Center(child: Text('home_screen.no_products_available'.tr)),
                     );
                   } else {
                     final products = recommendProductController.productData!;

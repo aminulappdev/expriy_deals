@@ -4,12 +4,9 @@ import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class PaymentSuccessScreen extends StatefulWidget {
-  const PaymentSuccessScreen({
-    super.key,
-  });
+  const PaymentSuccessScreen({super.key});
 
   @override
   State<PaymentSuccessScreen> createState() => _PaymentSuccessScreenState();
@@ -18,14 +15,13 @@ class PaymentSuccessScreen extends StatefulWidget {
 class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
   @override
   void initState() {
-    _movetoNewScreen();
     super.initState();
+    _moveToNewScreen();
   }
 
-  Future<void> _movetoNewScreen() async {
+  Future<void> _moveToNewScreen() async {
     await Future.delayed(const Duration(seconds: 3));
-
-    Get.to(PaymentDetailsScreen());
+    Get.to(() => const PaymentDetailsScreen());
   }
 
   @override
@@ -40,8 +36,9 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
               height: 90.h,
               width: 90.h,
               decoration: BoxDecoration(
-                  color: AppColors.iconButtonThemeColor,
-                  shape: BoxShape.circle),
+                color: AppColors.iconButtonThemeColor,
+                shape: BoxShape.circle,
+              ),
               child: Center(
                 child: Icon(
                   Icons.check,
@@ -52,7 +49,14 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
             ),
           ),
           heightBox8,
-          Text('Payment successful')
+          Text(
+            'payment_success.success_message'.tr, // Localized "Payment successful"
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
+            ),
+          ),
         ],
       ),
     );

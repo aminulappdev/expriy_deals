@@ -79,7 +79,7 @@ class _InfoScreenState extends State<InfoScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 heightBox20,
-                CustomAppBar(name: widget.appBarTitle),
+                CustomAppBar(name: widget.appBarTitle.tr),
                 heightBox8,
                 Text(
                   widget.appBarTitle,

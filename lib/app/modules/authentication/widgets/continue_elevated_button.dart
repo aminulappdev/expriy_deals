@@ -3,6 +3,7 @@
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ContinueElevatedButton extends StatelessWidget {
@@ -39,7 +40,7 @@ class ContinueElevatedButton extends StatelessWidget {
             ),
             widthBox8,
             Text(
-              name,
+              name.tr,
               style: GoogleFonts.poppins(
                   fontSize: 14.sp, fontWeight: FontWeight.w400),
             )

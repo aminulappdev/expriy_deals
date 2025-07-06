@@ -3,6 +3,7 @@ import 'package:expriy_deals/app/utils/assets_path.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ShopInfoCard extends StatelessWidget {
@@ -118,14 +119,14 @@ class ShopInfoCard extends StatelessWidget {
                   children: [
                     heightBox10,
                     Text(
-                      'Price Details',
+                      'price_details'.tr,
                       style: GoogleFonts.poppins(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     PriceRow(
-                      name: 'Price',
+                      name: 'price'.tr,
                       price: productPrice,
                       nameSize: 14,
                       priceSize: 14,
@@ -142,7 +143,7 @@ class ShopInfoCard extends StatelessWidget {
                       margin: EdgeInsets.symmetric(vertical: 10.h),
                     ),
                     PriceRow(
-                      name: 'Total Price',
+                      name: 'total_price',
                       price: productPrice,
                       nameSize: 14,
                       priceSize: 14,
