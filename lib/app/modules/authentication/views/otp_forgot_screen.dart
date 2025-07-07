@@ -91,7 +91,7 @@ class _OTPVerifyForgotScreenState extends State<OTPVerifyForgotScreen> {
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.length < 6) {
-                          return 'otp_verify_forgot.invalid_otp_error'.tr; // Localized "Enter a valid 6-digit OTP"
+                          return 'otp_verify_forgot.error_message'.tr; // Localized "Enter a valid 6-digit OTP"
                         }
                         return null;
                       },
@@ -161,7 +161,7 @@ class _OTPVerifyForgotScreenState extends State<OTPVerifyForgotScreen> {
                                 style: GoogleFonts.poppins(color: Colors.orange, fontSize: 16.sp),
                               ),
                               TextSpan(
-                                text: 'otp_verify_forgot.seconds'.tr, // Localized "s"
+                                text: 's'.tr, // Localized "s"
                                 style: GoogleFonts.poppins(color: Colors.black, fontSize: 16.sp),
                               ),
                             ],
@@ -183,7 +183,7 @@ class _OTPVerifyForgotScreenState extends State<OTPVerifyForgotScreen> {
     if (_formKey.currentState!.validate()) {
       final bool isSuccess = await otpVerifyController.otyVerify(otpCtrl.text, widget.token);
       if (isSuccess && mounted) {
-        showSnackBarMessage(context, 'otp_verify_forgot.success_message'.tr); // Localized "Otp verification successfully done"
+        showSnackBarMessage(context, 'otp_verify.success_message'.tr); // Localized "Otp verification successfully done"
         Get.to(() => const ResetPasswordScreen());
       } else if (mounted) {
         showSnackBarMessage(context, otpVerifyController.errorMessage ?? 'otp_verify_forgot.error_message'.tr, true); // Localized fallback error

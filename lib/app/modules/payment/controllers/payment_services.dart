@@ -24,7 +24,7 @@ class PaymentService {
 
     if (isSuccess) {
       // Directly use context without mounted check
-      showSnackBarMessage(context, 'Payment request done');
+      showSnackBarMessage(context, 'payment_requesta_done'.tr);
       StorageUtil.saveData('order-id', orderId);
       Get.to(PaymentWebviewScreen(paymentData: paymentData));
     } else {

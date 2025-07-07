@@ -87,7 +87,7 @@ class _SellerProductScreenState extends State<SellerProductScreen> {
               ),
               heightBox12,
               Obx(() => Text(
-                    'seller_products.item_label'.trParams({
+                    ''.trParams({
                       'count':
                           '${allProductController.productData?.length ?? 0}',
                     }), // Localized "Item ({count})"
@@ -144,6 +144,7 @@ class _SellerProductScreenState extends State<SellerProductScreen> {
                           '0',
                       productId:
                           allProductController.productData?[index].id ?? '',
+                          discount: allProductController.productData?[index].discount?.toString() ?? '',
                     ),
                   );
                 },

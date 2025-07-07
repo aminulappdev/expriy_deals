@@ -218,7 +218,7 @@ class MyOrderCard extends StatelessWidget {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    'View Details',
+                                    'view_details'.tr,
                                     style: TextStyle(color: Colors.white),
                                   ),
                                 ),

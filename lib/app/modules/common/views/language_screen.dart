@@ -1,8 +1,8 @@
 import 'package:expriy_deals/app/modules/common/controllers/translator_controller.dart';
 import 'package:expriy_deals/app/utils/get_storage.dart';
+import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key});
@@ -14,9 +14,9 @@ class LanguageScreen extends StatefulWidget {
 class _LanguageScreenState extends State<LanguageScreen> {
   @override
   Widget build(BuildContext context) {
-    final TranslationController controller = Get.put(TranslationController());
+    Get.put(TranslationController());
 
-    void _changeLanguage(String langCode, String countryCode) {
+    void changeLanguage(String langCode, String countryCode) {
       var locale = Locale(langCode, countryCode);
       Get.updateLocale(locale);
       box.write('language_code', langCode);
@@ -34,51 +34,44 @@ class _LanguageScreenState extends State<LanguageScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                
-                  ElevatedButton(
-                    onPressed: () => _changeLanguage('es', 'ES'),
-                    child: Text('Español'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => _changeLanguage('hi', 'IN'),
-                    child: Text('हिन्दी'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => _changeLanguage('en', 'US'),
-                    child: Text('English'),
-                  ),
+                  languageF('Español', () {
+                    
+                    changeLanguage('es', 'ES');
+                  }),
+                  heightBox14,
+                  languageF('हिन्दी', () {
+                    changeLanguage('hi', 'IN');
+                  }),
+                  heightBox14,
+                  languageF('English', () {
+                    changeLanguage('en', 'US');
+                  }),
                 ],
               ),
             ),
-            Text('greeting'.tr, style: const TextStyle(fontSize: 24)),
-            const SizedBox(height: 20),
-            Text('description'.tr, style: const TextStyle(fontSize: 16)),
-            const SizedBox(height: 40),
-            const Text('Select Language:', style: TextStyle(fontSize: 18)),
-            Obx(() => DropdownButton<String>(
-                  value: controller.locale.value.languageCode,
-                  items: [
-                    DropdownMenuItem(value: 'en', child: Text('english'.tr)),
-                    DropdownMenuItem(value: 'es', child: Text('spanish'.tr)),
-                    DropdownMenuItem(value: 'hi', child: Text('hindi'.tr)),
-                  ],
-                  onChanged: (value) {
-                    if (value != null) {
-                      switch (value) {
-                        case 'en':
-                          controller.changeLanguage('en', 'US');
-                          break;
-                        case 'es':
-                          controller.changeLanguage('es', 'ES');
-                          break;
-                        case 'hi':
-                          controller.changeLanguage('hi', 'IN');
-                          break;
-                      }
-                    }
-                  },
-                )),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget languageF(String text, VoidCallback onTap, {Color? color}) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: 30,
+        width: 200,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey),
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+                color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),
+          ),
         ),
       ),
     );

@@ -32,14 +32,14 @@ class VerifyEmailScreen extends StatelessWidget {
               ),
               heightBox16,
               Text(
-                'verify_email.title'.tr, // Localized "Check Email"
+                'verify_email.header_title'.tr, // Localized "Check Email"
                 style: GoogleFonts.poppins(fontSize: 20.sp, fontWeight: FontWeight.w400),
               ),
               heightBox12,
               SizedBox(
                 width: 210.w,
                 child: Text(
-                  'verify_email.subtitle'.tr, // Localized "Please check your email to verify your account."
+                  'verify_email.header_subtitle'.tr, // Localized "Please check your email to verify your account."
                   style: GoogleFonts.poppins(fontSize: 12.sp, fontWeight: FontWeight.w400),
                   textAlign: TextAlign.center,
                 ),

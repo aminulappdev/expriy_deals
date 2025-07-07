@@ -9,6 +9,7 @@ import 'package:expriy_deals/app/modules/order/controllers/my_orders_controller.
 import 'package:expriy_deals/app/modules/order/controllers/order_controller.dart';
 import 'package:expriy_deals/app/modules/payment/controllers/confirmed_payment_controller.dart';
 import 'package:expriy_deals/app/modules/payment/controllers/payment_controller.dart';
+import 'package:expriy_deals/app/modules/payment/controllers/payment_url_controller.dart';
 import 'package:expriy_deals/app/modules/product/controllers/Special_product_controller.dart';
 
 import 'package:expriy_deals/app/modules/product/controllers/all_card_controller.dart';
@@ -43,9 +44,9 @@ class ControllerBinder extends Bindings {
     Get.put(MyOrdersController());
     Get.put(AllShopController());
     Get.put(PaymentController());
+    Get.put(PaymentURLController());
     Get.put(ConfirmedPaymentController());
     Get.put(ChangePasswordController());
     Get.put(TranslationController());
-    
   }
 }

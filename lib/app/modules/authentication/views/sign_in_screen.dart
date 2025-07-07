@@ -92,7 +92,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               .tr; // Localized "Enter email"
                         }
                         if (!EmailValidator.validate(value)) {
-                          return 'sign_in.invalid_email_error'
+                          return 'sign_in.email_validation_invalid'
                               .tr; // Localized "Enter a valid email address"
                         }
                         return null;
@@ -275,7 +275,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Future<void> forgotPasswordBTN() async {
     if (emailCtrl.text.isEmpty) {
-      showSnackBarMessage(context, 'sign_in.empty_email_error_forgot'.tr,
+      showSnackBarMessage(context, 'sign_in.forgot_password_error_empty_email'.tr,
           true); // Localized "Fill-up your valid email"
     } else {
       final bool isSuccess =

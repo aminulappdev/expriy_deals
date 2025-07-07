@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AgreeConditionCheck extends StatefulWidget {
   const AgreeConditionCheck({
@@ -31,24 +32,24 @@ class _AgreeConditionCheckState extends State<AgreeConditionCheck> {
         ),
         Flexible(
           child: RichText(
-            text: const TextSpan(
+            text:  TextSpan(
               children: [
                 TextSpan(
-                  text: 'I agree to the ',
+                  text: 'agree_condition.agree '.tr,
                   style: TextStyle(color: Colors.black),
                 ),
                 TextSpan(
-                  text: 'Terms & Conditions ',
+                  text: 'agree_condition.terms'.tr,
                   style: TextStyle(
                       decoration: TextDecoration.underline,
                       color: Colors.black),
                 ),
                 TextSpan(
-                  text: 'and ',
+                  text: 'agree_condition.and '.tr,
                   style: TextStyle(color: Colors.black),
                 ),
                 TextSpan(
-                  text: 'Privacy Policy',
+                  text: 'agree_condition.privacy'.tr,
                   style: TextStyle(
                       decoration: TextDecoration.underline,
                       color: Colors.black),

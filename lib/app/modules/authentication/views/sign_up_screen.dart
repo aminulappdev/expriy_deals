@@ -77,7 +77,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       keyboardType: TextInputType.name,
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
-                          return 'sign_up.empty_name_error'.tr; // Localized "Enter name"
+                          return 'sign_up.name_validation_empty'.tr; // Localized "Enter name"
                         }
                         return null;
                       },
@@ -103,7 +103,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       keyboardType: TextInputType.phone,
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
-                          return 'sign_up.empty_number_error'.tr; // Localized "Enter number"
+                          return 'sign_up.number_validation_empty'.tr; // Localized "Enter number"
                         }
                         return null;
                       },
@@ -128,10 +128,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       keyboardType: TextInputType.emailAddress,
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
-                          return 'sign_up.empty_email_error'.tr; // Localized "Enter email"
+                          return 'sign_up.email_validation_empty'.tr; // Localized "Enter email"
                         }
                         if (!EmailValidator.validate(value)) {
-                          return 'sign_up.invalid_email_error'.tr; // Localized "Enter a valid email address"
+                          return 'sign_up.email_validation_invalid'.tr; // Localized "Enter a valid email address"
                         }
                         return null;
                       },
@@ -155,7 +155,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
-                          return 'sign_up.empty_password_error'.tr; // Localized "Enter password"
+                          return 'sign_up.password_validation_empty'.tr; // Localized "Enter password"
                         }
                         return null;
                       },

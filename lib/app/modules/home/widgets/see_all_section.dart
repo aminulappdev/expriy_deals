@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SeeAllSection extends StatelessWidget {
@@ -24,7 +25,7 @@ class SeeAllSection extends StatelessWidget {
         GestureDetector(
           onTap: ontap,
           child: Text(
-            'See all..',
+            'home_screen.see_all'.tr,
             style: GoogleFonts.poppins(
                 fontSize: 12.sp,
                 color: Colors.green),

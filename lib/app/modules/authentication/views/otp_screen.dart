@@ -85,7 +85,7 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
                       animationDuration: const Duration(milliseconds: 300),
                       validator: (value) {
                         if (value == null || value.length < 6) {
-                          return 'otp_verify.invalid_otp_error'.tr; // Localized "Enter a valid 6-digit OTP"
+                          return 'otp_verify_forgot.error_message'.tr; // Localized "Enter a valid 6-digit OTP"
                         }
                         return null;
                       },
@@ -162,7 +162,7 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
                                 style: GoogleFonts.poppins(color: Colors.orange, fontSize: 16.sp),
                               ),
                               TextSpan(
-                                text: 'otp_verify.seconds'.tr, // Localized "s"
+                                text: 's'.tr, // Localized "s"
                                 style: GoogleFonts.poppins(color: Colors.black, fontSize: 16.sp),
                               ),
                             ],

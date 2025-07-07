@@ -54,7 +54,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
-                          return 'change_password.error_messages.enter_current_password'.tr; // Localized "Enter current password"
+                          return 'add_product.validation.empty_field'.tr; // Localized "Enter current password"
                         }
                         return null;
                       },
@@ -87,10 +87,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
-                          return 'change_password.error_messages.enter_new_password'.tr; // Localized "Enter new password"
+                          return 'change_password.validation.empty_password'.tr; // Localized "Enter new password"
                         }
                         if (value.length < 6) {
-                          return 'change_password.error_messages.password_too_short'.tr; // Localized "Password must be at least 6 characters"
+                          return 'change_password.validation.empty_password_must'.tr; // Localized "Password must be at least 6 characters"
                         }
                         return null;
                       },
@@ -108,7 +108,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             });
                           },
                         ),
-                        hintText: 'change_password.new_password_hint'.tr, // Localized "New password"
+                        hintText: 'change_password.validation.empty_password'.tr, // Localized "New password"
                         hintStyle: const TextStyle(color: Colors.grey),
                       ),
                     ),
@@ -123,7 +123,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
-                          return 'change_password.error_messages.enter_confirm_password'.tr; // Localized "Enter confirm password"
+                          return 'change_password.confirm_password_hint'.tr; // Localized "Enter confirm password"
                         }
                         if (value != passwordCtrl.text) {
                           return 'change_password.error_messages.passwords_do_not_match'.tr; // Localized "Passwords do not match"
