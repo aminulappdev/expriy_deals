@@ -941,3 +941,5 @@ class AppTranslations extends Translations {
         },
       };
 }
+
+ 
