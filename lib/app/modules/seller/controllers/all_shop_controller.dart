@@ -15,7 +15,7 @@ class AllShopController extends GetxController {
 
   final Rx<AllShopModel?> allShopModel = Rx<AllShopModel?>(null);
   List<AllShopItemModel>? get allShopData =>
-      allShopModel.value!.data?.data ?? [];
+      allShopModel.value?.data?.data ?? [];
 
   @override
   void onInit() {

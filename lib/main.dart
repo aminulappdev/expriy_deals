@@ -26,8 +26,8 @@ class ExpriyDeals extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String langCode = box.read('language_code') ?? 'es';
-    String countryCode = box.read('country_code') ?? 'ES';
+    String langCode = box.read('language_code') ?? 'en';
+    String countryCode = box.read('country_code') ?? 'EN';
     return FutureBuilder(
       future: translations.loadTranslations(),
       builder: (context, snapshot) {
@@ -43,7 +43,7 @@ class ExpriyDeals extends StatelessWidget {
                 title: 'expriy-deals',
                 translations: AppTranslations(),
                 locale: Locale(langCode, countryCode), // Default: Spanish
-                fallbackLocale: Locale('es', 'ES'),
+                fallbackLocale: Locale('en', 'EN'),
                 theme: ThemeData(
                   scaffoldBackgroundColor: Colors.white,
                   primaryColor: Color(0xffA57EA5).withOpacity(0.1),

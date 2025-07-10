@@ -5,11 +5,11 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Expriy Deals</string>
+	<string>ExpiryDeals</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<string>com.expriydeals.user</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -45,5 +45,24 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Expriy Deals uses the camera to scan barcodes and help you find deals on products.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Expriy Deals uses your location to find nearby deals and provide personalized offers based on your location.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Expriy Deals uses your location to find nearby deals while you are using the app.</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.638131107111-vabipd47f9pc192ir7vh4cbj71u1dtdg</string>
+			</array>
+		</dict>
+	</array>
+	<key>GIDClientID</key>
+	<string>638131107111-vabipd47f9pc192ir7vh4cbj71u1dtdg.apps.googleusercontent.com</string>
 </dict>
 </plist>
