@@ -56,6 +56,11 @@ class _HomeScreenState extends State<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!_isApiCalled) {
         _isApiCalled = true;
+        // API calls
+        recommendProductController.getRecommenedProduct();
+        specialProductController.getSpecialProduct();
+        categoryController.getCategory();
+        allProductController.getProduct();
         await requestLocationPermission();
         await getCurrentLocation();
       }
@@ -78,11 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
       latitude = locationData.latitude;
       longitude = locationData.longitude;
 
-      // API calls
-      recommendProductController.getRecommenedProduct();
-      specialProductController.getSpecialProduct();
-      categoryController.getCategory();
-      allProductController.getProduct();
+
       allShopController.myShops(latitude: latitude, longitude: longitude);
     } catch (e) {
       // Handle location error
@@ -93,284 +94,293 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     Get.put(ProfileController());
     final controller = Get.find<ProfileController>();
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Obx(() {
-                      return controller.inProgress
-                          ? const CircularProgressIndicator()
-                          : CircleAvatar(
-                              radius: 21.r,
-                              backgroundImage:
-                                  controller.profileData?.profile != null
-                                      ? NetworkImage(
-                                          controller.profileData!.profile!)
-                                      : const AssetImage(AssetsPath.appleLogo),
-                            );
-                    }),
-                    GestureDetector(
-                      onTap: () {
-                        Get.to(const SearchProductScreen());
-                      },
-                      child: Container(
-                        height: 34.h,
-                        width: 34.h,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.iconButtonThemeColor,
-                        ),
-                        child: Center(
-                          child: Icon(
-                            Icons.search_rounded,
-                            size: 24.h,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                heightBox16,
-                heightBox16,
-                SeeAllSection(
-                  title: 'home_screen.categories'.tr,
-                  ontap: () {
-                    Get.to(const AllCategoryScreen());
-                  },
-                ),
-                heightBox8,
-                Obx(() {
-                  if (categoryController.inProgress) {
-                    return const CategoryShimmerEffectWidget();
-                  } else if (categoryController.categoryData?.isEmpty ?? true) {
-                    return Center(child: Text('home_screen.no_categories_available'.tr));
-                  } else {
-                    final categories = categoryController.categoryData!;
-                    return SizedBox(
-                      height: 100.h,
-                      width: MediaQuery.of(context).size.width,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: categories.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 6.w),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                CategoryCard(
-                                  image: categories[index].banner ?? '',
-                                  onTap: () {
-                                    Get.to(ProductScreen(
-                                      shouldBackButton: true,
-                                      categoryId: categories[index].id ?? '',
-                                      categoryName:
-                                          categories[index].name ?? '',
-                                    ));
-                                  },
-                                  name: categories[index].name ?? '',
-                                ),
-                              ],
-                            ),
-                          );
+    return RefreshIndicator(
+      onRefresh: ()async{
+        recommendProductController.getRecommenedProduct();
+        specialProductController.getSpecialProduct();
+        categoryController.getCategory();
+        allProductController.getProduct();
+        allShopController.myShops(latitude: latitude, longitude: longitude);
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Obx(() {
+                        return controller.inProgress
+                            ? const CircularProgressIndicator()
+                            : CircleAvatar(
+                                radius: 21.r,
+                                backgroundImage:
+                                    controller.profileData?.profile != null
+                                        ? NetworkImage(
+                                            controller.profileData!.profile!)
+                                        : const AssetImage(AssetsPath.logo),
+                              );
+                      }),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(const SearchProductScreen());
                         },
-                      ),
-                    );
-                  }
-                }),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          'home_screen.special_offer'.tr,
-                          style: GoogleFonts.poppins(
-                            fontSize: 18.sp,
+                        child: Container(
+                          height: 34.h,
+                          width: 34.h,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
                             color: AppColors.iconButtonThemeColor,
-                            fontWeight: FontWeight.w600,
+                          ),
+                          child: Center(
+                            child: Icon(
+                              Icons.search_rounded,
+                              size: 24.h,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                        widthBox4,
-                        Icon(
-                          Icons.flash_on_outlined,
-                          color: AppColors.iconButtonThemeColor,
+                      ),
+                    ],
+                  ),
+                  heightBox16,
+                  heightBox16,
+                  SeeAllSection(
+                    title: 'home_screen.categories'.tr,
+                    ontap: () {
+                      Get.to(const AllCategoryScreen());
+                    },
+                  ),
+                  heightBox8,
+                  Obx(() {
+                    if (categoryController.inProgress) {
+                      return const CategoryShimmerEffectWidget();
+                    } else if (categoryController.categoryData?.isEmpty ?? true) {
+                      return Center(child: Text('home_screen.no_categories_available'.tr));
+                    } else {
+                      final categories = categoryController.categoryData!;
+                      return SizedBox(
+                        height: 100.h,
+                        width: MediaQuery.of(context).size.width,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: categories.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 6.w),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CategoryCard(
+                                    image: categories[index].banner ?? '',
+                                    onTap: () {
+                                      Get.to(ProductScreen(
+                                        shouldBackButton: true,
+                                        categoryId: categories[index].id ?? '',
+                                        categoryName:
+                                            categories[index].name ?? '',
+                                      ));
+                                    },
+                                    name: categories[index].name ?? '',
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
-                      ],
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Get.to(ProductScreen(
-                          shouldBackButton: true,
-                          categoryId: '',
-                          categoryName: 'Special-offer',
-                        ));
-                      },
-                      child: Text(
-                        'home_screen.see_all'.tr,
-                        style: GoogleFonts.poppins(
-                          fontSize: 12.sp,
-                          color: Colors.green,
+                      );
+                    }
+                  }),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'home_screen.special_offer'.tr,
+                            style: GoogleFonts.poppins(
+                              fontSize: 18.sp,
+                              color: AppColors.iconButtonThemeColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          widthBox4,
+                          Icon(
+                            Icons.flash_on_outlined,
+                            color: AppColors.iconButtonThemeColor,
+                          ),
+                        ],
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(ProductScreen(
+                            shouldBackButton: true,
+                            categoryId: '',
+                            categoryName: 'Special-offer',
+                          ));
+                        },
+                        child: Text(
+                          'home_screen.see_all'.tr,
+                          style: GoogleFonts.poppins(
+                            fontSize: 12.sp,
+                            color: Colors.green,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Obx(() {
-                  if (specialProductController.inProgress ||
-                      specialProductController.productData == null) {
-                    return const ProductItemShimmerEffectWidget();
-                  } else if (specialProductController.productData!.isEmpty) {
-                    return SizedBox(
-                      height: 180.h,
-                      child: Center(child: Text('home_screen.no_products_available'.tr)),
-                    );
-                  } else {
-                    final products = specialProductController.productData!;
-                    print(
-                        'Special data: ${specialProductController.productData}');
-                    return SizedBox(
-                      height: 180.h,
-                      width: MediaQuery.of(context).size.width,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: products.length,
-                        itemBuilder: (context, index) {
-                          final product = products[index];
-                          return Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 4.w),
-                            child: ProductCard(
-                              discount: product.discount?.toString() ?? '',
-                              image: product.images.isNotEmpty == true
-                                  ? product.images[0].url ?? ''
-                                  : '',
-                              price: product.price?.toString() ?? '',
-                              title: product.name ?? '',
-                              isShowDiscount: true,
-                              productId: product.id ?? '',
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  }
-                }),
-                heightBox12,
-                SeeAllSection(
-                  title: 'home_screen.nearby_stores'.tr,
-                  ontap: () {
-                    Get.to(const ShopScreen(shouldBackButton: true));
-                  },
-                ),
-                heightBox10,
-                Obx(() {
-                  if (allShopController.inProgress) {
-                    return const ProductItemShimmerEffectWidget();
-                  } else if (allShopController.allShopData?.isEmpty ?? true) {
-                    return SizedBox(
-                      height: 150.h,
-                      child: Center(child: Text('home_screen.no_shops_available'.tr)),
-                    );
-                  } else {
-                    final shops = allShopController.allShopData!;
-                    return SizedBox(
-                      height: 180.h,
-                      width: MediaQuery.of(context).size.width,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: shops.length,
-                        itemBuilder: (context, index) {
-                          final shop = shops[index];
-                          return Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 4.w),
-                            child: ShopCard(
-                              onTapF: () {
-                                Get.to(SellerProfileScreen(
-                                  sellerData: {
-                                    'sellerId': shop.author?.id ?? '',
-                                    'shopName': shop.name ?? 'Unknown Shop',
-                                    'shopLogo': shop.logo ??
-                                        'https://fastly.picsum.photos/id/471/200/300.jpg?hmac=N_ZXTRU2OGQ7b_1b8Pz2X8e6Qyd84Q7xAqJ90bju2WU',
-                                    'shopId': shop.id ?? '',
-                                    'sellerName':
-                                        shop.author?.name ?? 'Unknown Seller',
-                                    'location':
-                                        shop.address ?? 'Unknown Location',
-                                    'phone': shop.author?.phoneNumber ?? 'N/A',
-                                    'description':
-                                        shop.description ?? 'No Description',
-                                  },
-                                ));
-                              },
-                              image: shop.logo ??
-                                  'https://fastly.picsum.photos/id/471/200/300.jpg?hmac=N_ZXTRU2OGQ7b_1b8Pz2X8e6Qyd84Q7xAqJ90bju2WU',
-                              title: shop.name ?? 'Shop Name',
-                              shopData: shop,
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  }
-                }),
-                heightBox12,
-                SeeAllSection(
-                  title: 'home_screen.recommended_for_you'.tr,
-                  ontap: () {
-                    Get.to(const ProductScreen(
-                      shouldBackButton: true,
-                      categoryId: '',
-                      categoryName: '',
-                    ));
-                  },
-                ),
-                heightBox10,
-                Obx(() {
-                  if (recommendProductController.inProgress) {
-                    return const ProductItemShimmerEffectWidget();
-                  } else if (recommendProductController.productData?.isEmpty ??
-                      true) {
-                    return SizedBox(
-                      height: 180.h,
-                      child: Center(child: Text('home_screen.no_products_available'.tr)),
-                    );
-                  } else {
-                    final products = recommendProductController.productData!;
-                    return SizedBox(
-                      height: 180.h,
-                      width: MediaQuery.of(context).size.width,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: products.length > 4 ? 4 : products.length,
-                        itemBuilder: (context, index) {
-                          final product = products[index];
-                          return Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 4.w),
-                            child: ProductCard(
-                              image: product.images.isNotEmpty == true
-                                  ? product.images[0].url ?? ''
-                                  : '',
-                              price: product.price?.toString() ?? '',
-                              title: product.name ?? '',
-                              isShowDiscount: true,
-                              productId: product.id ?? '',
-                              discount: product.discount.toString(),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  }
-                }),
-                heightBox20,
-              ],
+                    ],
+                  ),
+                  Obx(() {
+                    if (specialProductController.inProgress ||
+                        specialProductController.productData == null) {
+                      return const ProductItemShimmerEffectWidget();
+                    } else if (specialProductController.productData!.isEmpty) {
+                      return SizedBox(
+                        height: 180.h,
+                        child: Center(child: Text('home_screen.no_products_available'.tr)),
+                      );
+                    } else {
+                      final products = specialProductController.productData!;
+                      print(
+                          'Special data: ${specialProductController.productData}');
+                      return SizedBox(
+                        height: 180.h,
+                        width: MediaQuery.of(context).size.width,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: products.length,
+                          itemBuilder: (context, index) {
+                            final product = products[index];
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 4.w),
+                              child: ProductCard(
+                                discount: product.discount?.toString() ?? '',
+                                image: product.images.isNotEmpty == true
+                                    ? product.images[0].url ?? ''
+                                    : '',
+                                price: product.price?.toString() ?? '',
+                                title: product.name ?? '',
+                                isShowDiscount: true,
+                                productId: product.id ?? '',
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    }
+                  }),
+                  heightBox12,
+                  SeeAllSection(
+                    title: 'home_screen.nearby_stores'.tr,
+                    ontap: () {
+                      Get.to(const ShopScreen(shouldBackButton: true));
+                    },
+                  ),
+                  heightBox10,
+                  Obx(() {
+                    if (allShopController.inProgress) {
+                      return const ProductItemShimmerEffectWidget();
+                    } else if (allShopController.allShopData?.isEmpty ?? true) {
+                      return SizedBox(
+                        height: 150.h,
+                        child: Center(child: Text('home_screen.no_shops_available'.tr)),
+                      );
+                    } else {
+                      final shops = allShopController.allShopData!;
+                      return SizedBox(
+                        height: 180.h,
+                        width: MediaQuery.of(context).size.width,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: shops.length,
+                          itemBuilder: (context, index) {
+                            final shop = shops[index];
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 4.w),
+                              child: ShopCard(
+                                onTapF: () {
+                                  Get.to(SellerProfileScreen(
+                                    sellerData: {
+                                      'sellerId': shop.author?.id ?? '',
+                                      'shopName': shop.name ?? 'Unknown Shop',
+                                      'shopLogo': shop.logo ??
+                                          'https://fastly.picsum.photos/id/471/200/300.jpg?hmac=N_ZXTRU2OGQ7b_1b8Pz2X8e6Qyd84Q7xAqJ90bju2WU',
+                                      'shopId': shop.id ?? '',
+                                      'sellerName':
+                                          shop.author?.name ?? 'Unknown Seller',
+                                      'location':
+                                          shop.address ?? 'Unknown Location',
+                                      'phone': shop.author?.phoneNumber ?? 'N/A',
+                                      'description':
+                                          shop.description ?? 'No Description',
+                                    },
+                                  ));
+                                },
+                                image: shop.logo ??
+                                    'https://fastly.picsum.photos/id/471/200/300.jpg?hmac=N_ZXTRU2OGQ7b_1b8Pz2X8e6Qyd84Q7xAqJ90bju2WU',
+                                title: shop.name ?? 'Shop Name',
+                                shopData: shop,
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    }
+                  }),
+                  heightBox12,
+                  SeeAllSection(
+                    title: 'home_screen.recommended_for_you'.tr,
+                    ontap: () {
+                      Get.to(const ProductScreen(
+                        shouldBackButton: true,
+                        categoryId: '',
+                        categoryName: '',
+                      ));
+                    },
+                  ),
+                  heightBox10,
+                  Obx(() {
+                    if (recommendProductController.inProgress) {
+                      return const ProductItemShimmerEffectWidget();
+                    } else if (recommendProductController.productData?.isEmpty ??
+                        true) {
+                      return SizedBox(
+                        height: 180.h,
+                        child: Center(child: Text('home_screen.no_products_available'.tr)),
+                      );
+                    } else {
+                      final products = recommendProductController.productData!;
+                      return SizedBox(
+                        height: 180.h,
+                        width: MediaQuery.of(context).size.width,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: products.length > 4 ? 4 : products.length,
+                          itemBuilder: (context, index) {
+                            final product = products[index];
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 4.w),
+                              child: ProductCard(
+                                image: product.images.isNotEmpty == true
+                                    ? product.images[0].url ?? ''
+                                    : '',
+                                price: product.price?.toString() ?? '',
+                                title: product.name ?? '',
+                                isShowDiscount: true,
+                                productId: product.id ?? '',
+                                discount: product.discount.toString(),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    }
+                  }),
+                  heightBox20,
+                ],
+              ),
             ),
           ),
         ),

@@ -61,7 +61,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   showBackButton: true,
                   imageHeight: 280,
                   onBoardingRow: false,
-                  title: 'onboarding.page3_title'.tr, // Localized "You are safe here..."
+                  title: 'onboarding_screen.page3_title'.tr, // Localized "You are safe here..."
                   subtitle: 'onboarding.page3_subtitle'.tr, // Localized subtitle
                   pageController: _pageController,
                 ),

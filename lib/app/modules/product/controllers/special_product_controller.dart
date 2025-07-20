@@ -17,11 +17,6 @@ class SpecialProductController extends GetxController {
   List<ProductItemModel>? get productData =>
       _productModel.value?.data?.data ?? [];
 
-  @override
-  void onInit() {
-    super.onInit();
-    // getCategory(Get.arguments);
-  }
 
   Future<bool> getSpecialProduct() async {
     final token = StorageUtil.getData(StorageUtil.userAccessToken);

@@ -3,7 +3,6 @@ import 'package:expriy_deals/app/modules/order/controllers/order_controller.dart
 import 'package:expriy_deals/app/modules/order/widgets/price_row.dart';
 import 'package:expriy_deals/app/modules/payment/controllers/payment_services.dart';
 import 'package:expriy_deals/app/modules/product/model/product_details_model.dart';
-import 'package:expriy_deals/app/modules/product/widgets/checkout_user_info.dart';
 import 'package:expriy_deals/app/modules/profile/controllers/profile_controller.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
@@ -14,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../widgets/checkout_user_info.dart';
 
 class CheckOutScreen extends StatefulWidget {
   final ProductDetailsData productDetailsData;
@@ -40,6 +41,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   double mainTotalPrice = 0.0;
   int discount = 0;
   int item = 1;
+  final double vatRate = 0.0825; // 8.25% VAT
 
   @override
   void initState() {
@@ -56,7 +58,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
   void _calculateTotalPrice() {
     totalPrice = price * quantity;
-    mainTotalPrice = double.parse(totalPrice.toStringAsFixed(2));
+    double vatAmount = totalPrice * vatRate;
+    mainTotalPrice = double.parse((totalPrice + vatAmount).toStringAsFixed(2));
   }
 
   @override
@@ -93,7 +96,14 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                 heightBox12,
                 PriceRow(
                   name: 'checkout.price_label'.tr.replaceFirst('{item}', item.toString()), // Localized "Price ({item} item)"
-                  price: price.toStringAsFixed(2),
+                  price: (price * quantity).toStringAsFixed(2),
+                  nameSize: 14,
+                  priceSize: 14,
+                ),
+                heightBox12,
+                PriceRow(
+                  name: 'VAT'.tr,
+                  price: "${(totalPrice * vatRate).toStringAsFixed(2)} (8.25%)",
                   nameSize: 14,
                   priceSize: 14,
                 ),
@@ -270,7 +280,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
               Align(
                 alignment: Alignment.bottomRight,
                 child: Text(
-                  (price * quantity).toStringAsFixed(2),
+                  mainTotalPrice.toStringAsFixed(2),
                   style: GoogleFonts.poppins(fontSize: 20.sp),
                 ),
               ),

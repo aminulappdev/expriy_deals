@@ -39,193 +39,192 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Padding(
-          padding: EdgeInsets.all(16.0.h),
-          child: SingleChildScrollView(
-            child: Obx(() {
-              if (productDetailsController.inProgress) {
-                return const Center(child: CircularProgressIndicator());
-              } else {
-                final data = productDetailsController.productDetailsData;
-                final double updatePrice = double.parse(data?.price?.toString() ?? '0');
-                final double discountValue = updatePrice * ((100 - (int.parse(data?.discount?.toString() ?? '0'))) / 100);
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomAppBar(name: 'product_details.app_bar_title'.tr), // Localized "Product Details"
-                    heightBox12,
-                    HomeCarouselSlider(
-                      images: productDetailsController.productDetailsData?.images ?? [],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          data?.name ?? 'info.no_data_message'.tr, // Localized "No data available"
-                          style: GoogleFonts.poppins(fontSize: 20.sp),
-                        ),
-                        Text(
-                          '\$${discountValue.toStringAsFixed(2)}',
-                          style: GoogleFonts.poppins(fontSize: 16.h, fontWeight: FontWeight.w500),
-                        ),
-                      ],
-                    ),
-                    heightBox8,
-                    Text(
-                      'product_details.section_title'.tr, // Localized "Product Details"
-                      style: GoogleFonts.poppins(fontSize: 14.sp, fontWeight: FontWeight.w400),
-                    ),
-                    heightBox4,
-                    Html(data: data?.details ?? ''),
-                    heightBox4,
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            data?.author?.shop?.logo != null
-                                ? CircleAvatar(
-                                    radius: 18.r,
-                                    backgroundImage: NetworkImage(data!.author!.shop!.logo!),
-                                  )
-                                : CircleAvatar(
-                                    backgroundColor: AppColors.themeColor,
-                                    radius: 18.r,
-                                    child: Text(
-                                      data?.author?.shop?.name?.isNotEmpty == true
-                                          ? data!.author!.shop!.name!.substring(0, 1)
-                                          : '',
-                                      style: GoogleFonts.poppins(color: Colors.white, fontSize: 18.sp),
-                                    ),
-                                  ),
-                            widthBox4,
-                            Text(
-                              data?.author?.shop?.name ?? 'seller_about.store_name_label'.tr, // Localized "Store Name: "
-                              style: GoogleFonts.poppins(fontSize: 18.sp, fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                        heightBox8,
-                        InkWell(
-                          onTap: () {
-                            if (data?.author != null && data?.author!.shop != null) {
-                              Get.to(() => SellerProfileScreen(
-                                    sellerData: {
-                                      'sellerId': data?.author!.id ?? '',
-                                      'shopName': data?.author!.shop!.name ?? 'seller_about.store_name_label'.tr,
-                                      'shopLogo': data?.author!.shop!.logo,
-                                      'shopId': data?.author!.shop!.id ?? '',
-                                      'sellerName': data?.author!.name ?? 'info.no_data_message'.tr,
-                                      'location': data?.author!.shop?.address ?? 'info.no_data_message'.tr,
-                                      'phone': data?.author!.phoneNumber ?? 'info.no_data_message'.tr,
-                                      'description': data?.author!.shop!.description ?? 'info.no_data_message'.tr,
-                                    },
-                                  ));
-                            } else {
-                              showSnackBarMessage(
-                                context,
-                                'product_details.error_messages.seller_data_not_available'.tr, // Localized "Seller data not available"
-                                true,
-                              );
-                            }
-                          },
-                          child: Container(
-                            height: 32.h,
-                            width: 150,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              color: const Color(0xff308960),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                const Icon(Icons.shopping_bag_outlined, color: Colors.white),
-                                Text(
-                                  'product_details.visit_store_button'.tr, // Localized "Visit Store"
-                                  style: GoogleFonts.poppins(color: Colors.white),
-                                ),
-                                const Icon(Icons.arrow_forward_ios, color: Colors.white,size: 14,),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    heightBox12,
-                    Container(
-                      height: 70.h,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.all(16.0.h),
+        child: SingleChildScrollView(
+          child: Obx(() {
+            if (productDetailsController.inProgress) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              final data = productDetailsController.productDetailsData;
+              final double updatePrice = double.parse(data?.price?.toString() ?? '0');
+              final double discountValue = updatePrice * ((100 - (int.parse(data?.discount?.toString() ?? '0'))) / 100);
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  heightBox30,
+                  CustomAppBar(name: 'product_details.app_bar_title'.tr), // Localized "Product Details"
+                  heightBox12,
+                  HomeCarouselSlider(
+                    images: productDetailsController.productDetailsData?.images ?? [],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        data?.name ?? 'info.no_data_message'.tr, // Localized "No data available"
+                        style: GoogleFonts.poppins(fontSize: 20.sp),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      Text(
+                        '\$${discountValue.toStringAsFixed(2)}',
+                        style: GoogleFonts.poppins(fontSize: 16.h, fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                  heightBox8,
+                  Text(
+                    'product_details.section_title'.tr, // Localized "Product Details"
+                    style: GoogleFonts.poppins(fontSize: 14.sp, fontWeight: FontWeight.w400),
+                  ),
+                  heightBox4,
+                  Html(data: data?.details ?? ''),
+                  heightBox4,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            child: SizedBox(
-                              width: 150.w,
-                              height: 40.h,
-                              child: GestureDetector(
-                                onTap: () {
-                                  if (data?.id != null && data?.stock != null) {
-                                    addToCartFunction(data!.id!, data.stock.toString());
-                                  } else {
-                                    showSnackBarMessage(
-                                      context,
-                                      'product_details.error_messages.product_data_not_available'.tr, // Localized "Product data not available"
-                                      true,
-                                    );
-                                  }
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: AppColors.iconButtonThemeColor),
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'product_details.add_to_cart_button'.tr, // Localized "Add to cart"
-                                      style: GoogleFonts.poppins(color: AppColors.iconButtonThemeColor),
-                                    ),
+                          data?.author?.shop?.logo != null
+                              ? CircleAvatar(
+                                  radius: 18.r,
+                                  backgroundImage: NetworkImage(data!.author!.shop!.logo!),
+                                )
+                              : CircleAvatar(
+                                  backgroundColor: AppColors.themeColor,
+                                  radius: 18.r,
+                                  child: Text(
+                                    data?.author?.shop?.name?.isNotEmpty == true
+                                        ? data!.author!.shop!.name!.substring(0, 1)
+                                        : '',
+                                    style: GoogleFonts.poppins(color: Colors.white, fontSize: 18.sp),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            child: SizedBox(
-                              width: 150.w,
-                              height: 42.h,
-                              child: CustomElevatedButton(
-                                onPressed: () {
-                                  if (data != null) {
-                                    Get.to(() => CheckOutScreen(productDetailsData: data));
-                                  } else {
-                                    showSnackBarMessage(
-                                      context,
-                                      'product_details.error_messages.product_data_not_available'.tr, // Localized "Product data not available"
-                                      true,
-                                    );
-                                  }
-                                },
-                                text: 'product_details.buy_now_button'.tr, // Localized "Buy now"
-                              ),
-                            ),
+                          widthBox4,
+                          Text(
+                            data?.author?.shop?.name ?? 'seller_about.store_name_label'.tr, // Localized "Store Name: "
+                            style: GoogleFonts.poppins(fontSize: 18.sp, fontWeight: FontWeight.w500),
                           ),
                         ],
                       ),
+                      heightBox8,
+                      InkWell(
+                        onTap: () {
+                          if (data?.author != null && data?.author!.shop != null) {
+                            Get.to(() => SellerProfileScreen(
+                                  sellerData: {
+                                    'sellerId': data?.author!.id ?? '',
+                                    'shopName': data?.author!.shop!.name ?? 'seller_about.store_name_label'.tr,
+                                    'shopLogo': data?.author!.shop!.logo,
+                                    'shopId': data?.author!.shop!.id ?? '',
+                                    'sellerName': data?.author!.name ?? 'info.no_data_message'.tr,
+                                    'location': data?.author!.shop?.address ?? 'info.no_data_message'.tr,
+                                    'phone': data?.author!.phoneNumber ?? 'info.no_data_message'.tr,
+                                    'description': data?.author!.shop!.description ?? 'info.no_data_message'.tr,
+                                  },
+                                ));
+                          } else {
+                            showSnackBarMessage(
+                              context,
+                              'product_details.error_messages.seller_data_not_available'.tr, // Localized "Seller data not available"
+                              true,
+                            );
+                          }
+                        },
+                        child: Container(
+                          height: 32.h,
+                          width: 150,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: const Color(0xff308960),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              const Icon(Icons.shopping_bag_outlined, color: Colors.white),
+                              Text(
+                                'product_details.visit_store_button'.tr, // Localized "Visit Store"
+                                style: GoogleFonts.poppins(color: Colors.white),
+                              ),
+                              const Icon(Icons.arrow_forward_ios, color: Colors.white,size: 14,),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  heightBox12,
+                  Container(
+                    height: 70.h,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                  ],
-                );
-              }
-            }),
-          ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: SizedBox(
+                            width: 150.w,
+                            height: 40.h,
+                            child: GestureDetector(
+                              onTap: () {
+                                if (data?.id != null && data?.stock != null) {
+                                  addToCartFunction(data!.id!, data.stock.toString());
+                                } else {
+                                  showSnackBarMessage(
+                                    context,
+                                    'product_details.error_messages.product_data_not_available'.tr, // Localized "Product data not available"
+                                    true,
+                                  );
+                                }
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: AppColors.iconButtonThemeColor),
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'product_details.add_to_cart_button'.tr, // Localized "Add to cart"
+                                    style: GoogleFonts.poppins(color: AppColors.iconButtonThemeColor),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: SizedBox(
+                            width: 150.w,
+                            height: 42.h,
+                            child: CustomElevatedButton(
+                              onPressed: () {
+                                if (data != null) {
+                                  Get.to(() => CheckOutScreen(productDetailsData: data));
+                                } else {
+                                  showSnackBarMessage(
+                                    context,
+                                    'product_details.error_messages.product_data_not_available'.tr, // Localized "Product data not available"
+                                    true,
+                                  );
+                                }
+                              },
+                              text: 'product_details.buy_now_button'.tr, // Localized "Buy now"
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }
+          }),
         ),
       ),
     );
@@ -237,7 +236,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       if (mounted) {
         showSnackBarMessage(
           context,
-          'product_details.success_messages.added_to_cart'.tr, // Localized "Successfully added to cart"
+          'product_details.success_message'.tr, // Localized "Successfully added to cart"
         );
       }
     } else {

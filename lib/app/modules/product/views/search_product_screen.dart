@@ -140,9 +140,20 @@ class _SearchProductScreenState extends State<SearchProductScreen> {
                     });
                   },
                 ),
-                Text(
-                  'search_products.filter_label'.tr, // Localized "Filter"
-                  style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
+                InkWell(
+                  onTap: (){
+                    setState(() {
+                      _showCategories = !_showCategories ?? false;
+                      if (!_showCategories) {
+                        _selectedCategoryId = null;
+                        allProductController.getProduct(categoryId: null);
+                      }
+                    });
+                  },
+                  child: Text(
+                    'search_products.filter_label'.tr, // Localized "Filter"
+                    style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
+                  ),
                 ),
               ],
             ),

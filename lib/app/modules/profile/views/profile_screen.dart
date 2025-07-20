@@ -54,7 +54,7 @@ class ProfileScreen extends StatelessWidget {
                               backgroundImage:
                                   controller.profileData?.profile != null
                                       ? NetworkImage(controller.profileData!.profile!)
-                                      : const AssetImage(AssetsPath.appleLogo),
+                                      :  AssetImage(AssetsPath.logo,),
                             ),
                             heightBox4,
                             Text(
