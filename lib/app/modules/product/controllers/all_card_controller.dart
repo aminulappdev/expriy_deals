@@ -5,7 +5,7 @@ import 'package:expriy_deals/services/network_caller/network_caller.dart';
 import 'package:expriy_deals/services/network_caller/network_response.dart';
 import 'package:expriy_deals/urls.dart';
 import 'package:get/get.dart';
-
+ 
 class AllCartController extends GetxController {
   final RxBool _inProgress = false.obs;
   bool get inProgress => _inProgress.value; 

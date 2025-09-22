@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 
 class AllCategoryController extends GetxController {
   final RxBool _inProgress = false.obs;
-  bool get inProgress => _inProgress.value;
+  bool get inProgress => _inProgress.value; 
 
   RxString? _errorMessage = ''.obs;
   String? get errorMessage => _errorMessage?.value;

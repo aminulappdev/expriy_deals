@@ -11,7 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class GoogleAuthController extends GetxController {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-
+ 
   bool _inProgress = false;
   bool get inProgress => _inProgress;
 
@@ -64,8 +64,7 @@ class GoogleAuthController extends GetxController {
       if (response.isSuccess) {       
         StorageUtil.saveData(
             StorageUtil.userAccessToken, response.responseData['data']['accessToken']);
-// \0
-// \0
+
         _errorMessage = null;
         profileController.getProfileData();
 

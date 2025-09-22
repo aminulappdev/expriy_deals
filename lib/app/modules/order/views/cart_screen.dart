@@ -13,7 +13,7 @@ class CartScreen extends StatefulWidget {
 
   @override
   State<CartScreen> createState() => _CartScreenState();
-}
+} 
 
 class _CartScreenState extends State<CartScreen> {
   final AllCartController allCartController = Get.find<AllCartController>();
