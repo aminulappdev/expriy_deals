@@ -51,14 +51,14 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
-    nameCtrl.text = widget.profileData.name ?? 'info.no_data_message'.tr; // Localized "No data available"
-    emailCtrl.text = widget.profileData.email ?? 'info.no_data_message'.tr;
-    contactCtrl.text = widget.profileData.phoneNumber ?? 'info.no_data_message'.tr;
-    locationCtrl.text = widget.profileData.address ?? 'info.no_data_message'.tr;
-    cityCtrl.text = widget.profileData.city ?? 'info.no_data_message'.tr;
-    stateCtrl.text = widget.profileData.state ?? 'info.no_data_message'.tr;
-    zipcodeCtrl.text = widget.profileData.zipCode ?? 'info.no_data_message'.tr;
-    countryCtrl.text = widget.profileData.country ?? 'info.no_data_message'.tr;
+    nameCtrl.text = widget.profileData.name ?? ''; // Localized "No data available"
+    emailCtrl.text = widget.profileData.email ?? '';
+    contactCtrl.text = widget.profileData.phoneNumber ?? '';
+    locationCtrl.text = widget.profileData.address ?? '';
+    cityCtrl.text = widget.profileData.city ?? '';
+    stateCtrl.text = widget.profileData.state ?? '';
+    zipcodeCtrl.text = widget.profileData.zipCode ?? '';
+    countryCtrl.text = widget.profileData.country ?? '';
   }
 
   @override
@@ -173,12 +173,6 @@ class _EditProfileState extends State<EditProfile> {
                       controller: contactCtrl,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       keyboardType: TextInputType.phone,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'edit_profile.error_messages.enter_contact'.tr; // Localized "Enter contact information"
-                        }
-                        return null;
-                      },
                       decoration: InputDecoration(hintStyle: const TextStyle(color: Colors.grey)),
                     ),
                     heightBox12,
@@ -190,12 +184,6 @@ class _EditProfileState extends State<EditProfile> {
                     TextFormField(
                       controller: locationCtrl,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'edit_profile.error_messages.enter_address'.tr; // Localized "Enter address"
-                        }
-                        return null;
-                      },
                       decoration: InputDecoration(hintStyle: const TextStyle(color: Colors.grey)),
                     ),
                     heightBox12,
@@ -207,12 +195,6 @@ class _EditProfileState extends State<EditProfile> {
                     TextFormField(
                       controller: cityCtrl,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'edit_profile.error_messages.enter_city'.tr; // Localized "Enter city"
-                        }
-                        return null;
-                      },
                       decoration: InputDecoration(hintStyle: const TextStyle(color: Colors.grey)),
                     ),
                     heightBox12,
@@ -224,12 +206,6 @@ class _EditProfileState extends State<EditProfile> {
                     TextFormField(
                       controller: stateCtrl,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'edit_profile.error_messages.enter_state'.tr; // Localized "Enter state"
-                        }
-                        return null;
-                      },
                       decoration: InputDecoration(hintStyle: const TextStyle(color: Colors.grey)),
                     ),
                     heightBox12,

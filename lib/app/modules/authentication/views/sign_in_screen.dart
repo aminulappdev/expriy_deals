@@ -54,9 +54,9 @@ class _SignInScreenState extends State<SignInScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              heightBox20,
+              heightBox40,
               CustomAppBar(
-                  name: 'sign_in.app_bar_title'.tr), // Localized "Sign In"
+                  name: 'sign_in.app_bar_title'.tr,isBack: false,), // Localized "Sign In"
               heightBox16,
               Align(
                 alignment: Alignment.center,

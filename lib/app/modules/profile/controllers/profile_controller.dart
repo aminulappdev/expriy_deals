@@ -64,7 +64,7 @@ class ProfileController extends GetxController {
   // }
 
   Future<void> logout() async {
-    _inProgress.value = true;
+    //_inProgress.value = true;
     final isSuccess = await _profileService.logout();
     _inProgress.value = false;
     if (isSuccess) {

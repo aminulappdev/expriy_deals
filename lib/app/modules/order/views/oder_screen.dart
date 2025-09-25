@@ -3,6 +3,7 @@ import 'package:expriy_deals/app/modules/order/views/order_details_screen.dart';
 import 'package:expriy_deals/app/modules/order/widgets/my_order_card.dart';
 import 'package:expriy_deals/app/modules/product/views/check_out_screen.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
+import 'package:expriy_deals/app/widgets/costom_app_bar.dart';
 import 'package:expriy_deals/app/widgets/show_snackBar_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,21 +34,9 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            heightBox20,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                widthBox12,
-                Text(
-                  'my_orders.title'.tr, // Localized "My Orders"
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
-            ),
+            heightBox40,
+            CustomAppBar(name: 'my_orders.title'.tr), // Localized "Update profile"
+
             heightBox10,
             Obx(() {
               if (myOrdersController.inProgress) {
@@ -98,17 +87,17 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                           }
                         },
                         secondBTNOntap: () {
-                          if (order.product != null) {
-                            Get.to(() => CheckOutScreen(
-                                  productDetailsData: order.product!,
-                                ));
-                          } else {
-                            showSnackBarMessage(
-                              context,
-                              'product_details.error_messages.product_data_not_available'.tr, // Localized error message
-                              true,
-                            );
-                          }
+                          // if (order.product != null) {
+                          //   Get.to(() => CheckOutScreen(
+                          //         productDetailsData: order.product!,
+                          //       ));
+                          // } else {
+                          //   showSnackBarMessage(
+                          //     context,
+                          //     'product_details.error_messages.product_data_not_available'.tr, // Localized error message
+                          //     true,
+                          //   );
+                          // }
                         },
                         productDetailsData: order.product!,
                       );

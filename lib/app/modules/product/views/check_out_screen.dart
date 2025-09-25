@@ -51,7 +51,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
     discount = widget.productDetailsData.discount ?? 0;
     double originalPrice = widget.productDetailsData.price?.toDouble() ?? 0.0;
-    price = originalPrice * ((100 - discount) / 100);
+    price = originalPrice;
     price = double.parse(price.toStringAsFixed(2));
     _calculateTotalPrice();
   }
@@ -59,7 +59,12 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   void _calculateTotalPrice() {
     totalPrice = price * quantity;
     double vatAmount = totalPrice * vatRate;
-    mainTotalPrice = double.parse((totalPrice + vatAmount).toStringAsFixed(2));
+    double sum = totalPrice + vatAmount;
+
+    double discountPercent = double.parse(widget.productDetailsData.discount.toString());
+    double discountAmount = sum * (discountPercent / 100);
+
+    mainTotalPrice = double.parse((sum - discountAmount).toStringAsFixed(2));
   }
 
   @override
@@ -102,8 +107,15 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                 ),
                 heightBox12,
                 PriceRow(
-                  name: 'VAT'.tr,
+                  name: 'Sales Tax'.tr,
                   price: "${(totalPrice * vatRate).toStringAsFixed(2)} (8.25%)",
+                  nameSize: 14,
+                  priceSize: 14,
+                ),
+                heightBox12,
+                PriceRow(
+                  name: 'Discount'.tr,
+                  price: "-${widget.productDetailsData.discount} %",
                   nameSize: 14,
                   priceSize: 14,
                 ),
@@ -146,6 +158,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                     ignoring: isLoading,
                                     child: CustomElevatedButton(
                                       onPressed: () {
+                                        debugPrint(">>>>>>> mainTotalPrice $mainTotalPrice");
                                         if (controller.profileData?.address == null || controller.profileData!.address!.isEmpty) {
                                           showSnackBarMessage(
                                             context,
@@ -277,13 +290,13 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                   ),
                 ],
               ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Text(
-                  mainTotalPrice.toStringAsFixed(2),
-                  style: GoogleFonts.poppins(fontSize: 20.sp),
-                ),
-              ),
+              // Align(
+              //   alignment: Alignment.bottomRight,
+              //   child: Text(
+              //     price.toStringAsFixed(2),
+              //     style: GoogleFonts.poppins(fontSize: 20.sp),
+              //   ),
+              // ),
             ],
           ),
         ),

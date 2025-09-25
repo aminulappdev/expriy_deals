@@ -1,8 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:expriy_deals/app/modules/product/model/product_details_model.dart';
 import 'package:expriy_deals/app/utils/app_colors.dart';
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -19,8 +17,15 @@ class HomeCarouselSlider extends StatefulWidget {
 
 class _HomeCarouselSliderState extends State<HomeCarouselSlider> {
   final ValueNotifier<int> _selectedIndex = ValueNotifier(0);
+
   @override
   Widget build(BuildContext context) {
+    print(">>>>>>>>>>>>>> ${widget.images.length}");
+
+    // Condition to determine the number of items and the swipe behavior
+    bool isSingleImage = widget.images.length == 1;
+    bool isTwoImages = widget.images.length == 2;
+
     return Column(
       children: [
         SizedBox(
@@ -34,9 +39,15 @@ class _HomeCarouselSliderState extends State<HomeCarouselSlider> {
                   onPageChanged: (currentIndex, reason) {
                     _selectedIndex.value = currentIndex;
                   },
+                  enableInfiniteScroll: false, // Disable infinite scroll
+                  scrollPhysics: isSingleImage
+                      ? NeverScrollableScrollPhysics() // Disable scrolling for 1 image
+                      : isTwoImages
+                      ? BouncingScrollPhysics() // Allow one swipe for 2 images
+                      : BouncingScrollPhysics(), // For more than 2 images
                 ),
                 items: widget.images.map(
-                  (banner) {
+                      (banner) {
                     return Builder(
                       builder: (BuildContext context) {
                         return Column(
@@ -46,12 +57,13 @@ class _HomeCarouselSliderState extends State<HomeCarouselSlider> {
                               width: MediaQuery.of(context).size.width,
                               margin: EdgeInsets.symmetric(horizontal: 2.w),
                               decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: NetworkImage(widget
-                                              .images[_selectedIndex.value].url ??
-                                          'https://fastly.picsum.photos/id/1/200/300.jpg?hmac=jH5bDkLr6Tgy3oAg5khKCHeunZMHq0ehBZr6vGifPLY'),
-                                      fit: BoxFit.cover),
-                                  borderRadius: BorderRadius.circular(8.r)),
+                                image: DecorationImage(
+                                  image: NetworkImage(banner.url ??
+                                      'https://fastly.picsum.photos/id/1/200/300.jpg?hmac=jH5bDkLr6Tgy3oAg5khKCHeunZMHq0ehBZr6vGifPLY'),
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
                             ),
                           ],
                         );
@@ -75,7 +87,8 @@ class _HomeCarouselSliderState extends State<HomeCarouselSlider> {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    for (int i = 0; i < 4; i++)
+                    // Dynamically create the dots based on the number of images
+                    for (int i = 0; i < widget.images.length; i++)
                       Container(
                         width: 12.w,
                         height: 12.h,

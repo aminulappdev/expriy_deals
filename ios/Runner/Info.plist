@@ -18,7 +18,18 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
+
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need location access to show the route.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>We need location access to show the route.</string>
+
+
+
 	<key>CFBundleSignature</key>
+
+
+
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>

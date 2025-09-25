@@ -18,9 +18,9 @@ class CustomAppBar extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        GestureDetector(
+        isBack == true ? GestureDetector(
           onTap: () {
-            isBack == true ? Navigator.pop(context) : null;
+             Navigator.pop(context);
           },
           child: CircleAvatar(
             backgroundColor: AppColors.iconButtonThemeColor,
@@ -29,7 +29,7 @@ class CustomAppBar extends StatelessWidget {
               Icons.arrow_back,color: Colors.white,
             ),
           ),
-        ),
+        ) : SizedBox(),
         
         Text(
           name,

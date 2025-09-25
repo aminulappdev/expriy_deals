@@ -1,4 +1,5 @@
 import 'package:expriy_deals/app/modules/order/model/my_orders_model.dart';
+import 'package:expriy_deals/app/modules/order/views/route_page_screen.dart';
 import 'package:expriy_deals/app/modules/order/views/timeLine.dart';
 import 'package:expriy_deals/app/modules/order/widgets/delivery_banner.dart';
 import 'package:expriy_deals/app/modules/order/widgets/delivery_card_info.dart';
@@ -7,6 +8,7 @@ import 'package:expriy_deals/app/utils/app_colors.dart';
 import 'package:expriy_deals/app/utils/assets_path.dart';
 import 'package:expriy_deals/app/utils/responsive_size.dart';
 import 'package:expriy_deals/app/widgets/costom_app_bar.dart';
+import 'package:expriy_deals/app/widgets/gradiant_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -187,7 +189,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 productPrice: '\$${widget.myOrdersItemModel.product?.price ?? '0'}',
                 productQuantity: 'Qty: ${widget.myOrdersItemModel.quantity}',
               ),
-              heightBox12,
+              heightBox12, //.toString()
               DeliveryInformationCard(
                 title: 'order_details.order_details_title'.tr, // Localized "Order Details"
                 icon: Icons.location_on,
@@ -205,6 +207,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   ],
                 ),
               ),
+              heightBox12,
+              CustomElevatedButton(onPressed: (){
+                Get.to(() =>  RoutePage(lat: double.parse(widget.myOrdersItemModel.product?.author?.shop?.location?.coordinates[0].toString() ?? ""), long: double.parse(widget.myOrdersItemModel.product?.author?.shop?.location?.coordinates[1].toString() ?? "")));
+              }, text: "View on Map")
             ],
           ),
         ),

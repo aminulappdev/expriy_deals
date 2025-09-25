@@ -23,12 +23,12 @@ class MyOrdersController extends GetxController {
     // getCategory(Get.arguments);
   }
 
-  Map<String, dynamic> get queryParams {
-    return {
-      'page': 1,
-      'limit': 50,
-    };
-  }
+  // Map<String, dynamic> get queryParams {
+  //   return {
+  //   //  'page': 1,
+  //     'limit': 9999999999999999,
+  //   };
+  // }
 
   Future<bool> myOrder() async {
     final token = StorageUtil.getData(StorageUtil.userAccessToken);
@@ -40,7 +40,7 @@ class MyOrdersController extends GetxController {
     _inProgress.value = true;
 
     final NetworkResponse response = await Get.find<NetworkCaller>().getRequest(
-        queryParams: queryParams,
+    //    queryParams: queryParams,
         Urls.myOrderUrl,
         accesToken: StorageUtil.getData(StorageUtil.userAccessToken));
 

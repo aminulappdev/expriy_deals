@@ -1,12 +1,31 @@
 import 'dart:convert';
+import 'package:expriy_deals/app/modules/authentication/views/sign_in_screen.dart';
+import 'package:expriy_deals/get_storage.dart';
 import 'package:expriy_deals/services/network_caller/error_message_model.dart';
 import 'package:expriy_deals/services/network_caller/network_response.dart';
+import 'package:get/get.dart';
+
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
 
 
 class NetworkCaller {
   final Logger _logger = Logger();
+
+  // Method to log out the user
+  Future<void> _logout() async {
+    try {
+      // Remove the token or any other user data
+      await GoogleSignIn().signOut(); // Sign out of Google
+      await StorageUtil.deleteData(StorageUtil.userAccessToken); // Remove token from storage
+
+      // Navigate to the SignInScreen
+      Get.offAll(() => SignInScreen()); // Redirect to sign-in screen
+    } catch (e) {
+      _logger.e("Logout failed: $e");
+    }
+  }
 
   Future<NetworkResponse> getRequest(String url,
       {Map<String, dynamic>? queryParams, String? accesToken}) async {
@@ -30,6 +49,14 @@ class NetworkCaller {
 
       var response = await get(uri, headers: headers);
       _logResponse(url, response.statusCode, response.headers, response.body);
+
+      if (response.statusCode == 401) {
+        await _logout();  // Logout the user if 401 is received
+        return NetworkResponse(
+            isSuccess: false,
+            statusCode: 401,
+            errorMessage: 'Unauthorized. Please log in again.');
+      }
       if (response.statusCode == 200) {
         final debugMessage = jsonDecode(response.body);
         return NetworkResponse(
@@ -90,6 +117,14 @@ class NetworkCaller {
       );
 
       _logResponse(url, response.statusCode, response.headers, response.body);
+
+      if (response.statusCode == 401) {
+        await _logout();  // Logout the user if 401 is received
+        return NetworkResponse(
+            isSuccess: false,
+            statusCode: 401,
+            errorMessage: 'Unauthorized. Please log in again.');
+      }
 
       if (response.statusCode == 200) {
         final debugMessage = jsonDecode(response.body);
@@ -173,6 +208,15 @@ class NetworkCaller {
       _logRequest(url, headers, body);
       var response = await put(uri, headers: headers, body: jsonEncode(body));
       _logResponse(url, response.statusCode, response.headers, response.body);
+
+      if (response.statusCode == 401) {
+        await _logout();  // Logout the user if 401 is received
+        return NetworkResponse(
+            isSuccess: false,
+            statusCode: 401,
+            errorMessage: 'Unauthorized. Please log in again.');
+      }
+
       if (response.statusCode == 200 || response.statusCode == 201) {
         final debugMessage = jsonDecode(response.body);
         return NetworkResponse(
@@ -213,6 +257,15 @@ class NetworkCaller {
 
       var response = await delete(uri, headers: headers);
       _logResponse(url, response.statusCode, response.headers, response.body);
+
+      if (response.statusCode == 401) {
+        await _logout();  // Logout the user if 401 is received
+        return NetworkResponse(
+            isSuccess: false,
+            statusCode: 401,
+            errorMessage: 'Unauthorized. Please log in again.');
+      }
+
       if (response.statusCode == 200) {
         final debugMessage = jsonDecode(response.body);
         return NetworkResponse(
@@ -268,6 +321,14 @@ class NetworkCaller {
       );
 
       _logResponse(url, response.statusCode, response.headers, response.body);
+      if (response.statusCode == 401) {
+        await _logout();  // Logout the user if 401 is received
+        return NetworkResponse(
+            isSuccess: false,
+            statusCode: 401,
+            errorMessage: 'Unauthorized. Please log in again.');
+      }
+
 
       if (response.statusCode == 200) {
         final debugMessage = jsonDecode(response.body);
